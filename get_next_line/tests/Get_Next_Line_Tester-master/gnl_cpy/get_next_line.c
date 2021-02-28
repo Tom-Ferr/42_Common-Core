@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 10:07:57 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/02/27 20:04:24 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/02/27 15:26:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,16 @@ static int		checkout(char **current, char **next, char **buf, char ***line)
 	if (**buf)
 	{
 		if (!distribute(*buf, current, next))
-		{
-			free(*buf);
-			**line = ft_strdup(*buf);
-			return (0);
-		}
-		return (newlap(buf, current, line));
+			{
+				**line = *buf;
+				return (0);
+			}
+		free(*buf);
+		*buf = NULL;
+		**line = *current;
+		return (1);
 	}
-	free(*buf);
-	**line = ft_strdup("");
+	**line = *buf;
 	return (0);
 }
 

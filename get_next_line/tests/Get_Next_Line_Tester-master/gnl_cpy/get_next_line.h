@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 10:09:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/02/27 18:29:42 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/02/27 15:06:27 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,5 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 int		distribute(char *buf, char **current, char **next);
 void	*ft_bzero(void *str, size_t n);
 size_t	ft_strlen(const char *str);
-char	*ft_strdup(const char *str);
-void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 #endif
