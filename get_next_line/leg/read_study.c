@@ -4,11 +4,11 @@
 
 void f(int fd, char *buf) {
 	int size;
-	size = read(1, buf, 6);
-	printf("%s\n", buf );
+	size = read(fd+1, buf, 6);
+	//printf("%s\n", buf );
 	printf("%d\n", size);
 	read(fd, &buf[2], 2);
-	printf("%s\n", buf );
+	//printf("%s\n", buf );
 }
 
 int  main() {

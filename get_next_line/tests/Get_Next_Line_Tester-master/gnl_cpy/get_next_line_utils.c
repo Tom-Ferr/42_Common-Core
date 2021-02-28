@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 15:02:03 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/02/27 10:58:41 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/02/28 09:56:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ size_t			ft_strlcpy(char *dest, const char *src, size_t size)
 	return (ft_strlen(src));
 }
 
-static void		prepare_next(size_t	rest_len, char* buf, char** next, size_t j)
+static void		prepare_next(size_t rest_len, char *buf, char **next, size_t j)
 {
 	size_t	i;
 	char	*xtr;
@@ -42,7 +42,7 @@ static void		prepare_next(size_t	rest_len, char* buf, char** next, size_t j)
 		j++;
 		while (rest_len > 0)
 		{
-			xtr[i] = buf [j];
+			xtr[i] = buf[j];
 			i++;
 			j++;
 			rest_len--;
@@ -51,7 +51,7 @@ static void		prepare_next(size_t	rest_len, char* buf, char** next, size_t j)
 	}
 }
 
-int			distribute(char *buf, char **current, char **next)
+int				distribute(char *buf, char **current, char **next)
 {
 	size_t	i;
 	size_t	j;
@@ -79,7 +79,7 @@ int			distribute(char *buf, char **current, char **next)
 	return (1);
 }
 
-void		*ft_bzero(void *str, size_t n)
+void			*ft_bzero(void *str, size_t n)
 {
 	char *tcstr;
 
@@ -89,7 +89,7 @@ void		*ft_bzero(void *str, size_t n)
 	return (str);
 }
 
-size_t		ft_strlen(const char *str)
+size_t			ft_strlen(const char *str)
 {
 	size_t i;
 

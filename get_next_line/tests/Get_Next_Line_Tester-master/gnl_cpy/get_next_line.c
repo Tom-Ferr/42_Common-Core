@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 10:07:57 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/02/27 15:26:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/02/28 09:55:34 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static int		start(char **buf, char **next, int *i, int *bytes_total)
 	ft_bzero(*buf, BUFFER_SIZE + 1);
 	if (*next)
 	{
-
 		*i = ft_strlen(*next);
 		*bytes_total = *i;
 		free(*buf);
@@ -41,9 +40,9 @@ static int		start(char **buf, char **next, int *i, int *bytes_total)
 
 static void		update_buffer(int *bytes_total, int *nbytes, char **buf)
 {
-	char 	*tmp;
+	char	*tmp;
 
-	*bytes_total +=  *nbytes;
+	*bytes_total += *nbytes;
 	tmp = (char*)malloc((*bytes_total + BUFFER_SIZE + 1));
 	ft_bzero(tmp, *bytes_total + BUFFER_SIZE + 1);
 	ft_strlcpy(&tmp[0], *buf, *bytes_total);
@@ -65,44 +64,40 @@ static int		checkout(char **current, char **next, char **buf, char ***line)
 	if (**buf)
 	{
 		if (!distribute(*buf, current, next))
-			{
-				**line = *buf;
-				return (0);
-			}
-		free(*buf);
-		*buf = NULL;
-		**line = *current;
-		return (1);
+		{
+			**line = (char*)malloc((ft_strlen(*buf) + 1));
+			ft_bzero(**line, ft_strlen(*buf) + 1);
+			ft_strlcpy(**line, *buf, ft_strlen(*buf));
+			free(*buf);
+			return (0);
+		}
+		return (newlap(buf, current, line));
 	}
-	**line = *buf;
+	**line = (char*)malloc(1);
+	***line = '\0';
+	free(*buf);
 	return (0);
 }
 
-int		get_next_line(int fd, char **line)
+int				get_next_line(int fd, char **line)
 {
 	static char		*next;
 	int				i;
-	char 			*buf;
+	char			*buf;
 	int				nbytes;
 	int				bytes_total;
-	char			*current;
 
 	if (fd < 0 || !line || fd > RLIMIT_NOFILE || BUFFER_SIZE <= 0
 		|| start(&buf, &next, &i, &bytes_total) < 0)
 		return (-1);
-	nbytes = 1;
-	while (nbytes)
+	while ((nbytes = read(fd, &buf[i], BUFFER_SIZE)))
 	{
-		nbytes = read(fd, &buf[i], BUFFER_SIZE);
-		if(nbytes > 0)
-		{
-			update_buffer(&bytes_total, &nbytes, &buf);
-			if (distribute(buf, &current, &next))
-				break;
-			i += nbytes;
-		}
+		update_buffer(&bytes_total, &nbytes, &buf);
+		if (distribute(buf, line, &next))
+			break ;
+		i += nbytes;
 	}
 	if (!nbytes)
-		return (checkout(&current, &next, &buf, &line));
-	return (newlap(&buf, &current, &line));
+		return (checkout(line, &next, &buf, &line));
+	return (newlap(&buf, line, &line));
 }
