@@ -6,26 +6,27 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/02/15 13:12:15 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/03/09 14:48:50 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS			=	ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c\
-					ft_isascii.c ft_isdigit.c ft_isprint.c ft_itoa.c ft_memccpy.c\
-					ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memset.c\
-					ft_putchar_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_putstr_fd.c\
-					ft_split.c ft_strchr.c ft_strncmp.c ft_strdup.c ft_strjoin.c\
-					ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strnstr.c\
-					ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c
+SRCS			=	utils/flags_layer.c utils/ft_atoi.c utils/ft_dtox.c\
+					utils/ft_isdigit.c utils/ft_isset.c utils/ft_itoa.c\
+					utils/ft_make_str.c utils/ft_memcpy.c utils/ft_memset.c\
+					utils/ft_putchar_fd.c utils/ft_puthex.c utils/ft_putstr_fd.c\
+					utils/ft_strdup.c utils/ft_strjoin_free.c utils/ft_strlcpy.c\
+					utils/ft_strlen.c utils/precision_layer.c utils/ft_utoa.c\
+					utils/specifier_layer.c utils/width_layer.c\
+					utils/print_format.c\
+					ft_printf.c
 
 OBJS			= ${SRCS:.c=.o}
 
-BONUS			= ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c ft_lstdelone.c\
-				  ft_lstiter.c ft_lstlast.c ft_lstmap.c ft_lstnew.c ft_lstsize.c
+BONUS			=
 
 BONUS_OBJS		= ${BONUS:.c=.o}
 
-NAME			= libft.a
+NAME			= libftprintf.a
 
 GCC				=	gcc
 

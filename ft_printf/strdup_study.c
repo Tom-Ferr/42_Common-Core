@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+
 static char		*make_str(int n, ...)
 {
 	va_list my_chars;
@@ -57,10 +58,20 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (ptr);
 }
 
+char	*ft_utoa(unsigned int n)
+{
+	char *m;
+
+	if (n < 10)
+		return (make_str(1, (n + '0')));
+	m = ft_utoa(n / 10);
+	return (ft_strjoin(m, make_str(1, ((n % 10) + '0'))));
+}
+
+
 int main(int argc, char const *argv[]) {
-	char *n = make_str(2, '4', '2');
-	//char *m = make_str(2, '!', '@');
-	char *j = ft_strjoin(n, make_str(2, '!', '@'));
-	printf("%s\n", j);
+	char *n = ft_utoa(-1);
+
+	printf("%s\n", n);
 	return 0;
 }

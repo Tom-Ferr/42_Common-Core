@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:37:38 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/08 11:56:35 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/10 14:49:15 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
@@ -21,7 +21,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 		return (0);
 	if (size)
 	{
-		while (--size && *tcsrc)
+		while (--size)
 		{
 			*dest++ = *tcsrc++;
 		}

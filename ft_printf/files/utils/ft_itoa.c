@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 16:24:56 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/08 11:56:06 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/09 14:05:13 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 static char		*create_ptr(int n, int len)
 {

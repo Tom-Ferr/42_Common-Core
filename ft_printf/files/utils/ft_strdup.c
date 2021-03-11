@@ -6,17 +6,20 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 14:16:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/08 11:56:26 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/09 11:32:07 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 char	*ft_strdup(const char *str)
 {
 	char	*ptr;
 	char	*tcstr;
 	size_t	size;
+
+	if (!str)
+		return (ft_make_str(6, '(', 'n', 'u', 'l', 'l', ')'));
 
 	tcstr = (char*)str;
 	size = ft_strlen(tcstr) + 1;

@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 00:33:13 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/07 00:35:02 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/08 12:50:34 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 char		*ft_make_str(int n, ...)
 {

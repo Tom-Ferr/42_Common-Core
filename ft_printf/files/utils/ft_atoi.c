@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:23:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/08 11:55:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/08 12:49:21 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 static int		convert(const char *str, char is_neg, size_t index)
 {

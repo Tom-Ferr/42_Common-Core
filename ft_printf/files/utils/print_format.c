@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isset.c                                         :+:      :+:    :+:   */
+/*   print_format.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/06 15:09:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/08 12:50:23 by tde-cama         ###   ########.fr       */
+/*   Created: 2021/03/08 12:28:49 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/03/08 15:10:42 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
 
-int		ft_isset(char const s, char const *check)
+char		*print_format(va_list args, char *format, char flag)
 {
-	size_t len;
-	size_t i;
-
-	i = 0;
-	len = ft_strlen(check);
-	while (i < len)
-	{
-		if (s == check[i])
-			return (1);
-		i++;
-	}
-	return (0);
+	if (ft_isset(*format, "cspdiuxX%"))
+		return (specifier_layer(args, format));
+	else if (*format == '.')
+		return (precision_layer(args, ++format));
+	else if (ft_isset(*format, "-0"))
+		return (flags_layer(args, format));
+	else if (*format == '*' || ft_isdigit(*format))
+		return (width_layer(args, format, flag));
+	else
+		return (NULL);
 }

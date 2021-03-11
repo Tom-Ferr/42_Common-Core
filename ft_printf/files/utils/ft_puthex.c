@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_dtox.c                                          :+:      :+:    :+:   */
+/*   ft_puthex.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:39:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/08 09:45:01 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/08 12:50:57 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 static	void	write_symbol(long z, bool a)
 {
@@ -26,7 +26,7 @@ static	void	write_symbol(long z, bool a)
 	write(1, &z, 1);
 }
 
-void			ft_dtox(long d, bool a)
+void			ft_puthex(long d, bool a)
 {
 	long n;
 	long m;
@@ -40,7 +40,7 @@ void			ft_dtox(long d, bool a)
 	}
 	else
 	{
-		ft_dtox(n, a);
+		ft_puthex(n, a);
 		write_symbol(m, a);
 	}
 }

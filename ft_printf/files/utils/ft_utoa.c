@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isset.c                                         :+:      :+:    :+:   */
+/*   ft_utoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/06 15:09:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/08 12:50:23 by tde-cama         ###   ########.fr       */
+/*   Created: 2021/03/09 14:13:25 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/03/09 14:34:34 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
 
-int		ft_isset(char const s, char const *check)
+char	*ft_utoa(unsigned int n)
 {
-	size_t len;
-	size_t i;
+	char *m;
 
-	i = 0;
-	len = ft_strlen(check);
-	while (i < len)
-	{
-		if (s == check[i])
-			return (1);
-		i++;
-	}
-	return (0);
+	if (n < 10)
+		return (ft_make_str(1, (n + '0')));
+	m = ft_utoa(n / 10);
+	return (ft_strjoin_free(m, ft_make_str(1, ((n % 10) + '0'))));
 }
