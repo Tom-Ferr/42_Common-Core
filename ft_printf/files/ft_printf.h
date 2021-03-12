@@ -6,12 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 10:27:32 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/10 21:10:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/11 14:01:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
-# define  FT_PRINTF_H
+# define FT_PRINTF_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -32,7 +32,7 @@ char	*ft_make_str(int n, ...);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *str, int c, size_t n);
 void	ft_putchar_fd(char c, int fd);
-int	ft_putstr_fd(char *s, int fd);
+int		ft_putstr_fd(char *s, int fd);
 char	*ft_strdup(const char *str);
 char	*ft_strjoin_free(char const *s1, char const *s2);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);

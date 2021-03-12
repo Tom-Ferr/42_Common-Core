@@ -20,7 +20,6 @@ char	*ft_strdup(const char *str)
 
 	if (!str)
 		return (ft_make_str(6, '(', 'n', 'u', 'l', 'l', ')'));
-
 	tcstr = (char*)str;
 	size = ft_strlen(tcstr) + 1;
 	ptr = (char*)malloc(size);

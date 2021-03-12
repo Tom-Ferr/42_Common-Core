@@ -6,29 +6,43 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 15:20:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/10 23:54:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/11 17:57:39 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
 
+static char		*init_mem(int pr, char pads)
+{
+	char *pd;
+
+	pd = (char *)malloc(pr + 1);
+	ft_memset(pd, pads, pr);
+	pd[pr] = '\0';
+	return (pd);
+}
+
 static char		*add_zeros(int pr, int len, char *to_print)
 {
-	char *zr;
-	char *zr_0;
-	char *to_print_0;
+	char	*zr;
+	char	*zr_0;
+	char	*to_print_0;
+	int		j;
 
+	j = 2;
 	if (pr <= len)
-		return(to_print);
+		return (to_print);
 	pr = pr - len;
 	zr = (char *)malloc(len + pr + 3);
 	zr_0 = zr;
 	to_print_0 = to_print;
 	if (*to_print == '-')
 		*zr++ = *to_print++;
+	while (to_print_0[len + 1] == 'p' && j--)
+		*zr++ = *to_print++;
 	while (pr--)
 		*zr++ = '0';
-	while(*to_print)
+	while (*to_print)
 		*zr++ = *to_print++;
 	*zr++ = '\0';
 	*zr++ = to_print_0[len + 1];
@@ -39,8 +53,8 @@ static char		*add_zeros(int pr, int len, char *to_print)
 
 static char		*add_pads(int pr, int len, char *to_print, char flag)
 {
-	char *pd;
 	char *ret;
+	char *pd;
 	char pads;
 	char sp;
 
@@ -51,9 +65,7 @@ static char		*add_pads(int pr, int len, char *to_print, char flag)
 		return (to_print);
 	pr = pr - len;
 	sp = to_print[len + 1];
-	pd = (char *)malloc(pr + 1);
-	ft_memset(pd, pads, pr);
-	pd[pr] = '\0';
+	pd = init_mem(pr, pads);
 	len = ft_strlen(pd) + ft_strlen(to_print);
 	if (to_print[0] == '\0' && ft_isset(to_print[1], "cC"))
 		len++;
@@ -70,8 +82,8 @@ static char		*add_pads(int pr, int len, char *to_print, char flag)
 
 static char		*core(va_list args, int pr, char flag, char *format)
 {
-	char *to_print;
-	int len;
+	char	*to_print;
+	int		len;
 
 	to_print = print_format(args, format, flag);
 	len = ft_strlen(to_print);
@@ -85,8 +97,12 @@ static char		*core(va_list args, int pr, char flag, char *format)
 		pr--;
 		to_print[len + 1] = 'C';
 	}
+	if (!len && !to_print[1])
+		len = 1;
 	if (flag == '0' && to_print[len + 2] == '.' && to_print[len + 1] != '%')
 		flag = '\0';
+	if (!to_print[0] && !to_print[1])
+		len = 0;
 	if (flag == '0' && to_print[len + 2] != '.')
 		return (add_zeros(pr, len, to_print));
 	return (add_pads(pr, len, to_print, flag));
@@ -94,8 +110,8 @@ static char		*core(va_list args, int pr, char flag, char *format)
 
 char			*width_layer(va_list args, char *format, char flag)
 {
-	int pr;
-	char *dg;
+	int		pr;
+	char	*dg;
 
 	if (ft_isdigit(*format))
 	{
@@ -109,5 +125,5 @@ char			*width_layer(va_list args, char *format, char flag)
 		pr = va_arg(args, int);
 		return (core(args, pr, flag, ++format));
 	}
-	return(print_format(args, format, flag));
+	return (print_format(args, format, flag));
 }

@@ -6,18 +6,27 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 09:12:50 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/03/10 23:05:33 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/03/11 18:06:04 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
 
-char	*specifier_layer(va_list args, char *format)
+static	char	*mem_ptr(va_list args, char *format)
+{
+	char *temp;
+
+	temp = ft_dtox(va_arg(args, size_t), *format == 'X');
+	temp = ft_strjoin_free(ft_make_str(2, '0', 'x'), temp);
+	return (temp);
+}
+
+char			*specifier_layer(va_list args, char *format)
 {
 	char *temp;
 	char *ret;
 
-	if (*format == 'i' || *format == 'd')
+	if (*format == 'i' || *format == 'd' || *format == 'f')
 		temp = ft_itoa(va_arg(args, int));
 	else if (*format == 'u')
 		temp = ft_utoa(va_arg(args, int));
@@ -30,10 +39,7 @@ char	*specifier_layer(va_list args, char *format)
 	else if (*(format) == 'x' || *(format) == 'X')
 		temp = ft_dtox(va_arg(args, unsigned int), *format == 'X');
 	else if (*(format) == 'p')
-	{
-		temp = ft_dtox(va_arg(args, size_t), *format == 'X');
-		temp = ft_strjoin_free(ft_make_str(2, '0', 'x'), temp);
-	}
+		temp = mem_ptr(args, format);
 	else
 		return (NULL);
 	ret = (char *)malloc(ft_strlen(temp) + 3);

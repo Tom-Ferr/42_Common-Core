@@ -23,14 +23,14 @@ static	char	*write_symbol(size_t z, bool a)
 		z = (z % 10) + c;
 	else
 		z = z + '0';
-	return (ft_make_str(1,z));
+	return (ft_make_str(1, z));
 }
 
 char			*ft_dtox(size_t d, bool a)
 {
-	size_t n;
-	size_t m;
-	char *ptr;
+	size_t	n;
+	size_t	m;
+	char	*ptr;
 
 	if (d < 16 && d < 10)
 		return (ft_make_str(1, d + '0'));

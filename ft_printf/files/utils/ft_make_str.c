@@ -14,14 +14,14 @@
 
 char		*ft_make_str(int n, ...)
 {
+	char	*str;
+	int		i;
 	va_list my_chars;
-	char *str;
-	int i;
 
 	va_start(my_chars, n);
 	i = 0;
 	str = (char *)malloc(n + 1);
-	while(n > i)
+	while (n > i)
 	{
 		str[i] = va_arg(my_chars, int);
 		i++;

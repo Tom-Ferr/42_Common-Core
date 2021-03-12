@@ -7,9 +7,8 @@ int		ft_printf(const char *format, ...);
 int main(void) {
 	int ft;
 	int fp;
-	int *p = malloc(1*4);
-	ft = ft_printf("%06.2%\n");
-	fp = printf("%06.2%\n");
+	ft = ft_printf("%-054.78d\n", 42);
+	fp = printf("%-054.78d\n", 42);
 	printf("%d\n%d\n", ft, fp);
 	return 0;
 }
