@@ -3,7 +3,8 @@
 
 int function(va_list args)
 {
-	return (va_arg(args, int));
+	typedef int teste;
+	return (va_arg(args, teste));
 }
 void sum(int n, ...)
 {
