@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 10:46:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/17 18:49:47 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/17 22:03:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ bool				metal	(
 {
 	t_vec3 reflected;
 	reflected = reflect(unit_vector(r_in.dir), rec.normal);
-	*scattered = cast_ray(rec.p, vec_add(reflected,vec_multiply(rec.mat_ptr->fuzz, random_in_unit_sphere())));
+	*scattered = cast_ray(rec.p, vec_add(reflected,
+			vec_multiply(rec.mat_ptr->fuzz, random_in_unit_sphere())));
 	*attenuation = rec.mat_ptr->albedo;
 	return (dot(scattered->dir, rec.normal) > 0);
 }
@@ -76,7 +77,8 @@ bool				dielectric(
 	cos_theta = fmin(dot(vec_multiply(-1,unit_direction), rec.normal), 1.0);
 	sin_theta = sqrt(1.0 - (cos_theta * cos_theta));
 	cannot_refract = refraction_ratio * sin_theta > 1.0;
-	if (cannot_refract || reflectance(cos_theta, refraction_ratio) > random_double())
+	if (cannot_refract
+		|| reflectance(cos_theta, refraction_ratio) > random_double())
 	 	direction = reflect(unit_direction, rec.normal);
 	else
 		direction = refract(unit_direction, rec.normal, refraction_ratio);

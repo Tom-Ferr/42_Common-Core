@@ -6,64 +6,23 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 11:39:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/17 19:05:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/18 12:36:07 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "color.h"
-#include "ray.h"
-#include "camera.h"
-#include "vec3.h"
-#include "hittable_list.h"
-#include "sphere.h"
-#include "numbers.h"
-
-t_color ray_color(t_ray r, t_hittable_list *world, int depth)
-{
-	double t;
-    t_vec3 unit_direction;
-	t_hit_record rec;
-	t_params_list load_params = set_lstparam_values(r, 0.001, MY_INFINITY, &rec);
-	if (depth <= 0)
-	   return (init_vec(0,0,0));
-	world->hit = hittable_list_hit;
-    if (world->hit(&load_params, world))
-	{
-		t_ray scattered;
-		t_color attenuation;
-			if (rec.mat_ptr->scatter(r, rec, &attenuation, &scattered))
-				return (vec_multiply_dot(attenuation, ray_color(scattered, world, depth - 1)));
-			return (init_vec(0,0,0));
-    }
-
-	unit_direction = unit_vector(r.dir);
-    t = 0.5 * (unit_direction.y + 1.0);
-    return
-	(
-		vec_add
-		(
-			vec_multiply(1.0 - t, init_vec(1.0, 1.0, 1.0)),
-			vec_multiply(t, init_vec(0.5, 0.7, 1.0))
-		)
-	);
-}
+#include "utils.h"
 
 int main(void)
 {
 	t_image image;
 	t_camera camera;
 	t_hittable_list *world;
-	int j;
-	int i;
-	int s;
-	t_ray r;
-	const int max_depth = 50;
 
 	t_point3 lookfrom = init_vec(3,3,2);
 	t_point3 lookat = init_vec(0,0,-1);
 	t_vec3 vup = init_vec(0,1,0);
 	double dist_to_focus = length(vec_subtract(lookfrom,lookat));
-	double aperture = 2.0;
+	double aperture = 4.0;
 
 
 	t_material material_ground = set_material	(init_vec(0.8, 0.8, 0.0), NONE, NONE, lambertian);
@@ -86,32 +45,22 @@ int main(void)
 	image.aspect_ratio = 16.0 / 9.0;
 	image.width = 400;
 	image.height = image.width / image.aspect_ratio;
-	const int samples_per_pixel = 100;
 
     camera = set_camera(lookfrom, lookat, vup, 20, image.aspect_ratio, aperture, dist_to_focus);
 
-//Render
-	printf("P3\n%i %i\n255\n", image.width, image.height);
 
-    j = image.height - 1;
-	while (j >= 0)
-	{
-		i = 0;
-        while (i < image.width)
-		{
-            t_color pixel_color = init_vec(0, 0, 0);
-			s = 0;
-			while (s < samples_per_pixel)
-			{
-				double u = ((double)i + random_double()) / (image.width - 1);
-	            double v = ((double)j + random_double()) / (image.height - 1);
-	            r = get_ray(camera, u, v);
-				pixel_color = vec_add(pixel_color, ray_color(r, world, max_depth));
-				s++;
-			}
-            write_color(pixel_color, samples_per_pixel);
-			i++;
-        }
-		j--;
-    }
+	t_data  img;
+	t_vars vars;
+	vars.mlx = mlx_init();
+    vars.mlx_win = mlx_new_window(vars.mlx, image.width, image.height, "tde-cama's miniRT");
+    img.img = mlx_new_image(vars.mlx, image.width, image.height);
+    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
+                                &img.endian);
+
+	render(image, camera, world, &img);
+
+	mlx_put_image_to_window(vars.mlx, vars.mlx_win, img.img, 0, 0);
+	mlx_key_hook(vars.mlx_win, key_pressed, &vars);
+	mlx_hook(vars.mlx_win, 17, 1L<<17, close_program, &vars);
+    mlx_loop(vars.mlx);
 }

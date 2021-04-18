@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 14:57:39 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/17 14:01:33 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/17 23:39:00 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,17 +80,19 @@ int main() {
     img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
                                 &img.endian);
 
-	while (--g)
+
+	while (g--)
 	{
 		r = 0;
 		while (r < image_width)
 		{
 			int color = create_trgb(0, r, g, b);
 
-			my_mlx_pixel_put(&img, r, image_height - g, color);
+			my_mlx_pixel_put(&img, r, image_height-1 - g, color);
 			r++;
 		}
 	}
+
 
     mlx_put_image_to_window(vars.mlx, vars.mlx_win, img.img, 0, 0);
 	mlx_key_hook(vars.mlx_win, key_pressed, &vars);

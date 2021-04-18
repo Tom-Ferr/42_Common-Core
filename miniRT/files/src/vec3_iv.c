@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 14:00:05 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/17 19:47:19 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/17 21:53:33 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_vec3	random_in_unit_disk(void)
 	b = 1;
     while (b)
 	{
-        p = init_vec(random_double(-1,1), random_double(-1,1), 0);
+        p = init_vec(inrange_random(-1,1), inrange_random(-1,1), 0);
         if (length_squared(p) < 1)
         	return p;
     }
