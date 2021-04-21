@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 11:39:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/18 12:36:07 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/18 21:29:43 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int main(void)
 	t_camera camera;
 	t_hittable_list *world;
 
-	t_point3 lookfrom = init_vec(3,3,2);
+	t_point3 lookfrom = init_vec(-2,0.5,2);
 	t_point3 lookat = init_vec(0,0,-1);
 	t_vec3 vup = init_vec(0,1,0);
 	double dist_to_focus = length(vec_subtract(lookfrom,lookat));
-	double aperture = 4.0;
+	double aperture = 0;
 
 
 	t_material material_ground = set_material	(init_vec(0.8, 0.8, 0.0), NONE, NONE, lambertian);
@@ -32,8 +32,8 @@ int main(void)
 
 	t_sphere sph0 = init_sphere(init_vec(0,-100.5,-1), 100, &material_ground);
 	t_sphere sph1 = init_sphere(init_vec(0,0,-1), 0.5, &material_center);
-	t_sphere sph2 = init_sphere(init_vec(-1,0,-1), -0.45, &material_left);
-	t_sphere sph3 = init_sphere(init_vec(1,0,-1), 0.5, &material_right);
+	t_sphere sph2 = init_sphere(init_vec(-1,0,-1), 0.5, &material_left);
+	t_sphere sph3 = init_sphere(init_vec(1,0,-0.3), 0.5, &material_right);
 
 	world = ft_lstnew(&sph0);
 	ft_lstadd_back(&world, ft_lstnew(&sph1));
@@ -46,7 +46,7 @@ int main(void)
 	image.width = 400;
 	image.height = image.width / image.aspect_ratio;
 
-    camera = set_camera(lookfrom, lookat, vup, 20, image.aspect_ratio, aperture, dist_to_focus);
+    camera = set_camera(lookfrom, lookat, vup, 45, image.aspect_ratio, aperture, dist_to_focus);
 
 
 	t_data  img;

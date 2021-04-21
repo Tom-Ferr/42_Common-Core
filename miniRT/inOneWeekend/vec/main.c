@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 11:39:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/17 00:15:05 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/20 10:37:16 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ int main(void)
 	t_ray r;
 	const int max_depth = 50;
 
-	t_point3 lookfrom = init_vec(3,3,2);
+	t_point3 lookfrom = init_vec(0,0,1);
 	t_point3 lookat = init_vec(0,0,-1);
 	t_vec3 vup = init_vec(0,1,0);
 	double dist_to_focus = length(vec_subtract(lookfrom,lookat));
-	double aperture = 2.0;
+	double aperture = 0;
 
 
 	t_material material_ground = set_material	(init_vec(0.8, 0.8, 0.0), NONE, NONE, lambertian);
@@ -76,7 +76,7 @@ int main(void)
 
 	t_sphere sph0 = init_sphere(init_vec(0,-100.5,-1), 100, &material_ground);
 	t_sphere sph1 = init_sphere(init_vec(0,0,-1), 0.5, &material_center);
-	t_sphere sph2 = init_sphere(init_vec(-1,0,-1), -0.45, &material_left);
+	t_sphere sph2 = init_sphere(init_vec(-1,0,-1), 0.5, &material_left);
 	t_sphere sph3 = init_sphere(init_vec(1,0,-1), 0.5, &material_right);
 
 	world = ft_lstnew(&sph0);
@@ -102,7 +102,7 @@ int main(void)
 	image.height = image.width / image.aspect_ratio;
 	const int samples_per_pixel = 100;
 
-    camera = set_camera(lookfrom, lookat, vup, 20, image.aspect_ratio, aperture, dist_to_focus);
+    camera = set_camera(lookfrom, lookat, vup, 55, image.aspect_ratio, aperture, dist_to_focus);
 
 //Render
 	printf("P3\n%i %i\n255\n", image.width, image.height);

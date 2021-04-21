@@ -6,17 +6,17 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 13:59:16 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/17 19:04:14 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/21 17:34:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "camera.h"
 
-t_ray		get_ray(t_camera camera, double s, double t)
+t_ray	get_ray(t_camera camera, double s, double t)
 {
-	t_ray r;
-	t_vec3 rd;
-	t_vec3 offset;
+	t_ray	r;
+	t_vec3	rd;
+	t_vec3	offset;
 
 	rd = vec_multiply(camera.lens_radius, random_in_unit_disk());
 	offset = vec_multiply(rd.x, camera.u);
@@ -24,35 +24,37 @@ t_ray		get_ray(t_camera camera, double s, double t)
 	offset = vec_multiply(rd.y, offset);
 	r.orig = vec_add(camera.origin, offset);
 	r.dir = vec_add(
-		camera.lower_left_corner, vec_multiply(s,camera.horizontal));
-	r.dir = vec_add(r.dir, vec_multiply(t,camera.vertical));
+			camera.lower_left_corner, vec_multiply(s, camera.horizontal));
+	r.dir = vec_add(r.dir, vec_multiply(t, camera.vertical));
 	r.dir = vec_subtract(r.dir, camera.origin);
 	r.dir = vec_subtract(r.dir, offset);
 	return (r);
 }
 
-t_camera set_camera(t_point3 lookfrom, t_point3 lookat,t_vec3 vup, double vfov, double aspect_ratio, double aperture, double focus_dist)
+t_camera	set_camera(t_point3 lookfrom, t_point3 lookat, t_vec3 vup, double vfov, double aspect_ratio, double aperture, double focus_dist)
 {
-	t_camera camera;
+	t_camera	camera;
+	double		h;
+	double		theta;
 
-	camera.theta = degrees_to_radians(vfov);
-	camera.h = tan(camera.theta / 2);
-	camera.viewport_height = 2.0 * camera.h;
+	theta = degrees_to_radians(vfov);
+	h = tan(theta / 2);
+	camera.viewport_height = 2.0 * h;
 	camera.viewport_width = aspect_ratio * camera.viewport_height;
 	camera.w = unit_vector(vec_subtract(lookfrom, lookat));
-    camera.u = unit_vector(cross(vup, camera.w));
-    camera.v = cross(camera.w, camera.u);
-    camera.origin = lookfrom;
-    camera.horizontal = vec_multiply(
-		focus_dist * camera.viewport_width, camera.u);
-    camera.vertical = vec_multiply(
-		focus_dist * camera.viewport_height, camera.v);
-    camera.lower_left_corner = vec_subtract(
-		camera.origin, vec_divide(2,camera.horizontal));
-    camera.lower_left_corner = vec_subtract(
-		camera.lower_left_corner, vec_divide(2,camera.vertical));
-    camera.lower_left_corner = vec_subtract(
-		camera.lower_left_corner, vec_multiply(focus_dist,camera.w));
+	camera.u = unit_vector(cross(vup, camera.w));
+	camera.v = cross(camera.w, camera.u);
+	camera.origin = lookfrom;
+	camera.horizontal = vec_multiply(
+			focus_dist * camera.viewport_width, camera.u);
+	camera.vertical = vec_multiply(
+			focus_dist * camera.viewport_height, camera.v);
+	camera.lower_left_corner = vec_subtract(
+			camera.origin, vec_divide(2, camera.horizontal));
+	camera.lower_left_corner = vec_subtract(
+			camera.lower_left_corner, vec_divide(2, camera.vertical));
+	camera.lower_left_corner = vec_subtract(
+			camera.lower_left_corner, vec_multiply(focus_dist, camera.w));
 	camera.lens_radius = aperture / 2;
 	return (camera);
 }

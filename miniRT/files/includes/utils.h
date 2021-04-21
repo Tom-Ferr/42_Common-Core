@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 10:43:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/18 10:54:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/21 19:01:48 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,24 @@
 # include "numbers.h"
 # include "libx_utils.h"
 
-void	render(t_image image, t_camera camera, t_hittable_list *world, t_data *img);
-t_color ray_color(t_ray r, t_hittable_list *world, int depth);
+typedef struct s_render
+{
+	t_ray	r;
+	int		x;
+	int		y;
+	int		s;
+	t_color	clr;
+	double	u;
+	double	v;
+	int		put_clr;
+}			t_render;
+
+void	render(
+			t_image image,
+			t_camera camera,
+			t_hittable_list *world,
+			t_data *img
+			);
+t_color	ray_color(t_ray r, t_hittable_list *world, int depth);
 
 #endif

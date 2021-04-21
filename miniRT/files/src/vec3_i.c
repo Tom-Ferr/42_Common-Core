@@ -6,24 +6,23 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 10:34:11 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/14 10:07:41 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/21 18:15:42 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vec3.h"
 
-t_vec3		init_vec(double e0, double e1, double e2)
+t_vec3	init_vec(double e0, double e1, double e2)
 {
 	t_vec3	vector;
 
 	vector.x = e0;
 	vector.y = e1;
 	vector.z = e2;
-
 	return (vector);
 }
 
-t_vec3		vec_add(t_vec3 u, t_vec3 v)
+t_vec3	vec_add(t_vec3 u, t_vec3 v)
 {
 	t_vec3	w;
 
@@ -33,7 +32,7 @@ t_vec3		vec_add(t_vec3 u, t_vec3 v)
 	return (w);
 }
 
-t_vec3		vec_subtract(t_vec3 u, t_vec3 v)
+t_vec3	vec_subtract(t_vec3 u, t_vec3 v)
 {
 	t_vec3	w;
 
@@ -43,12 +42,12 @@ t_vec3		vec_subtract(t_vec3 u, t_vec3 v)
 	return (w);
 }
 
-double		dot(t_vec3 u, t_vec3 v)
+double	dot(t_vec3 u, t_vec3 v)
 {
 	return (u.x * v.x + u.y * v.y + u.z * v.z);
 }
 
-t_vec3		cross(t_vec3 u, t_vec3 v)
+t_vec3	cross(t_vec3 u, t_vec3 v)
 {
 	t_vec3	w;
 

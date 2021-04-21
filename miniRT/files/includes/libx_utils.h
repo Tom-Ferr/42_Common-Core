@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 22:59:31 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/18 10:07:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/21 18:47:00 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,21 @@
 # include "mlx.h"
 # include <stdlib.h>
 
-typedef struct  s_data
-{
-    void		*img;
-    char		*addr;
-    int			bits_per_pixel;
-    int			line_length;
-    int			endian;
-}      			t_data;
+# define ESC 53
 
-typedef struct  s_vars
+typedef struct s_data
 {
-    void		*mlx;
-    void		*mlx_win;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+}				t_data;
+
+typedef struct s_vars
+{
+	void		*mlx;
+	void		*mlx_win;
 }				t_vars;
 
 int		close_program(void);
