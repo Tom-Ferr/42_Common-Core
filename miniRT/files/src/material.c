@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 10:46:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 17:58:48 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/23 12:44:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,11 @@ bool	dielectric(
 						t_ray *scattered
 						)
 {
-	double	refraction_ratio;
-	t_vec3	unit_direction;
-	double	cos_theta;
-	double	sin_theta;
-	bool	cannot_refract;
-	t_vec3	direction;
+	double		refraction_ratio;
+	t_vec3		unit_direction;
+	double		cos_theta;
+	double		sin_theta;
+	t_scatter	ray;
 
 	*attenuation = init_vec(1, 1, 1);
 	if (rec.front_face)
@@ -77,13 +76,13 @@ bool	dielectric(
 	unit_direction = unit_vector(r_in.dir);
 	cos_theta = fmin(dot(vec_multiply(-1, unit_direction), rec.normal), 1.0);
 	sin_theta = sqrt(1.0 - (cos_theta * cos_theta));
-	cannot_refract = refraction_ratio * sin_theta > 1.0;
-	if (cannot_refract
+	ray.cannot_refract = refraction_ratio * sin_theta > 1.0;
+	if (ray.cannot_refract
 		|| reflectance(cos_theta, refraction_ratio) > random_double())
-		direction = reflect(unit_direction, rec.normal);
+		ray.direction = reflect(unit_direction, rec.normal);
 	else
-		direction = refract(unit_direction, rec.normal, refraction_ratio);
-	*scattered = cast_ray(rec.p, direction);
+		ray.direction = refract(unit_direction, rec.normal, refraction_ratio);
+	*scattered = cast_ray(rec.p, ray.direction);
 	return (true);
 }
 

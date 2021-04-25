@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 13:59:16 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 17:34:54 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/23 18:43:29 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_ray	get_ray(t_camera camera, double s, double t)
 	return (r);
 }
 
-t_camera	set_camera(t_point3 lookfrom, t_point3 lookat, t_vec3 vup, double vfov, double aspect_ratio, double aperture, double focus_dist)
+t_camera	set_camera(double vfov, double aspect_ratio, t_settings set)
 {
 	t_camera	camera;
 	double		h;
@@ -41,20 +41,20 @@ t_camera	set_camera(t_point3 lookfrom, t_point3 lookat, t_vec3 vup, double vfov,
 	h = tan(theta / 2);
 	camera.viewport_height = 2.0 * h;
 	camera.viewport_width = aspect_ratio * camera.viewport_height;
-	camera.w = unit_vector(vec_subtract(lookfrom, lookat));
-	camera.u = unit_vector(cross(vup, camera.w));
+	camera.w = unit_vector(vec_subtract(set.lookfrom, set.lookat));
+	camera.u = unit_vector(cross(set.vup, camera.w));
 	camera.v = cross(camera.w, camera.u);
-	camera.origin = lookfrom;
+	camera.origin = set.lookfrom;
 	camera.horizontal = vec_multiply(
-			focus_dist * camera.viewport_width, camera.u);
+			set.focus_dist * camera.viewport_width, camera.u);
 	camera.vertical = vec_multiply(
-			focus_dist * camera.viewport_height, camera.v);
+			set.focus_dist * camera.viewport_height, camera.v);
 	camera.lower_left_corner = vec_subtract(
 			camera.origin, vec_divide(2, camera.horizontal));
 	camera.lower_left_corner = vec_subtract(
 			camera.lower_left_corner, vec_divide(2, camera.vertical));
 	camera.lower_left_corner = vec_subtract(
-			camera.lower_left_corner, vec_multiply(focus_dist, camera.w));
-	camera.lens_radius = aperture / 2;
+			camera.lower_left_corner, vec_multiply(set.focus_dist, camera.w));
+	camera.lens_radius = set.aperture / 2;
 	return (camera);
 }

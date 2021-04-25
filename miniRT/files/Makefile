@@ -6,13 +6,13 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/04/19 16:10:27 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/04/25 13:02:04 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FILES			=	vec3_ii.c vec3_i.c ray.c hittable_list.c sphere.c\
 					hittable.c numbers.c camera.c vec3_iii.c vec3_iv.c\
-					material.c color.c libx_utils.c utils.c hit.c
+					material.c color.c libx_utils.c utils.c hit.c bitmap.c
 
 SRCDIR			= src/
 
@@ -59,6 +59,9 @@ noflag:			all
 
 run_noflag:		noflag
 				./${OUT}
+
+bmp:			main
+				./${OUT} --save
 
 all:			${NAME}
 

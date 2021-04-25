@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 12:16:20 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 18:54:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/23 20:43:02 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ typedef struct s_material
 	double	ir;
 	bool	(*scatter)(t_ray, struct s_hit_record, t_color*, t_ray*);
 }			t_material;
+
+typedef struct s_scatter
+{
+	bool	cannot_refract;
+	t_vec3	direction;
+}			t_scatter;
 
 bool		lambertian(
 				t_ray r_in,

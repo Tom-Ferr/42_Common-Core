@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 10:37:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 18:14:24 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/25 11:07:52 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,53 @@ void	render	(
 		var.y--;
 	}
 	ft_freelst(world);
+}
+
+void	write_bmp_image(
+						t_image image,
+						t_camera camera,
+						t_hittable_list *world,
+						int fd
+						)
+{
+	t_render	var;
+
+	var.y = 0;
+	while (var.y < image.height)
+	{
+		var.x = 0;
+		while (var.x < image.width)
+		{
+			var.clr = init_vec(0, 0, 0);
+			var.s = 0;
+			while (var.s < SAMPLES_PER_PIXEL)
+			{
+				var.u = ((double)var.x + random_double()) / (image.width - 1);
+				var.v = ((double)var.y + random_double()) / (image.height - 1);
+				var.r = get_ray(camera, var.u, var.v);
+				var.clr = vec_add(var.clr, ray_color(var.r, world, MAX_DEPTH));
+				var.s++;
+			}
+			var.put_clr = write_color(var.clr, SAMPLES_PER_PIXEL);
+			write_data(fd, var.put_clr);
+			var.x++;
+		}
+		var.y++;
+	}
+	ft_freelst(world);
+}
+
+void	export_bmp(
+					t_image image,
+					t_camera camera,
+					t_hittable_list *world
+					)
+{
+	int				fd;
+	t_bmp_header	header;
+
+	fd = create_file();
+	header = set_header(image);
+	write_header(fd, header);
+	write_bmp_image(image, camera, world, fd);
 }

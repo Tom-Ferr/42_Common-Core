@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 20:59:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 18:42:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/24 00:01:45 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,17 @@
 
 # include "hittable.h"
 # include "sphere.h"
-
+/*
+typedef struct s_shapes
+{
+	t_sphere				sph;
+	t_plane					pl;
+	t_cylinder				cy;
+	t_triangle				tr;
+	t__square				sq;
+	bool					(*hit)(t_params_list*, struct s_shapes*);
+}							t_shapes;
+*/
 typedef struct s_hittable_list
 {
 	t_sphere				*obj;

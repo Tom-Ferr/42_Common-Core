@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 10:43:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 19:01:48 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/25 11:08:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "sphere.h"
 # include "numbers.h"
 # include "libx_utils.h"
+# include "bitmap.h"
 
 typedef struct s_render
 {
@@ -41,5 +42,15 @@ void	render(
 			t_data *img
 			);
 t_color	ray_color(t_ray r, t_hittable_list *world, int depth);
-
+void	write_bmp_image(
+			t_image image,
+			t_camera camera,
+			t_hittable_list *world,
+			int fd
+			);
+void	export_bmp(
+			t_image image,
+			t_camera camera,
+			t_hittable_list *world
+			);
 #endif
