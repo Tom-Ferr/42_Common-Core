@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 09:49:45 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/23 18:46:24 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/27 10:31:56 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ typedef struct s_settings
 	t_vec3		vup;
 	double		focus_dist;
 	double		aperture;
+	double		vfov;
 }				t_settings;
 
 t_ray		get_ray(t_camera camera, double u, double v);
-t_camera	set_camera(double vfov, double aspect_ratio, t_settings set);
+t_camera	set_camera(double aspect_ratio, t_settings set);
 
 #endif

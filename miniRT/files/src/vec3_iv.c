@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 14:00:05 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 19:10:16 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/28 23:31:07 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ bool	near_zero(t_vec3 v)
 	double	s;
 
 	s = 1e-8;
-	return ((v.x < s) && (v.y < s) && (v.z < s));
+	return ((fabs(v.x) < s) && (fabs(v.y) < s) && (fabs(v.z) < s));
 }
 
 t_vec3	vec_multiply_dot(t_vec3 u, t_vec3 v)

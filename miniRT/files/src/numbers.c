@@ -6,11 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 12:18:58 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 18:01:44 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/28 21:51:36 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "numbers.h"
+#include <stdio.h>
 
 int	ft_rand(void)
 {
@@ -20,7 +21,7 @@ int	ft_rand(void)
 	if (!first++)
 		next = (unsigned long int)&next;
 	next = next * 1103515243 + 12345;
-	return ((unsigned int)(next / 65536) % RAND_MAX);
+	return ((unsigned int)(next >> 32) & RAND_MAX);
 }
 
 double	random_double(void)

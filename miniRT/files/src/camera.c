@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 13:59:16 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/23 18:43:29 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/27 10:31:45 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ t_ray	get_ray(t_camera camera, double s, double t)
 	return (r);
 }
 
-t_camera	set_camera(double vfov, double aspect_ratio, t_settings set)
+t_camera	set_camera(double aspect_ratio, t_settings set)
 {
 	t_camera	camera;
 	double		h;
 	double		theta;
 
-	theta = degrees_to_radians(vfov);
+	theta = degrees_to_radians(set.vfov);
 	h = tan(theta / 2);
 	camera.viewport_height = 2.0 * h;
 	camera.viewport_width = aspect_ratio * camera.viewport_height;

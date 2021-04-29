@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 10:43:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/25 11:08:54 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/25 14:05:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,6 @@ void	export_bmp(
 			t_camera camera,
 			t_hittable_list *world
 			);
+int		ft_strcmp(char *str1, char *str2);
+void	run_mlx(t_image image, t_camera camera, t_hittable_list *world);
 #endif

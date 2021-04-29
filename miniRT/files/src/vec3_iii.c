@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 14:42:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 18:21:10 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/28 23:06:22 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,15 @@ t_vec3	inrange_random_vec(double min, double max)
 
 t_vec3	random_in_unit_sphere(void)
 {
-	int			b;
 	t_point3	p;
 
-	b = 1;
-	while (b)
+	while (true)
 	{
 		p = inrange_random_vec(-1.0, 1.0);
-		if (length_squared(p) < 1.0)
-			return (p);
+		if (length_squared(p) >= 1.0)
+			continue ;
+		return (p);
 	}
-	return (init_vec(0, 0, 0));
 }
 
 t_vec3	random_unit_vector(void)

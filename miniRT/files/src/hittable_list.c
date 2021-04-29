@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 16:21:04 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 17:46:02 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/27 18:41:24 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,12 @@ void	ft_freelst(t_hittable_list *lst)
 	while (lst->next)
 	{
 		new = lst->next;
+		free(lst->obj->mat_ptr);
+		free(lst->obj);
 		free(lst);
 		lst = new;
 	}
+	free(lst->obj->mat_ptr);
+	free(lst->obj);
 	free(lst);
 }

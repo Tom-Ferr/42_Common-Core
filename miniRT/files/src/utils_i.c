@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_i.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 10:37:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/25 11:07:52 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/28 15:38:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,4 +121,16 @@ void	export_bmp(
 	header = set_header(image);
 	write_header(fd, header);
 	write_bmp_image(image, camera, world, fd);
+}
+
+int	ft_strcmp(char *str1, char *str2)
+{
+	while (*str1 && *str2)
+	{
+		if (*str1++ != *str2++)
+			return (*(--str1) - *(--str2));
+	}
+	if (*str1 == *str2)
+		return (0);
+	return (*str1 - *str2);
 }

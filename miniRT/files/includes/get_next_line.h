@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/25 11:39:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/28 23:46:10 by tde-cama         ###   ########.fr       */
+/*   Created: 2021/02/18 10:09:52 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/04/26 12:03:36 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
-#include "parsing.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	main(int argc, char **argv)
-{
-	t_image			image;
-	t_camera		camera;
-	t_hittable_list	*world;
-	t_settings		settings;
+# include <unistd.h>
+# include <stdlib.h>
+# include <limits.h>
 
-	parse_scene(&image, &settings, &world);
-	camera = set_camera(image.aspect_ratio, settings);
-	if (ft_strcmp(argv[argc - 1], "--save"))
-		run_mlx(image, camera, world);
-	else
-		export_bmp(image, camera, world);
-}
+# define BUFFER_SIZE 80
+
+int		get_next_line(int fd, char **line);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+int		distribute(char *buf, char **current, char **next);
+void	*ft_bzero(void *str, size_t n);
+size_t	ft_strlen(const char *str);
+
+#endif

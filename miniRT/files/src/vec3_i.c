@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 10:34:11 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/21 18:15:42 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/04/28 21:55:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_vec3	vec_subtract(t_vec3 u, t_vec3 v)
 
 double	dot(t_vec3 u, t_vec3 v)
 {
-	return (u.x * v.x + u.y * v.y + u.z * v.z);
+	return ((u.x * v.x) + (u.y * v.y) + (u.z * v.z));
 }
 
 t_vec3	cross(t_vec3 u, t_vec3 v)
