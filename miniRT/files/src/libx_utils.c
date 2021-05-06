@@ -6,11 +6,18 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 22:57:02 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/25 14:02:08 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/06 15:23:24 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libx_utils.h"
+
+int	error_exit(char *error)
+{
+	printf("%s\n", error);
+	exit(EXIT_FAILURE);
+	return (1);
+}
 
 int	close_program(void)
 {
@@ -23,7 +30,7 @@ int	key_pressed(int keycode, t_vars *vars)
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(vars->mlx, vars->mlx_win);
-		close_program();
+		exit(0);
 		return (1);
 	}
 	return (0);

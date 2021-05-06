@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 16:53:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/28 21:16:34 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:06:22 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,14 @@ bool	hittable_list_hit(t_params_list *params, t_hittable_list *lst)
 		lst = lst->next;
 	}
 	return (hit_anything);
+}
+
+t_vec3	normalize(t_vec3 p)
+{
+	t_vec3	normal;
+	double	div;
+
+	div = length(p);
+	normal = vec_divide(div, p);
+	return (normal);
 }

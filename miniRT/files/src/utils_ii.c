@@ -6,13 +6,13 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/25 14:01:12 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/27 16:07:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/06 18:23:31 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-void	run_mlx(t_image image, t_camera camera, t_hittable_list *world)
+void	run_mlx(t_image image, t_camera camera, t_world *world)
 {
 	t_data	img;
 	t_vars	vars;
@@ -28,4 +28,12 @@ void	run_mlx(t_image image, t_camera camera, t_hittable_list *world)
 	mlx_key_hook(vars.mlx_win, key_pressed, &vars);
 	mlx_hook(vars.mlx_win, 17, 1L << 17, close_program, &vars);
 	mlx_loop(vars.mlx);
+}
+
+double	unit_direction(t_ray r)
+{
+	t_vec3	uv;
+
+	uv = unit_vector(r.dir);
+	return (uv.y);
 }

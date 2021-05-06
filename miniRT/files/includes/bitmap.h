@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 14:52:38 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/25 00:48:39 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/06 18:32:56 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_bmp_header
 	unsigned int		important_colors;
 }						t_bmp_header;
 
-int				create_file(void);
+int				create_file(char *argv);
 t_bmp_header	set_header(t_image image);
 void			write_header(int fd, t_bmp_header header);
 void			write_data(int fd, int clr);

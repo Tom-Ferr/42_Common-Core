@@ -6,13 +6,13 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 10:37:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/28 15:38:47 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/06 18:41:20 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-t_color	ray_color(t_ray r, t_hittable_list *world, int depth)
+t_color	ray_color(t_ray r, t_world *world, int depth)
 {
 	t_vec3			unit_direction;
 	t_hit_record	rec;
@@ -24,26 +24,23 @@ t_color	ray_color(t_ray r, t_hittable_list *world, int depth)
 	if (depth <= 0)
 		return (init_vec(0, 0, 0));
 	world->hit = hittable_list_hit;
-	if (world->hit(&load_params, world))
-	{
-		if (rec.mat_ptr->scatter(r, rec, &attenuation, &scattered))
-			return (vec_multiply_dot(attenuation, ray_color(scattered,
-						world, depth - 1)));
-		return (init_vec(0, 0, 0));
-	}
 	unit_direction = unit_vector(r.dir);
-	return (
-		vec_add(vec_multiply(1.0 - (0.5 * (unit_direction.y + 1.0)),
-				init_vec(1.0, 1.0, 1.0)),
-			vec_multiply((0.5 * (unit_direction.y + 1.0)),
-				init_vec(0.5, 0.7, 1.0)))
-	);
+	if (!world->hit(&load_params, world->lst))
+		return (
+			vec_add(vec_multiply(
+					1.0 - (world->ambient_ratio * (unit_direction.y + 1.0)),
+					world->ambient_light), init_vec(0, 0, 0))
+		);
+	if (!rec.mat_ptr->scatter(r, rec, &attenuation, &scattered))
+		return (emitted(rec.mat_ptr));
+	return (vec_multiply_dot(attenuation, ray_color(scattered,
+				world, depth - 1)));
 }
 
 void	render	(
 					t_image image,
 					t_camera camera,
-					t_hittable_list *world,
+					t_world *world,
 					t_data *img
 				)
 {
@@ -71,13 +68,13 @@ void	render	(
 		}
 		var.y--;
 	}
-	ft_freelst(world);
+	ft_freelst(world->lst);
 }
 
 void	write_bmp_image(
 						t_image image,
 						t_camera camera,
-						t_hittable_list *world,
+						t_world *world,
 						int fd
 						)
 {
@@ -105,19 +102,20 @@ void	write_bmp_image(
 		}
 		var.y++;
 	}
-	ft_freelst(world);
+	ft_freelst(world->lst);
 }
 
 void	export_bmp(
 					t_image image,
 					t_camera camera,
-					t_hittable_list *world
+					t_world *world,
+					char *argv
 					)
 {
 	int				fd;
 	t_bmp_header	header;
 
-	fd = create_file();
+	fd = create_file(argv);
 	header = set_header(image);
 	write_header(fd, header);
 	write_bmp_image(image, camera, world, fd);

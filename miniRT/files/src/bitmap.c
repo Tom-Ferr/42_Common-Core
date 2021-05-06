@@ -6,18 +6,25 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 15:49:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/25 13:09:00 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/06 18:34:11 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bitmap.h"
+#include "parsing.h"
 
-int	create_file(void)
+int	create_file(char *argv)
 {
 	int		fd;
+	char	*dest;
+	char	*ext;
 
-	fd = open("./saves/test.bmp", O_CREAT | O_WRONLY | O_TRUNC,
+	dest = ft_strjoin("./saves/", argv);
+	ext = ft_strjoin(dest, ".bmp");
+	fd = open(ext, O_CREAT | O_WRONLY | O_TRUNC,
 			S_IRUSR | S_IWUSR);
+	free(dest);
+	free(ext);
 	return (fd);
 }
 

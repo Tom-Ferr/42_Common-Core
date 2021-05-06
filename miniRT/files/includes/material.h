@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 12:16:20 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/23 20:43:02 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/05 23:09:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,13 @@ bool		dielectric(
 				t_color *attenuation,
 				t_ray *scattered
 				);
+bool		emissive(
+				t_ray r_in,
+				struct s_hit_record rec,
+				t_color *attenuation,
+				t_ray *scattered
+				);
+t_color		emitted(t_material *material);
 t_material	set_material(
 				t_color c,
 				double f,
