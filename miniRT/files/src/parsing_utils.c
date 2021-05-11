@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:57:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/04/28 15:58:09 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/11 13:06:35 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,16 @@ void	next_number(char **param)
 
 	line = *param;
 	while (!((*line >= '0' && *line <= '9') || *line == '-') && *line)
+	{
+		if (!(*line == ' ' || *line == ',' || *line == 9
+				|| *line == '\n' || *line == '\0'))
+			error_exit("input value is bad formatted");
 		line++;
+	}
 	*param = line;
 }
 
-int	parse_int(char **param)
-{
-	int		ret;
-	char	*str;
-	char	*str_0;
-	char	*line;
-
-	next_number(param);
-	line = *param;
-	str = (char *)malloc((4 * sizeof(char)) + 1);
-	str_0 = str;
-	while ((*line >= '0' && *line <= '9') || *line == '-')
-		*str++ = *line++;
-	*str = '\0';
-	*param = line;
-	ret = atoi(str_0);
-	free(str_0);
-	return (ret);
-}
-
-double	parse_double(char **param)
+double	parse_double(char **param, double min, double max, char *err_)
 {
 	double	ret;
 	char	*str;
@@ -55,22 +40,70 @@ double	parse_double(char **param)
 	str_0 = str;
 	while ((*line >= '0' && *line <= '9') || *line == '.' || *line == '-')
 		*str++ = *line++;
+	if (!(*line == ' ' || *line == ',' || *line == 9
+			|| *line == '\n' || *line == '\0'))
+		error_exit("input value is bad formatted");
 	*str = '\0';
 	*param = line;
-	ret = atof(str_0);
+	ret = ft_atof(str_0);
 	free(str_0);
+	is_inrange(ret, min, max, err_);
 	return (ret);
 }
 
-t_vec3	parse_coordinates(char **line)
+t_vec3	parse_coordinates(char **line, double min, double max, char *err_)
 {
 	t_vec3	ret;
 
-	next_number(line);
-	ret.x = parse_double(line);
-	next_number(line);
-	ret.y = parse_double(line);
-	next_number(line);
-	ret.z = parse_double(line);
+	ret.x = parse_double(line, min, max, err_);
+	ret.y = parse_double(line, min, max, err_);
+	ret.z = parse_double(line, min, max, err_);
 	return (ret);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t		size;
+	char		*ptr;
+	char		*s1_0;
+	char		*s2_0;
+	char		*ptr_0;
+
+	s1_0 = (char *)s1;
+	s2_0 = (char *)s2;
+	size = (ft_strlen(s1) + ft_strlen(s2)) + 1;
+	ptr = (char *)malloc(size);
+	if (!ptr)
+		return (0);
+	ptr_0 = ptr;
+	while (*s1)
+		*ptr++ = *s1++;
+	while (*s2)
+		*ptr++ = *s2++;
+	*ptr = '\0';
+	return (ptr_0);
+}
+
+double	ft_atof(char *str)
+{
+	double	int_part;
+	double	dec_part;
+	double	is_neg;
+	int		i;
+
+	int_part = 0.0;
+	dec_part = 0.0;
+	is_neg = 1.0;
+	if (*str == '+' || *str == '-')
+		if (*str++ == '-')
+			is_neg = -1.0;
+	while (*str >= '0' && *str <= '9')
+		int_part = int_part * 10 + (*str++ - '0');
+	i = -1;
+	if (*str == '.' && *str++)
+	{
+		while (*str >= '0' && *str <= '9')
+			dec_part += (pow(10, i--) * (*str++ - '0'));
+	}
+	return (is_neg * (int_part + dec_part));
 }

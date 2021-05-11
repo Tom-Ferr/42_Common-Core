@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 16:53:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/06 17:06:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/10 16:08:11 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool	hittable_list_hit(t_params_list *params, t_hittable_list *lst)
 	{
 		load_params = set_lstparam_values(params->r, params->t_min,
 				closest_so_far, &temp_rec);
-		if (lst->obj->hit(&load_params, lst->obj))
+		if (lst->obj->sh.hit(&load_params, &lst->obj->sh))
 		{
 			hit_anything = true;
 			closest_so_far = load_params.rec->t;

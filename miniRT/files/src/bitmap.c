@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 15:49:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/06 18:34:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/11 13:15:27 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,15 @@ int	create_file(char *argv)
 	char	*dest;
 	char	*ext;
 
+	ext_filter(&argv);
 	dest = ft_strjoin("./saves/", argv);
 	ext = ft_strjoin(dest, ".bmp");
 	fd = open(ext, O_CREAT | O_WRONLY | O_TRUNC,
 			S_IRUSR | S_IWUSR);
 	free(dest);
 	free(ext);
+	if (fd < 0)
+		error_exit("File could not be created");
 	return (fd);
 }
 

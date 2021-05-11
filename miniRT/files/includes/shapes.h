@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 11:43:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/06 18:43:29 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/10 23:52:43 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "hittable.h"
 # include "vec3.h"
+# include "libx_utils.h"
+# include "camera.h"
 
 typedef struct s_sphere
 {
@@ -66,6 +68,13 @@ typedef struct s_shapes
 	bool			(*hit)(t_params_list*, struct	s_shapes*);
 	t_figures		fig;
 }					t_shapes;
+
+typedef union u_obj_list
+{
+	t_shapes		sh;
+	t_camera		cam;
+	t_data			data;
+}					t_obj_list;
 
 typedef struct s_sph
 {

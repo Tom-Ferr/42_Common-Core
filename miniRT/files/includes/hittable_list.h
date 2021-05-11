@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 20:59:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/06 18:06:12 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/10 17:06:27 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 typedef struct s_hittable_list
 {
-	t_shapes				*obj;
+	t_obj_list				*obj;
 	struct s_hittable_list	*next;
 }							t_hittable_list;
 
@@ -28,6 +28,7 @@ typedef struct s_world
 	bool				(*hit)(t_params_list*, struct s_hittable_list*);
 	t_color				ambient_light;
 	double				ambient_ratio;
+	t_hittable_list		*eqip;
 }						t_world;
 
 t_params_list		set_lstparam_values(

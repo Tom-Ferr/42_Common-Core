@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 10:37:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/06 18:41:20 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/11 11:03:17 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ t_color	ray_color(t_ray r, t_world *world, int depth)
 
 void	render	(
 					t_image image,
-					t_camera camera,
 					t_world *world,
+					t_camera camera,
 					t_data *img
 				)
 {
@@ -68,13 +68,12 @@ void	render	(
 		}
 		var.y--;
 	}
-	ft_freelst(world->lst);
 }
 
 void	write_bmp_image(
 						t_image image,
-						t_camera camera,
 						t_world *world,
+						t_camera camera,
 						int fd
 						)
 {
@@ -102,12 +101,10 @@ void	write_bmp_image(
 		}
 		var.y++;
 	}
-	ft_freelst(world->lst);
 }
 
 void	export_bmp(
 					t_image image,
-					t_camera camera,
 					t_world *world,
 					char *argv
 					)
@@ -118,7 +115,9 @@ void	export_bmp(
 	fd = create_file(argv);
 	header = set_header(image);
 	write_header(fd, header);
-	write_bmp_image(image, camera, world, fd);
+	write_bmp_image(image, world, world->eqip->obj->cam, fd);
+	ft_freelst(world->lst);
+	ft_freelst(world->eqip);
 }
 
 int	ft_strcmp(char *str1, char *str2)
