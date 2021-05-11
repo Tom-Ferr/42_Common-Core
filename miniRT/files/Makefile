@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/05/08 22:45:11 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/05/11 16:05:35 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,9 +46,8 @@ OUT				= miniRT
 					${GCC} ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
 $(NAME):		${OBJS}
-				${AR} ${NAME} ${OBJS}
 				make -C minilibx_opengl
-				${GCC} ${CFLAGS} ${INCLUDE} main.c -L. -lraytracing ${MLX} -o ${OUT}
+				${GCC} ${CFLAGS} ${INCLUDE} main.c ${OBJS} ${MLX} -o ${OUT}
 
 main:			all
 				${GCC} ${CFLAGS} ${INCLUDE} main.c -L. -lraytracing ${MLX} -o ${OUT}
@@ -72,7 +71,7 @@ clean:
 
 fclean:			clean
 				rm -f ${NAME}
-
+				make clean -C minilibx_opengl
 re:				fclean all
 
 .PHONY:			all clean fclean re main run noflag run_noflag bmp
