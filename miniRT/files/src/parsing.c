@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 12:22:56 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/11 13:31:49 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/14 18:44:50 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ static void	get_resolution(t_image *image, char **argv)
 	if (fd < 0)
 		error_exit(".rt file not found");
 	while (get_next_line(fd, &line) > 0)
+	{
 		if (line[0] == 'R')
 			parse_resolution(line, image);
+		free(line);
+	}
 	free(line);
 }
 
@@ -76,6 +79,18 @@ static void	parse_file(
 		error_exit("Bad identifier");
 }
 
+static void	errors_ifs(t_image *image, t_world *world)
+{
+	if (!world->lst)
+		error_exit("No elements to render");
+	if (!image->width || !image->height)
+		error_exit("Resolution was not declared");
+	if (!world->eqip)
+		error_exit("Camera was not declared");
+	if (world->ambient_ratio < 0)
+		error_exit("Ambient Light was not declared");
+}
+
 void	parse_scene(
 			t_image *image,
 			t_world *world,
@@ -97,14 +112,11 @@ void	parse_scene(
 		error_exit(".rt file not found");
 	world->ambient_ratio = -1;
 	while (get_next_line(fd, &line) > 0)
+	{
 		parse_file(image, world, line);
+		free(line);
+	}
+	parse_file(image, world, line);
 	free(line);
-	if (!world->lst)
-		error_exit("No elements to render");
-	if (!image->width || !image->height)
-		error_exit("Resolution was not declared");
-	if (!world->eqip)
-		error_exit("Camera was not declared");
-	if (world->ambient_ratio < 0)
-		error_exit("Ambient Light was not declared");
+	errors_ifs(image, world);
 }

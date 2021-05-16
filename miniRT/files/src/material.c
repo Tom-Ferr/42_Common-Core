@@ -20,13 +20,16 @@ bool	lambertian	(
 							)
 {
 	t_vec3	scatter_direction;
+	int		*to_use;
 
 	scatter_direction = vec_add(rec.normal, random_unit_vector());
 	if (near_zero(scatter_direction))
 		scatter_direction = rec.normal;
 	*scattered = cast_ray(rec.p, scatter_direction);
 	*attenuation = rec.mat_ptr->albedo;
-	r_in = *scattered;
+	to_use = 0;
+	if (to_use)
+		r_in.dir.x += r_in.dir.x;
 	return (true);
 }
 

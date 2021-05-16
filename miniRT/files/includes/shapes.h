@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/26 11:43:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/10 23:52:43 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/12 22:46:30 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ typedef struct s_sphere
 typedef struct s_triangle
 {
 	t_point3		vertex1;
+	t_point3		normal;
 	t_point3		vertex2;
 	t_point3		vertex3;
-	t_point3		normal;
 }					t_triangle;
 
 typedef struct s_plane

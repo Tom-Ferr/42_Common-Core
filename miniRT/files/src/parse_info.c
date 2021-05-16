@@ -14,12 +14,15 @@
 
 void	parse_resolution(char *line, t_image *image)
 {
+	static int	dim;
+
 	line = line + 1;
-	if (image->width || image->height)
+	if (dim)
 		error_exit("Resolution can only be declared once in the scene");
 	image->width = (int)parse_double(&line, 1, LONG_MAX, "Resolution Width");
 	image->height = (int)parse_double(&line, 1, LONG_MAX, "Resolution Height");
 	image->aspect_ratio = (double)image->width / (double)image->height;
+	dim++;
 }
 
 void	parse_camera(char *line, t_world *world, t_image *image)
@@ -33,6 +36,9 @@ void	parse_camera(char *line, t_world *world, t_image *image)
 	ol = malloc(sizeof(t_obj_list));
 	set.lookfrom = parse_coordinates(&line, LONG_MIN, LONG_MAX, "");
 	set.lookat = parse_coordinates(&line, -1, 1, "camera orientation");
+	if (set.lookat.z >= 0)
+		set.lookat.z = 1;
+	set.lookat = vec_add(set.lookfrom, set.lookat);
 	set.vfov = parse_double(&line, 0, 180, "field of view");
 	set.vup = init_vec(0, 1, 0);
 	set.focus_dist = length(vec_subtract(

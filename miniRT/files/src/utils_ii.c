@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/25 14:01:12 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/10 23:48:52 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/14 18:25:48 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,16 @@ void	run_mlx(t_image image, t_world *world)
 {
 	t_vars			vars;
 	t_obj_list		pov;
+	// int				sizex;
+	// int				sizey;
 
 	vars.lst = NULL;
 	vars.mlx = mlx_init();
+	// mlx_get_screen_size(vars.mlx, &sizex, &sizey);
+	// if (sizex < image.width)
+	// 	image.width = sizex;
+	// if (sizey < image.height)
+	// 	image.height = sizey;
 	vars.mlx_win = mlx_new_window(vars.mlx, image.width, image.height,
 			"tde-cama's miniRT");
 	render_camera(&pov, image, *world, &vars);
@@ -51,6 +58,7 @@ void	run_mlx(t_image image, t_world *world)
 		vars.lst->obj->data.img, 0, 0);
 	mlx_key_hook(vars.mlx_win, key_pressed, &vars);
 	mlx_hook(vars.mlx_win, 17, 1L << 17, close_program, &vars);
+	// mlx_expose_hook(vars.mlx_win, expose_hook, &vars);
 	mlx_loop(vars.mlx);
 }
 

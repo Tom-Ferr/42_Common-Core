@@ -20,9 +20,8 @@ int	error_exit(char *error)
 	return (1);
 }
 
-int	close_program(t_vars *vars)
+int	close_program(void)
 {
-	ft_freelst(vars->lst);
 	exit(0);
 	return (1);
 }
@@ -31,7 +30,6 @@ int	key_pressed(int keycode, t_vars *vars)
 {
 	if (keycode == ESC)
 	{
-		ft_freelst(vars->zeroth);
 		mlx_destroy_window(vars->mlx, vars->mlx_win);
 		exit(0);
 		return (1);
@@ -59,4 +57,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
+}
+
+int	expose_hook(t_vars *vars)
+{
+	return (mlx_put_image_to_window(vars->mlx, vars->mlx_win,
+			vars->lst->obj->data.img, 0, 0));
 }

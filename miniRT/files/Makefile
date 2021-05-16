@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/05/11 16:05:35 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/05/15 19:22:40 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ FILES			=	vec3_ii.c vec3_i.c ray.c hittable_list.c sphere.c\
 
 SRCDIR			= src/
 
-SRCS			= $(addprefix $(SRCDIR), $(FILES))
+SRCS			= $(addprefix $(SRCDIR), $(FILES)) main.c
 
 OBJS			= ${SRCS:.c=.o}
 
@@ -27,7 +27,7 @@ BONUS			=
 
 BONUS_OBJS		= ${BONUS:.c=.o}
 
-NAME			= libraytracing.a
+NAME			= miniRT
 
 GCC				=	gcc
 
@@ -39,39 +39,22 @@ INCLUDE 		= -I ./minilibx_opengl -I./includes
 
 MLX				= -L ./minilibx_opengl -lmlx -framework OpenGL -framework AppKit
 
-OUT				= miniRT
-
 
 .c.o:
 					${GCC} ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
 $(NAME):		${OBJS}
 				make -C minilibx_opengl
-				${GCC} ${CFLAGS} ${INCLUDE} main.c ${OBJS} ${MLX} -o ${OUT}
-
-main:			all
-				${GCC} ${CFLAGS} ${INCLUDE} main.c -L. -lraytracing ${MLX} -o ${OUT}
-
-run:			main
-				./${OUT} sphere.rt
-
-noflag:			all
-				${GCC} ${INCLUDE} main.c -L. -lraytracing ${MLX} -o ${OUT}
-
-run_noflag:		noflag
-				./${OUT} sphere.rt
-
-bmp:			main
-				./${OUT} sphere.rt --save
+				${GCC} ${CFLAGS} -fsanitize=address ${OBJS} ${MLX} -o ${NAME}
 
 all:			${NAME}
 
 clean:
-				rm -f ${OBJS} ${BONUS_OBJS} ${OUT}
+				rm -f ${OBJS}
 
 fclean:			clean
 				rm -f ${NAME}
 				make clean -C minilibx_opengl
 re:				fclean all
 
-.PHONY:			all clean fclean re main run noflag run_noflag bmp
+.PHONY:			all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 16:02:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/05/11 11:39:42 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/05/12 23:28:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	parse_triangle(char *line, t_world *world)
 			ol->sh.fig.tr.vertex2, ol->sh.fig.tr.vertex1);
 	ol->sh.fig.tr.normal = cross(vec_subtract(ol->sh.fig.tr.vertex3,
 				ol->sh.fig.tr.vertex1), ol->sh.fig.tr.normal);
+	ol->sh.fig.tr.normal = normalize(ol->sh.fig.tr.normal);
 	clr = vec_divide(255, parse_coordinates(&line, 0, 255, "triangle color"));
 	ol->sh.material = set_material(clr, NONE, NONE, lambertian);
 	ol->sh.hit = triangle_hit;

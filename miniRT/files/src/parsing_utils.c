@@ -54,10 +54,21 @@ double	parse_double(char **param, double min, double max, char *err_)
 t_vec3	parse_coordinates(char **line, double min, double max, char *err_)
 {
 	t_vec3	ret;
+	char	*check;
 
 	ret.x = parse_double(line, min, max, err_);
+	check = *line;
+	if (!((check[1] >= '0' && check[1] <= '9') || check[1] == '-'))
+		error_exit("input value is bad formatted");
 	ret.y = parse_double(line, min, max, err_);
+	check = *line;
+	if (!((check[1] >= '0' && check[1] <= '9') || check[1] == '-'))
+		error_exit("input value is bad formatted");
 	ret.z = parse_double(line, min, max, err_);
+	check = *line;
+	if (!(check[1] == ' ' || check[1] == '\n' || check[1] == '\0'
+			|| check[1] == 9))
+		error_exit("input value is bad formatted");
 	return (ret);
 }
 
@@ -65,12 +76,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t		size;
 	char		*ptr;
-	char		*s1_0;
-	char		*s2_0;
 	char		*ptr_0;
 
-	s1_0 = (char *)s1;
-	s2_0 = (char *)s2;
 	size = (ft_strlen(s1) + ft_strlen(s2)) + 1;
 	ptr = (char *)malloc(size);
 	if (!ptr)

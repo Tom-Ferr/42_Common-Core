@@ -21,6 +21,8 @@ bool	emissive(
 {
 	r_in = *scattered;
 	rec.p = *attenuation;
+	*scattered = r_in;
+	*attenuation = rec.p;
 	return (false);
 }
 
