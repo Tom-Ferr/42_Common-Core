@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 10:54:06 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/06/29 14:32:43 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/07/02 12:24:25 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	stack_swap(t_list **x)
 {
 	t_list	tmp;
 
-	if (!*x)
+	if (!*x || ft_lstsize(*x) < 2)
 		return ;
 	tmp = **x;
 	(*x)->content = (*x)->next->content;

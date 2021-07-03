@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 15:05:41 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/06/30 10:45:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/07/02 00:51:10 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	find_sequence(t_list *lst, int count, t_list *zeroth)
 	min = lst->content;
 	while (check != lst)
 	{
-		if (check->content >= min && check->content)
+		if (check->content >= min)
 		{
 			min = check->content;
 			count++;
@@ -77,6 +77,8 @@ void	filter(t_list *lst, t_pole *info)
 	int		target;
 	t_list	*zeroth;
 
+	info->lowest = lst->content;
+	info->highest = lst->content;
 	zeroth = lst;
 	target = sequence(lst, info);
 	polarize(lst);

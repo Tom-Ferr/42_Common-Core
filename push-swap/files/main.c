@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 09:42:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/07/01 07:45:03 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/07/02 12:36:23 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,10 @@ int	main(int argc, char *argv[])
 	while (--i)
 		if (!ft_isdigit(argv[i]) && (*argv[i] != '-'))
 			error_exit();
-	if (argc <= 2)
-		return (0);
 	a = NULL;
 	check_errors(&a, argv);
-	info.highest = 0;
+	if (argc <= 2)
+		return (0);
 	filter(a, &info);
 	b = NULL;
 	if (is_ring(a, DOWN) && (argc - 1) > 3)

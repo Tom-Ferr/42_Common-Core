@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 09:42:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/07/01 07:47:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/07/01 12:27:05 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ int	main(int argc, char *argv[])
 		write(1, "OK\n", 3);
 	else
 		write(1, "KO\n", 3);
-	if (b)
-		free_lst(&a);
-	if (b)
-		free_lst(&b);
+	free_lst(&a);
+	free_lst(&b);
 	return (0);
 }

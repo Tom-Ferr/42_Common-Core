@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/06/28 21:43:08 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/07/02 10:50:43 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ $(NAME):		${OBJS}
 all:			${NAME}
 
 bonus:			${BONUS_OBJS}
-				${GCC} ${CFLAGS} ${BONUS_OBJS} -o ${BONUS}
+				${GCC} ${CFLAGS} -fsanitize=address ${BONUS_OBJS} -o ${BONUS}
 
 clean:
 				rm -f ${OBJS} ${BONUS_OBJS}
