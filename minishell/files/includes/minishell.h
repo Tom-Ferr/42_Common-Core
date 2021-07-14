@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 12:35:48 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/07/13 14:52:25 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/07/13 21:32:26 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_info
 	int		fd_hist;
 	t_list	*buff;
 	size_t	i;
-	size_t	j;
+	int		j;
 }			t_info;
 
 t_info g_main;
@@ -54,10 +54,17 @@ t_info g_main;
 void	*ft_calloc(size_t nblock, size_t size);
 char	*ft_strdup(const char *str);
 
-void 	get_history(char *live, t_list **buff);
-void 	load_history(char **live, t_list *lst, int j);
+void 	get_history();
+void 	load_history(t_list *lst);
+int		open_history();
 
-void 	newline(t_list **buff, char *live, size_t *i, int *j);
+void 	newline();
+void	h_keys(char *side, int u);
+void	v_keys();
+void	arrow_keys();
+void 	save_history();
+void 	clear();
+void	check_input();
 
 void 	str_expans(char *live, int i, size_t stop);
 void 	str_retract(char *live, size_t i);
