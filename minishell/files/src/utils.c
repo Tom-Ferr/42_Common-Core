@@ -22,6 +22,8 @@ int	ft_isdigit(char *c)
 
 int	ft_strcmp(char *str1, char *str2)
 {
+	if (!str1 || !str2)
+		return (-1);
 	while (*str1 && *str2)
 	{
 		if (*str1++ != *str2++)

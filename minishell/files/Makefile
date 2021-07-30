@@ -6,12 +6,15 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/07/13 21:38:04 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/07/30 14:24:01 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FILES			= gnl.c gnl_utils.c utils.c list.c history.c live_string.c\
-					inputs.c keys.c
+FILES			= gnl.c gnl_utils.c utils.c utils_2.c list.c history.c \
+				inputs.c keys.c ft_export.c ft_split.c ft_strncmp.c ft_unset.c\
+				parsing.c artolst.c live_string.c pipe.c utils_3.c \
+				pipex.c pipex_2.c utils_4.c builtins.c ft_strnstr.c utils_5.c \
+				quotes.c heredoc.c
 
 SRCDIR			= src/
 
@@ -25,7 +28,7 @@ GCC				= clang
 
 AR				= ar -rcs
 
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			= -g -Wall -Wextra -Werror
 
 INCLUDE 		= -I./includes
 
@@ -42,6 +45,8 @@ clean:
 				rm -f ${OBJS}
 
 fclean:			clean
+				rm -f ${NAME} .history.log
+
 re:				fclean all
 
 .PHONY:			all clean fclean re
