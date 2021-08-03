@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 11:58:13 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/07/29 11:37:57 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/03 19:38:25 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ int	open_history(char *file)
 	fd = open(file, O_APPEND | O_CREAT | O_RDWR, S_IRWXU);
 	if (fd < 0)
 	{
-		perror("Error:");
+		printf("Error: %s\n", strerror(errno));
 		exit(1);
 	}
 	return (fd);
 }
 
-void 	get_history(void)
+void	get_history(void)
 {
 	char	*line;
 	char	*put;
@@ -53,7 +53,7 @@ void 	get_history(void)
 	close(fd);
 }
 
-void 	load_history(t_list *lst)
+void	load_history(t_list *lst)
 {
 	int	size;
 
@@ -61,12 +61,12 @@ void 	load_history(t_list *lst)
 	while (--size > g_main.j)
 		lst = lst->next;
 	g_main.live = lst->content;
-	write(1, "\e[u", 3);
-	write(1, "\e[J", 3);
+	write(1, CURSOR_REST, 3);
+	write(1, CLEAR_END, 3);
 	write(1, g_main.live, ft_strlen(g_main.live));
 }
 
-void 	save_history(void)
+void	save_history(void)
 {
 	write(g_main.fd_hist, g_main.live, ft_strlen(g_main.live));
 	write(g_main.fd_hist, "\n", 1);

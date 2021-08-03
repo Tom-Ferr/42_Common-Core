@@ -57,7 +57,7 @@ static int	convert(const char *str, char is_neg, size_t index)
 	return (ret);
 }
 
-int	ft_atoi(const char *str)
+int	ft_atoi(char *str)
 {
 	int			ret;
 	char		is_neg;

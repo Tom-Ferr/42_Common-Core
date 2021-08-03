@@ -1,41 +1,23 @@
 #include "minishell.h"
 
-void	whereis_util(struct dirent **sd, DIR **dir, char *target[], int j)
+void	flow_pipe(int x, int fd[], char *argv, char *envp[])
 {
-	*dir = opendir(target[j]);
-	if (*dir)
-		*sd = readdir(*dir);
-	else
-		*sd = NULL;
-}
+	char	**cmd;
 
-static void	ft_whereis(char **cmd[], char *target[])
-{
-	DIR				*dir;
-	struct dirent	*sd;
-	int				j;
-
-	j = 0;
-	while (target[j])
-	{
-		whereis_util(&sd, &dir, target, j);
-		while (sd)
-		{
-			while (sd && ft_strcmp(sd->d_name, (*cmd)[0]))
-				sd = readdir(dir);
-			if (sd)
-			{
-				free((*cmd)[0]);
-				(*cmd)[0] = ft_strjoin(ft_strdup(target[j]),
-						ft_strdup(sd->d_name), '/');
-				closedir(dir);
-				return ;
-			}
-		}
-		if (dir)
-			closedir(dir);
-		j++;
-	}
+	cmd_spacereverse(&argv);
+	cmd = ft_split(argv, -2);
+	close(fd[1 - x]);
+	if (g_main.parse.output.file || g_main.parse.pipe
+		|| g_main.parse.input.file)
+		dup2(fd[x], x);
+	close(fd[x]);
+	ft_searchbuiltins(cmd, envp);
+	if (!ft_strrchr(cmd[0], '/'))
+		set_path(&cmd, envp);
+	execve(cmd[0], cmd, envp);
+	free_star(cmd);
+	write(2, "Error: Command not found\n", 25);
+	exit(1);
 }
 
 void	set_path(char **cmd[], char *env[])
@@ -74,7 +56,7 @@ void	ft_builtinsfound(
 	else
 	{
 		free_star(argv);
-		perror("Error");
+		printf("Error: %s\n", strerror(errno));
 		exit (EXIT_FAILURE);
 	}
 }

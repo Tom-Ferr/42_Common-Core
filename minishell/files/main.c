@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 10:29:01 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/07/30 13:31:54 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/03 19:37:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	sig_handle(int signus)
 	if (signus == SIGINT)
 	{
 		write(1, "\n", 1);
-		newline("minishell > ");
+		newline(PROMPT);
 	}
 }
 
@@ -25,9 +25,10 @@ void	init_term(bool mode)
 {
 	struct termios	term;
 
+	check_tty();
 	if (tcgetattr(STDIN_FILENO, &term) != 0)
 	{
-		perror("tcgetatt() Error");
+		printf("tcgetattr() Error: %s\n", strerror(errno));
 		exit(1);
 	}
 	if (!mode)
@@ -42,7 +43,7 @@ void	init_term(bool mode)
 	}
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) != 0)
 	{
-		perror("tcsetattr() Error");
+		printf("tcgetattr() Error: %s\n", strerror(errno));
 		exit(1);
 	}
 }
@@ -57,8 +58,8 @@ void	start(void)
 	g_main.env->visible = 1;
 	init_term(false);
 	get_history();
-	write(1, "minishell > ", 12);
-	write(1, "\e[s", 3);
+	write(1, PROMPT, ft_strlen(PROMPT));
+	write(1, CURSOR_SAVE, 3);
 }
 
 void	loop(void)
@@ -79,9 +80,11 @@ int	main(int argc, char *argv[], char *env[])
 {
 	if (argc > 1)
 	{
-		printf("Please, no arguments after %s\n", argv[0]);
+		printf("Scripts are not required by the PDF in %s :)\n", argv[0]);
 		return (0);
 	}
+	argc--;
+	argv = 0;
 	copy_env(env);
 	start();
 	loop();

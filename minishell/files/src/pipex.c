@@ -1,23 +1,5 @@
 #include "minishell.h"
 
-static void	flow_pipe(int x, int fd[], char *argv, char *envp[])
-{
-	char	**cmd;
-
-	cmd_spacereverse(&argv);
-	cmd = ft_split(argv, -2);
-	close(fd[1 - x]);
-	dup2(fd[x], x);
-	close(fd[x]);
-	ft_searchbuiltins(cmd, envp);
-	if (!ft_strrchr(cmd[0], '/'))
-		set_path(&cmd, envp);
-	execve(cmd[0], cmd, envp);
-	free_star(cmd);
-	write(2, "Error: Command not found\n", 25);
-	exit(1);
-}
-
 void	last_child_util(int *file)
 {
 	if (g_main.parse.input.quote)
@@ -26,7 +8,7 @@ void	last_child_util(int *file)
 				S_IRWXU);
 		if (*file < 0)
 		{
-			perror("Error");
+			printf("Error: %s\n", strerror(errno));
 			exit(EXIT_FAILURE);
 		}
 		ft_heredoc(file);
@@ -45,7 +27,7 @@ static void	last_child(int fd[], char *argv[], char *envp[])
 		file = STDIN_FILENO;
 	if (file < 0)
 	{
-		perror("Error");
+		printf("Error: %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 	dup2(file, 0);
@@ -97,7 +79,7 @@ static void	parent(int fd[], int argc, char *argv[], char *envp[])
 	else
 		file = STDOUT_FILENO;
 	if (file < 0)
-		perror("Error");
+		printf("Error: %s\n", strerror(errno));
 	dup2(file, 1);
 	flow_pipe(0, fd, argv[argc], envp);
 }
@@ -108,10 +90,12 @@ int	ft_exec(int argc, char *argv[], char *envp[])
 	int		id;
 
 	if (pipe(fd) < 0)
-		perror("Error");
-	id = fork();
+		printf("Error: %s\n", strerror(errno));
+	id = 42;
+	if (g_main.parse.input.file || g_main.parse.pipe)
+		id = fork();
 	if (id < 0)
-		perror("Error");
+		printf("Error: %s\n", strerror(errno));
 	else if (id == 0)
 		child(fd, argc, argv, envp);
 	else

@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+void	check_tty(void)
+{
+	if (isatty(STDOUT_FILENO))
+	{
+		dup2(2, 0);
+		dup2(2, 1);
+	}
+}
+
 void	cmd_spacereverse(char **cmd)
 {
 	int		i;
@@ -23,7 +32,8 @@ char	*ft_search_env(char *arg, t_list *env)
 	ret = NULL;
 	while (env)
 	{
-		if (!ft_strncmp(env->content, arg, ft_strlen(arg)))
+		if (!ft_strncmp(env->content, arg,
+				ft_strlen_tilchar(env->content, '=')))
 		{
 			sp = ft_split(env->content, '=');
 			ret = ft_strdup(sp[1]);
@@ -47,4 +57,14 @@ void	sig_handle_child(int signus)
 		kill(g_main.id, SIGQUIT);
 		printf("Quit\n");
 	}
+}
+
+int	ft_strlen_tilchar(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (*str++ != c)
+		i++;
+	return (i);
 }

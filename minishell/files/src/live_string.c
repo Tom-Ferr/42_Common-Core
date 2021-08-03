@@ -6,13 +6,13 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 12:01:13 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/07/29 11:44:29 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/03 17:13:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void 	str_expans(char *live, int i, size_t stop)
+void	str_expans(char *live, int i, size_t stop)
 {
 	while (i > (int)stop)
 	{
@@ -21,7 +21,7 @@ void 	str_expans(char *live, int i, size_t stop)
 	}
 }
 
-void 	str_retract(char *live, size_t i)
+void	str_retract(char *live, size_t i)
 {
 	while (live[i])
 	{
@@ -50,8 +50,7 @@ void	str_update(char *live, char new, size_t *i)
 			live[(*i) - 1] = '\0';
 		(*i) -= 1;
 	}
-	write(1, "\e[u", 3);
-	write(1, "\e[J", 3);
+	check_lastline(new);
 	write(1, live, ft_strlen(live));
 	j = ft_strlen(live) - *i;
 	if (*i < ft_strlen(live))

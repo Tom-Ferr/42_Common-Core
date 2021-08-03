@@ -28,15 +28,29 @@ int	ft_unset(int argc, char *argv[], t_list **env)
 
 int	ft_exit(int argc, char *argv[], t_list **env)
 {
-	argc--;
-	if (argv)
-		argv[0] = NULL;
+	int	exit_val;
+
+	if (argc > 2)
+	{
+		errno = E2BIG;
+		return (1);
+	}
+	if (argv[1])
+		exit_val = ft_atoi(argv[1]);
+	if (argc != 1 && !exit_val && *argv[1] != 48)
+	{
+		write(1, "Numeric argument required.\n", 27);
+		exit_val = 255;
+	}
+	if (argc == 1)
+		exit_val = 0;
 	write(1, "exit\n", 5);
 	free_lst(&g_main.buff);
 	free_lst(&g_main.env);
+	free_star(argv);
 	*env = NULL;
 	close(g_main.fd_hist);
 	init_term(true);
-	exit(0);
+	exit(exit_val);
 	return (0);
 }

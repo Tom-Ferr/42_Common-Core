@@ -11,11 +11,12 @@ void	ft_checkdollarsign(t_list	**lst)
 {
 	while (*lst)
 	{
-		if (ft_iscontained(*((*lst)->content), "$"))
+		if ((*lst)->prev && ft_iscontained(*((*lst)->content), "$"))
 		{
 			if (((*lst)->next) && *((*lst)->next->content) == '?')
 				ft_exitvalue(lst);
-			else if (g_main.parse.quotes != 1)
+			else if (g_main.parse.quotes != 1 && (*lst)->next
+				&& ft_isalpha(*((*lst)->next->content)))
 				ft_convertdollartovalue(lst, g_main.env);
 		}
 		*lst = (*lst)->next;
@@ -31,22 +32,13 @@ static void	run_otherbuiltins(
 	if (f != NULL)
 	{
 		ft_firstcmdoff();
-		if (f == ft_exit)
+		if (f(line_count, *cmd_brkdown, &g_main.env))
 		{
-			free_star(g_main.parse.cmd);
-			free_star(*cmd_brkdown);
-			ft_exit(line_count, NULL, &g_main.env);
+			printf("Error: %s\n", strerror(errno));
+			g_main.exitval = 1;
 		}
 		else
-		{
-			if (f(line_count, *cmd_brkdown, &g_main.env))
-			{
-				perror("Error");
-				g_main.exitval = 1;
-			}
-			else
-				g_main.exitval = 0;
-		}
+			g_main.exitval = 0;
 		if (ft_strrchr((*cmd_brkdown)[0], '='))
 			ft_lstlast(g_main.env)->visible = 0;
 	}

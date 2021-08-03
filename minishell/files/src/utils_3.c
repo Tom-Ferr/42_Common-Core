@@ -83,7 +83,7 @@ char	*ft_itoa(int n)
 	return (str);
 }
 
-void	ft_exitvalue (t_list **lst)
+void	ft_exitvalue(t_list **lst)
 {
 	char	*int_result;
 	t_list	*temp;
