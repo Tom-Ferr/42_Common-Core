@@ -17,6 +17,8 @@ int	ft_pipe(t_list *lst)
 		{
 			quote = 1;
 			which_one = *(lst->content);
+			lst = lst->next;
+			continue ;
 		}
 		if (*(lst->content) == which_one)
 			quote = (quote + 1) % 2;

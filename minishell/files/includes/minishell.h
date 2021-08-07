@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nfranco- <nfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 12:35:48 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/03 19:33:55 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/07 17:05:10 by nfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ char	*ft_strrchr(const char *str, int c);
 void	ft_searchbuiltins(char	**cmd, char *env[]);
 void	ft_checkdollarsign(t_list	**lst);
 void	ft_convertdollartovalue(t_list **lst, t_list *env);
+void	env_exp_prep_util(t_list *env_exp, char old, char new);
 
 int		ft_exec(int argc, char *argv[], char *envp[]);
 void	set_path(char **cmd[], char *env[]);

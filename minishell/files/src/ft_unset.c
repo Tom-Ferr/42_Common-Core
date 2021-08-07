@@ -11,7 +11,10 @@ int	ft_unset(int argc, char *argv[], t_list **env)
 	{
 		while (*env)
 		{
-			if (!ft_strncmp((*env)->content, argv[i], ft_strlen(argv[i])))
+			if (!ft_strncmp((*env)->content, argv[i],
+					ft_strlen_tilchar((*env)->content, '='))
+				&& !ft_strncmp(argv[i], (*env)->content,
+					ft_strlen(argv[i])))
 			{
 				*env = (*env)->prev;
 				lst_detach(env);

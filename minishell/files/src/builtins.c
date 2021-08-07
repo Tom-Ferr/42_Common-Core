@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nfranco- <nfranco-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 12:35:08 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/03 17:46:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/07 17:48:00 by nfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,10 @@ int	ft_echo(int argc, char *argv[], char *env[])
 
 	i = 0;
 	argc--;
-	if ((argv[1]) && (argv[1][0] == '-' && argv[1][1] != 'n'))
-	{
-		errno = EINVAL;
-		return (1);
-	}
 	env = argv;
 	while (argv[++i])
 	{
-		if (*argv[i] != '-')
+		if (ft_strcmp(argv[i], "-n"))
 		{
 			printf("%s", argv[i]);
 			if (argv[i + 1])

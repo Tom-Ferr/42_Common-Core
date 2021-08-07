@@ -6,7 +6,7 @@ char	*lsttostr(t_list *lst)
 	char	*ret;
 
 	size = ft_lstsize(lst);
-	ret = (char *)malloc(size * sizeof(char));
+	ret = (char *)malloc(size + 1 * sizeof(char));
 	size = 0;
 	while (lst)
 	{

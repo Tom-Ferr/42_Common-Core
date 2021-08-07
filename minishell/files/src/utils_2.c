@@ -5,7 +5,7 @@ int	tofindmalloc(char **tofind, t_list *lst)
 	int	i;
 
 	i = 0;
-	while (lst && (ft_isalpha(*(lst->content))))
+	while (lst && !ft_iscontained(*(lst->content)," \t\"\'"))
 	{
 		lst = lst->next;
 		i++;
@@ -38,14 +38,16 @@ void	pickvariable(t_list *env, t_list **temp, char *tofind, int i)
 	{
 		if (ft_strncmp(env->content, tofind, i + 1) == 0)
 		{
-			found = ft_split(env->content, '=');
+			env_exp_prep_util(env, '=', -4);
+			found = ft_split(env->content, -4);
+			env_exp_prep_util(env, -4, '=');
 			break ;
 		}
 		env = env->next;
 	}
 	*temp = 0;
 	if (!found || found[1] == NULL)
-		argtolst("", temp);
+		argtolst("\b", temp);
 	else
 		argtolst(found[1], temp);
 	if (found)
@@ -80,7 +82,7 @@ void	ft_convertdollartovalue(t_list **lst, t_list *env)
 	searchvalue(&tofind, *lst, i);
 	pickvariable(env, &temp, tofind, i);
 	*lst = (*lst)->prev->prev;
-	while (((*lst)->next) && (ft_isalpha(*((*lst)->next->content))
+	while (((*lst)->next) && (*((*lst)->next->content) != '='
 			|| *((*lst)->next->content) == '$'))
 		lst_detach(lst);
 	writevariablevalue(lst, temp);

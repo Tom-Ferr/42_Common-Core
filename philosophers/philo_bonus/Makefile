@@ -3,19 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfranco- <nfranco-@student.42.fr>          +#+  +:+       +#+         #
+#    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/08/07 21:55:26 by nfranco-         ###   ########.fr        #
+#    Updated: 2021/08/07 10:18:44 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FILES			= gnl.c gnl_utils.c utils.c utils_2.c list.c history.c \
-				inputs.c keys.c ft_export.c ft_split.c ft_unset.c\
-				parsing.c artolst.c live_string.c pipe.c utils_3.c \
-				pipex.c pipex_2.c utils_4.c builtins.c utils_5.c utils_7.c\
-				quotes.c heredoc.c get.c interpreter.c run.c utils_6.c \
-				whereis.c cd.c
+FILES			= utils.c
 
 SRCDIR			= src/
 
@@ -23,13 +18,13 @@ SRCS			= $(addprefix $(SRCDIR), $(FILES)) main.c
 
 OBJS			= ${SRCS:.c=.o}
 
-NAME			= minishell
+NAME			= philo_bonus
 
-GCC				= clang
+GCC				=	gcc
 
-AR				= ar -rcs
+AR				=	ar -rcs
 
-CFLAGS			= -g -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror
 
 INCLUDE 		= -I./includes
 
@@ -47,7 +42,6 @@ clean:
 
 fclean:			clean
 				rm -f ${NAME}
-
 re:				fclean all
 
 .PHONY:			all clean fclean re

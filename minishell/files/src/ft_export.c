@@ -20,7 +20,9 @@ int	lookforvariable(char **arg, char *argv[], t_list **env, int i)
 	while (*env)
 	{
 		if (!ft_strncmp((*env)->content, arg[0],
-				ft_strlen_tilchar((*env)->content, '=')))
+				ft_strlen_tilchar((*env)->content, '='))
+			&& !ft_strncmp(arg[0], (*env)->content,
+				ft_strlen(arg[0])))
 		{
 			if (arg[1])
 			{

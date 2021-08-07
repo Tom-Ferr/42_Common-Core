@@ -33,7 +33,9 @@ char	*ft_search_env(char *arg, t_list *env)
 	while (env)
 	{
 		if (!ft_strncmp(env->content, arg,
-				ft_strlen_tilchar(env->content, '=')))
+				ft_strlen_tilchar(env->content, '='))
+			&& !ft_strncmp(arg, env->content,
+				ft_strlen(arg)))
 		{
 			sp = ft_split(env->content, '=');
 			ret = ft_strdup(sp[1]);

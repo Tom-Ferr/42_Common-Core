@@ -6,7 +6,8 @@ void	ft_removequotes(t_list **lst, char target)
 	{
 		if (((*lst)->next) && *((*lst)->next->content) == target)
 			lst_detach(lst);
-		*lst = (*lst)->next;
+		else
+			*lst = (*lst)->next;
 	}
 }
 
