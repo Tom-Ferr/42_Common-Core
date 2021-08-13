@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfranco- <nfranco-@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/04 12:35:08 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/07 17:48:00 by nfranco-         ###   ########.fr       */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nfranco- <nfranco-@student.42.fr>        +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/13 11:58:13 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/08/03 19:38:25 by nfranco-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_checkfound(
+							int (*g)(int argc,
+							char *argv[],
+							t_list *env[]),
+							int argc,
+							char *argv[]
+						)
+{
+	if (!g(argc, argv, &g_main.env))
+	{
+		free_star(argv);
+		exit (EXIT_SUCCESS);
+	}
+	else
+	{
+		free_star(argv);
+		printf("Error: %s\n", strerror(errno));
+		exit (EXIT_FAILURE);
+	}
+}
 
 int	ft_echo(int argc, char *argv[], char *env[])
 {

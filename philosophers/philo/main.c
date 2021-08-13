@@ -6,14 +6,20 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 13:01:03 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/07 19:13:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/13 13:03:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+static pthread_mutex_t	g_mutex_r;
+static pthread_mutex_t	g_mutex_l;
+static bool				g_panic;
+
 int	grab_fork(t_rout *rt)
 {
+	if (rt->ph[rt->id].die < (getusec() - rt->ph[rt->id].starv))
+		return (1);
 	pthread_mutex_lock(&g_mutex_l);
 	if (rt->ph[rt->id].frk)
 	{
@@ -59,11 +65,10 @@ void	grab_food(t_rout *rt)
 	rt->ph[rt->id].meals--;
 }
 
-void	routine(t_rout *rt)
+void	symposium(t_rout *rt)
 {
 	rt->ph[rt->id].starv = getusec();
-	while ((rt->ph[rt->id].die < (getusec() - rt->ph[rt->id].starv)
-			|| rt->ph[rt->id].meals) && g_panic == false)
+	while (rt->ph[rt->id].meals && g_panic == false)
 	{
 		if (rt->ph[rt->id].frk || rt->ph[(rt->id + 1) % rt->ph[rt->id].phi].frk)
 			if (grab_fork(rt) || g_panic)
@@ -78,25 +83,6 @@ void	routine(t_rout *rt)
 		g_panic = true;
 		printf("%u %d died\n", getusec() / 1000, rt->id + 1);
 	}
-}
-
-void	core(t_info info, pthread_t *th, t_info *ph, t_rout *rt)
-{
-	int	i;
-
-	i = RESET;
-	while (++i < (int)info.phi)
-		ph[i] = info;
-	i = RESET;
-	while (++i < (int)info.phi)
-	{
-		rt[i].ph = ph;
-		rt[i].id = i;
-		pthread_create(&th[i], NULL, (void *)&routine, &rt[i]);
-	}
-	i = RESET;
-	while (++i < (int)info.phi)
-		pthread_join(th[i], NULL);
 }
 
 int	main(int argc, char *argv[])

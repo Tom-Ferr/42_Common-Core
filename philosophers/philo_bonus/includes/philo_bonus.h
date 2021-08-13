@@ -1,26 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/08 00:20:50 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/13 12:48:22 by tde-cama         ###   ########.fr       */
+/*   Created: 2021/08/11 12:41:36 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/08/13 12:40:17 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define  PHILO_H
+#ifndef PHILO_BONUS_H
+# define  PHILO_BONUS_H
 
 # include <stdio.h>
+# include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <signal.h>
 # include <stdbool.h>
 # include <pthread.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
 # include <sys/time.h>
+# include <semaphore.h>
 
 # define  RESET -1
+# define  FRK 0
+# define  CTL 1
+# define  DIE 2
 
 typedef struct s_info
 {
@@ -32,17 +40,15 @@ typedef struct s_info
 	int				meals;
 	int				frk;
 	int				ready;
-}					t_info;
+	int				i;
+	int				*id;
+	sem_t			*sem[3];
 
-typedef struct s_rout
-{
-	unsigned int	id;
-	t_info			*ph;
-}					t_rout;
+}					t_info;
 
 int				start(int argc, char *argv[], t_info *info);
 unsigned int	getusec(void);
-void			core(t_info info, pthread_t *th, t_info *ph, t_rout *rt);
-void			symposium(t_rout *rt);
+void			sem_action(t_info *info, bool mode);
+void			symposium(int ph, t_info info);
 
 #endif

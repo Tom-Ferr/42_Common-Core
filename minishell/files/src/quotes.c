@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quotes.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nfranco- <nfranco-@student.42.fr>        +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/13 11:58:13 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/08/03 19:38:25 by nfranco-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_removequotes(t_list **lst, char target)
@@ -64,6 +76,9 @@ void	doublequotes(bool quote, t_list **lst)
 
 int	ft_checkquotes(t_list **lst)
 {
+	t_list	*zeroth;
+
+	zeroth = (*lst)->prev;
 	if (ft_iscontained(*((*lst)->content), "'"))
 		singlequotes(true, lst);
 	else if (ft_iscontained(*((*lst)->content), "\""))

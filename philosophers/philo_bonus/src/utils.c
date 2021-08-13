@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 13:03:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/07 10:06:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/13 12:35:05 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 static int	ft_strlen(char *str)
 {
@@ -69,6 +69,27 @@ int	start(int argc, char *argv[], t_info *info)
 
 unsigned int	getusec(void)
 {
-	gettimeofday(&g_t, NULL);
-	return ((g_t.tv_sec * 1000000) + (g_t.tv_usec));
+	struct timeval	t;
+
+	gettimeofday(&t, NULL);
+	return ((t.tv_sec * 1000000) + (t.tv_usec));
+}
+
+void	sem_action(t_info *info, bool mode)
+{
+	sem_unlink("fork");
+	sem_unlink("control");
+	sem_unlink("die");
+	if (mode)
+	{
+		info->sem[FRK] = sem_open("fork", O_CREAT | O_EXCL, 0644, info->phi);
+		info->sem[CTL] = sem_open("control", O_CREAT | O_EXCL, 0644, 1);
+		info->sem[DIE] = sem_open("die", O_CREAT | O_EXCL, 0644, 1);
+	}
+	else
+	{
+		sem_close(info->sem[FRK]);
+		sem_close(info->sem[CTL]);
+		sem_close(info->sem[DIE]);
+	}
 }

@@ -74,9 +74,11 @@ int	ft_countlines(char **cmd)
 void	ft_searchbuiltins(char	**cmd, char *env[])
 {
 	int	(*f)(int argc, char *argv[], char *env[]);
+	int	(*g)(int argc, char *argv[], t_list *env[]);
 	int	line_count;
 
 	f = NULL;
+	g = NULL;
 	line_count = ft_countlines(cmd);
 	if ((ft_strcmp(cmd[0], "echo") == 0))
 		f = ft_echo;
@@ -84,6 +86,16 @@ void	ft_searchbuiltins(char	**cmd, char *env[])
 		f = ft_env;
 	else if ((ft_strcmp(cmd[0], "pwd") == 0))
 		f = ft_pwd;
+	else if ((ft_strcmp(cmd[0], "export") == 0))
+		g = ft_export;
+	else if ((ft_strcmp(cmd[0], "exit") == 0))
+		g = ft_exit;
+	else if ((ft_strcmp(cmd[0], "cd") == 0))
+		g = ft_cd;
+	else if ((ft_strcmp(cmd[0], "unset") == 0))
+		g = ft_unset;
 	if (f != NULL)
 		ft_builtinsfound(f, line_count, cmd, env);
+	else if (g != NULL)
+		ft_checkfound(g, line_count, cmd);
 }

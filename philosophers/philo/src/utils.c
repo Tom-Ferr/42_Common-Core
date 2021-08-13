@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 13:03:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/07 10:06:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/13 12:46:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,27 @@ int	start(int argc, char *argv[], t_info *info)
 
 unsigned int	getusec(void)
 {
-	gettimeofday(&g_t, NULL);
-	return ((g_t.tv_sec * 1000000) + (g_t.tv_usec));
+	struct timeval	t;
+
+	gettimeofday(&t, NULL);
+	return ((t.tv_sec * 1000000) + (t.tv_usec));
+}
+
+void	core(t_info info, pthread_t *th, t_info *ph, t_rout *rt)
+{
+	int	i;
+
+	i = RESET;
+	while (++i < (int)info.phi)
+		ph[i] = info;
+	i = RESET;
+	while (++i < (int)info.phi)
+	{
+		rt[i].ph = ph;
+		rt[i].id = i;
+		pthread_create(&th[i], NULL, (void *)&symposium, &rt[i]);
+	}
+	i = RESET;
+	while (++i < (int)info.phi)
+		pthread_join(th[i], NULL);
 }

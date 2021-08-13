@@ -6,11 +6,11 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/08/07 10:18:44 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/08/13 12:41:47 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FILES			= utils.c
+FILES			= utils.c symposium.c
 
 SRCDIR			= src/
 
@@ -20,7 +20,7 @@ OBJS			= ${SRCS:.c=.o}
 
 NAME			= philo_bonus
 
-GCC				=	gcc
+GCC				=	clang
 
 AR				=	ar -rcs
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfranco- <nfranco-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/04 12:35:48 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/07 17:05:10 by nfranco-         ###   ########.fr       */
+/*   Created: 2021/07/13 11:58:13 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/08/10 18:32:38 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,13 @@ void	ft_firstcmdoff(void);
 int		ft_countlines(char **cmd);
 void	flow_pipe(int x, int fd[], char *argv, char *envp[]);
 void	ft_whereis(char **cmd[], char *target[]);
+void	ft_checkfound(
+			int (*g)(int argc,
+				char *argv[],
+				t_list *env[]),
+			int argc,
+			char *argv[]
+			);
 
 char	**ft_envarray(t_list *envp);
 void	cmd_spacereverse(char **cmd);

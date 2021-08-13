@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nfranco- <nfranco-@student.42.fr>        +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/13 11:58:13 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/08/03 19:38:25 by nfranco-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	run_util(char **visible_env)
@@ -44,7 +56,7 @@ void	ft_run(void)
 	checker = ft_parsing(g_main.live);
 	if (checker != 0)
 		parsing_error_handler(checker);
-	if (g_main.parse.cmd)
+	if (g_main.parse.cmd && !g_main.parse.pipe)
 		ft_otherbuiltins(g_main.parse.cmd);
 	if (g_main.parse.cmd && g_main.parse.cmd[0])
 	{

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   interpreter.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nfranco- <nfranco-@student.42.fr>        +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/13 11:58:13 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/08/03 19:38:25 by nfranco-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	token_handle(t_list **lst, int *setted)
@@ -35,6 +47,9 @@ int	interpreter_util(t_list **lst, int *setted)
 		lst_detach(lst);
 		*lst = (*lst)->prev;
 	}
+	while (((*((*lst)->content) == '|' && (*lst)->next))
+		&& ft_iscontained(*((*lst)->next->content), " \t"))
+		lst_detach(lst);
 	return (0);
 }
 
@@ -47,17 +62,16 @@ int	interpreter(t_list **lst)
 	zeroth = *lst;
 	while (*lst)
 	{
-		if (ft_checkquotes(lst) == 0)
+		if (ft_checkquotes(lst) == 0 && g_main.parse.pipe == 0)
 			break ;
 		if (interpreter_util(lst, &setted))
 			return (*lst = zeroth, 256);
-		while (*((*lst)->content) == '|'
-			&& ft_iscontained(*((*lst)->next->content), " \t"))
-			lst_detach(lst);
 		if (((*lst)->next) && ((*lst)->next->next)
 			&& ft_iscontained(*((*lst)->next->content), " \t")
 			&& *((*lst)->next->next->content) == '|')
 			lst_detach(lst);
+		if (*((*lst)->content) == '|' && (!(*lst)->prev || !(*lst)->next))
+			return (*lst = zeroth, 256);
 		*lst = (*lst)->next;
 	}
 	if (setted)
