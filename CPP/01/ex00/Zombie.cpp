@@ -1,0 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Zombie.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/15 23:59:06 by tde-cama          #+#    #+#             */
+/*   Updated: 2021/08/16 10:47:56 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Zombie.hpp"
+
+Zombie::Zombie(void)
+{
+	return ;
+}
+
+Zombie::Zombie(std::string name)
+{
+	this->name = name;
+}
+
+Zombie::~Zombie()
+{
+	std::cout << "AAAAAARGH!" << std::endl;
+}
+
+void Zombie::announce(void)
+{
+	std::cout << this->name << " BraiiiiiiinnnzzzZ..." << std::endl;
+}
+
+void Zombie::set_name(std::string name)
+{
+	this->name = name;
+}

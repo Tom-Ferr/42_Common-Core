@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 00:20:50 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/13 12:48:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/25 12:05:39 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <sys/time.h>
 
 # define  RESET -1
+# define  ME 0
+# define  RG 1
+# define  LF -1
 
 typedef struct s_info
 {
@@ -32,17 +35,24 @@ typedef struct s_info
 	int				meals;
 	int				frk;
 	int				ready;
+	pthread_mutex_t	mutex;
+	pthread_mutex_t	spaguetti;
 }					t_info;
 
 typedef struct s_rout
 {
 	unsigned int	id;
+	int				wait;
 	t_info			*ph;
 }					t_rout;
 
+unsigned int	mini_atoi(char argv[]);
 int				start(int argc, char *argv[], t_info *info);
 unsigned int	getusec(void);
 void			core(t_info info, pthread_t *th, t_info *ph, t_rout *rt);
+int				id(int side, t_rout *rt);
+void			hold_fork(t_rout *rt);
 void			symposium(t_rout *rt);
+void			monitor(t_rout *rt);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 10:31:24 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/13 12:40:58 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/23 20:00:03 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	parent(t_info info)
 
 	i = RESET;
 	ret = 1;
+	usleep(1000);
+	sem_post(info.sem[CTL]);
 	while (ret > 0)
 	{
 		ret = waitpid(-1, &val, 0);
@@ -51,15 +53,13 @@ int	main(int argc, char *argv[])
 	{
 		info.id[info.i] = fork();
 		if (!info.id[info.i])
-			break ;
-		if (info.i + 1 == (int)info.phi)
-			break ;
+		{
+			sem_wait(info.sem[CTL]);
+			symposium(info.i + 1, info);
+		}
 		info.i++;
 	}
-	if (!info.id[info.i])
-		symposium(info.i + 1, info);
-	else
-		parent(info);
+	parent(info);
 	sem_action(&info, false);
 	free(info.id);
 	return (0);

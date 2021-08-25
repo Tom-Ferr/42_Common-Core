@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/11 12:41:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/13 12:40:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/23 15:24:14 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define  FRK 0
 # define  CTL 1
 # define  DIE 2
+# define  EAT 3
 
 typedef struct s_info
 {
@@ -42,7 +43,7 @@ typedef struct s_info
 	int				ready;
 	int				i;
 	int				*id;
-	sem_t			*sem[3];
+	sem_t			*sem[4];
 
 }					t_info;
 

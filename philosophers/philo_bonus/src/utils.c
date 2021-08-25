@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 13:03:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/13 12:35:05 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/23 19:32:18 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	sem_action(t_info *info, bool mode)
 	if (mode)
 	{
 		info->sem[FRK] = sem_open("fork", O_CREAT | O_EXCL, 0644, info->phi);
-		info->sem[CTL] = sem_open("control", O_CREAT | O_EXCL, 0644, 1);
+		info->sem[CTL] = sem_open("control", O_CREAT | O_EXCL, 0644, 0);
 		info->sem[DIE] = sem_open("die", O_CREAT | O_EXCL, 0644, 1);
 	}
 	else

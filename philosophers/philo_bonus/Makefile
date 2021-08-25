@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/08/13 12:41:47 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/08/23 20:45:16 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ INCLUDE 		= -I./includes
 					${GCC} ${CFLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
 
 $(NAME):		${OBJS}
-				${GCC} ${CFLAGS} -fsanitize=address ${OBJS} -o ${NAME}
+				${GCC} ${CFLAGS} -fsanitize=address ${OBJS} -lpthread -o ${NAME}
 
 all:			${NAME}
 
