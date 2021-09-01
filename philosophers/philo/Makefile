@@ -6,11 +6,11 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/08/24 13:27:44 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/09/01 10:08:24 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FILES			= utils.c aux.c
+FILES			= utils.c aux.c cron.c acts.c
 
 SRCDIR			= src/
 

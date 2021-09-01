@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 13:03:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/23 19:32:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/27 20:58:20 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ int	start(int argc, char *argv[], t_info *info)
 	info->phi = mini_atoi(argv[1]);
 	if (!info->phi)
 		return (write(2, ":( Wrong Input at 1st Argument\n", 30), 1);
-	info->die = mini_atoi(argv[2]) * 1000;
+	info->die = mini_atoi(argv[2]);
 	if (!info->die)
 		return (write(2, ":( Wrong Input at 2nd Argument\n", 30), 2);
-	info->eat = mini_atoi(argv[3]) * 1000;
+	info->eat = mini_atoi(argv[3]);
 	if (!info->eat)
 		return (write(2, ":( Wrong Input at 3rd Argument\n", 30), 3);
-	info->sleep = mini_atoi(argv[4]) * 1000;
+	info->sleep = mini_atoi(argv[4]);
 	if (!info->sleep)
 		return (write(2, ":( Wrong Input at 4th Argument\n", 30), 4);
 	info->meals = -1;
@@ -72,7 +72,7 @@ unsigned int	getusec(void)
 	struct timeval	t;
 
 	gettimeofday(&t, NULL);
-	return ((t.tv_sec * 1000000) + (t.tv_usec));
+	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
 void	sem_action(t_info *info, bool mode)

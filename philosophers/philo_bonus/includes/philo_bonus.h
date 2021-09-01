@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/11 12:41:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/23 15:24:14 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/27 20:39:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,12 @@ typedef struct s_info
 
 }					t_info;
 
+unsigned int	g_begin;
+
 int				start(int argc, char *argv[], t_info *info);
 unsigned int	getusec(void);
 void			sem_action(t_info *info, bool mode);
 void			symposium(int ph, t_info info);
+unsigned int	myTime(void);
 
 #endif

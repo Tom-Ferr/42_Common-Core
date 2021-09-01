@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 13:03:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/25 12:05:31 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/08/28 15:08:26 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,11 @@ unsigned int	mini_atoi(char argv[])
 	return (ret);
 }
 
-unsigned int	getusec(void)
+void	mod(t_info *info)
 {
-	struct timeval	t;
-
-	gettimeofday(&t, NULL);
-	return ((t.tv_sec * 1000000) + (t.tv_usec));
+	g_mod.eat = info->eat % 10;
+	g_mod.sleep = info->sleep % 10;
+	g_mod.die = info->die % 10;
 }
 
 int	id(int side, t_rout *rt)

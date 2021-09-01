@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-FILES			= utils.c symposium.c
+FILES			= utils.c symposium.c myTime.c
 
 SRCDIR			= src/
 
