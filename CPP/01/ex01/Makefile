@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/08/16 12:18:50 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/09/14 15:33:06 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ SRCS			= main.cpp Zombie.cpp\
 
 OBJS			= ${SRCS:.cpp=.o}
 
-NAME			= zombie
+NAME			= horde
 
 CC				=	clang++
 

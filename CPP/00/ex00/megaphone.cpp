@@ -6,12 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 12:23:20 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/14 14:04:23 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/13 23:23:49 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include <cctype>
 
 int main(int argc, char *argv[])
 {

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 11:33:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/18 19:09:56 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/03 21:44:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ public:
 };
 
 std::ostream & operator<<(std::ostream &o, Fixed const &rhs);
+
+bool bsp( Point const a, Point const b, Point const c, Point const point);
 
 
 #endif

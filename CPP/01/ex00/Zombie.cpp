@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/15 23:59:06 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/16 10:47:56 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/14 15:35:00 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,22 @@ Zombie::Zombie(void)
 
 Zombie::Zombie(std::string name)
 {
-	this->name = name;
+	this->_name = name;
 }
 
-Zombie::~Zombie()
+Zombie::~Zombie(void)
 {
-	std::cout << "AAAAAARGH!" << std::endl;
+	std::cout << "AAAAAARGH! Zombie \"";
+	std::cout << this->_name;
+	std::cout << "\" destructor has been called" << std::endl;
 }
 
 void Zombie::announce(void)
 {
-	std::cout << this->name << " BraiiiiiiinnnzzzZ..." << std::endl;
+	std::cout << this->_name << " BraiiiiiiinnnzzzZ..." << std::endl;
 }
 
 void Zombie::set_name(std::string name)
 {
-	this->name = name;
+	this->_name = name;
 }

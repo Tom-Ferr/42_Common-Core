@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   AMateria.hpp                                       :+:      :+:    :+:   */
+/*   Materia.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 20:36:49 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/20 11:35:00 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/03 15:49:19 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 # define MATERIA_HPP
 
 # include <iostream>
-# include "Brain.hpp"
+# include "Character.hpp"
+
+class ICharacter;
 
 class AMateria
 {
@@ -36,12 +38,11 @@ class Ice : public AMateria
 {
 public:
 	Ice(void);
-	Ice(std::string const & type);
 	Ice(Ice const & rhs);
 	~Ice(void);
-	AMateria & operator=(Ice const & rhs);
+	Ice & operator=(Ice const & rhs);
 
-	Ice* clone() const;
+	AMateria* clone() const;
 	void use(ICharacter& target);
 };
 
@@ -49,12 +50,11 @@ class Cure : public AMateria
 {
 public:
 	Cure(void);
-	Cure(std::string const & type);
 	Cure(Cure const & rhs);
 	~Cure(void);
-	AMateria & operator=(Cure const & rhs);
+	Cure & operator=(Cure const & rhs);
 
-	Cure* clone() const;
+	AMateria* clone() const;
 	void use(ICharacter& target);
 };
 

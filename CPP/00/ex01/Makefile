@@ -6,11 +6,11 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/08/15 12:49:06 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/09/13 17:45:31 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS			= phonebook.cpp utils.cpp
+SRCS			= phonebook.cpp main.cpp contact.cpp
 
 OBJS			= ${SRCS:.cpp=.o}
 

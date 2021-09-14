@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/16 14:45:39 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/16 16:50:33 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/14 13:06:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
 
 	while (getline(ifs, line))
 	{
-		while((pos = line.find(s1, 0)) > 0)
+		while((pos = line.find(s1, 0)) > -1)
 		{
 			line.erase(pos, s1.size());
 			line.insert(pos, s2);

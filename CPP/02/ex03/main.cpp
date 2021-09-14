@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 13:03:40 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/17 19:11:33 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/03 21:45:51 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Fixed.hpp"
+#include "Point.hpp"
 
 int main()
 {

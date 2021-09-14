@@ -6,12 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 17:24:09 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/15 20:34:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/13 18:30:24 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_BONUS_HPP
-# define  PHILO_BONUS_HPP
+#ifndef PHONEBOOK_HPP
+# define  PHONEBOOK_HPP
 
 # include <iostream>
 # include <cstring>
@@ -20,14 +20,29 @@
 
 class Contact
 {
-public:
+private:
 	std::string firstname, lastname, nickname;
 	std::string phone;
 	std::string dark_secret;
+public:
 
 	void add_contact(void);
+	std::string getFirstName(void);
+	std::string getLastName(void);
+	std::string getNicktName(void);
+	std::string getPhone(void);
+	std::string getSecret(void);
 };
 
-void search_contact(int i, Contact contacts[]);
+class PhoneBook
+{
+private:
+	void write_name(std::string name);
+	void get_contact(unsigned int const &i, Contact contacts[]);
+public:
+	Contact contacts[8];
+	void search_contact(unsigned int const &i, Contact contacts[]);
+};
+
 
 #endif
