@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 11:33:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/03 21:44:53 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/16 10:58:36 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ public:
 	Point(void);
 	Point(Point const & src);
 	Point(float const x, float const y);
+	Point(Fixed const x, Fixed const y);
 	~Point(void);
 	Point & operator=(Point const & rhs);
 
@@ -31,13 +32,13 @@ private:
 	Fixed const _y;
 
 public:
-	Fixed const getXcoord(void);
-	Fixed const getYcoord(void);
+	Fixed const getXcoord(void) const;
+	Fixed const getYcoord(void) const;
+	Fixed cross(Point const & rhs) const;
 
 };
 
-std::ostream & operator<<(std::ostream &o, Fixed const &rhs);
-
+std::ostream & operator<<(std::ostream &o, Point const &rhs);
 bool bsp( Point const a, Point const b, Point const c, Point const point);
 
 

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 12:29:28 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/09 18:55:36 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 09:19:41 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ RobotomyRequestForm::RobotomyRequestForm(std::string target)
 }
 
 RobotomyRequestForm::RobotomyRequestForm(RobotomyRequestForm const & src)
-	: Form(src)
+	: Form("RobotomyRequestForm", src.getTaget(), 45, 72)
 {
 	*this = src;
 	std::cout << "RobotomyRequestForm Copy constructor has been called" << std::endl;
@@ -43,8 +43,9 @@ void RobotomyRequestForm::execute(Bureaucrat const & executor) const
 
 	if (!this->getStatus())
 		throw Form::IsNotSignedException();
-	if (executor->getGrade() > this->getExecGrade())
+	if (executor.getGrade() > this->getExecGrade())
 		throw Form::GradeTooLowException();
+	std::cout << executor.getName() << " executes " << this->getName() << std::endl;
 	if (++av % 2){
 		std::cout << "Bip...Bop...BzzzRhrh...TKnnn...Kpmmm...Psshh" << std::endl;
 		std::cout << this->getTaget() << " has been robotomized successfully";

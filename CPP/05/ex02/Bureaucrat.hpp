@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 11:53:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/09 13:02:48 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 18:06:52 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ class Form;
 class Bureaucrat
 {
 
+	Bureaucrat(void);
 public:
 	Bureaucrat(std::string name, int grade);
-	Bureaucrat(void);
 	Bureaucrat(Bureaucrat const & src);
 	~Bureaucrat(void);
 	Bureaucrat & operator=(Bureaucrat const & rhs);

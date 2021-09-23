@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/16 00:35:32 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/16 12:32:24 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/15 10:44:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ int main() {
 	Zombie *z;
 	int i = 10;
 	z = zombieHorde(i, "Clark");
-	while (i)
-		z[--i].announce();
+	for (int j = 0; j < i; j++) {
+		z[j].announce();
+	}
 	delete [] z;
 	return 0;
 }

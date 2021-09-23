@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 14:01:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/11 14:54:33 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/21 12:12:06 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void iter(T arr[], size_t size, void (*f)(T&))
 template <typename T>
 void twice(T &a)
 {
-	a *= 2;
+	a += a;
 }
+
 #endif

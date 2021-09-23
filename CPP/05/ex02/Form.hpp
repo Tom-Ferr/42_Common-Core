@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 11:53:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/09 23:47:34 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 09:22:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 class Form
 {
 
+	Form(void);
 public:
 	Form(std::string name, std::string target, int ex_grade, int sign_grade);
 	Form(Form const & src);
@@ -32,7 +33,7 @@ public:
 	void beSigned(Bureaucrat const & bur);
 	virtual void execute(Bureaucrat const & executor) const = 0;
 
-private:
+protected:
 	class GradeTooLowException : public std::exception
 	{
 	public:

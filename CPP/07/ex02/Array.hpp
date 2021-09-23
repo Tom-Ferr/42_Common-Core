@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 14:01:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/11 19:31:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/21 13:14:22 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Array
 	};
 public:
 	Array<T>(void) : _n(0), _ptr(nullptr) {return ;}
-	Array<T>(unsigned int const n) : _n(n), _ptr(new T[n]){return ;}
+	Array<T>(unsigned int const n) : _n(n), _ptr(new T[n]()){return ;}
 	Array<T>(Array const & src){*this = src;}
 	~Array(void) {if(this->_ptr) delete [] this->_ptr;}
 	Array & operator=(Array const & rhs)

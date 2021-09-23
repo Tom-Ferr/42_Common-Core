@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 11:53:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/09 10:55:43 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 09:28:45 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 
 # include "Bureaucrat.hpp"
 # include "Form.hpp"
+# include <fstream>
 
 class ShrubberyCreationForm : public Form
 {
 
+	ShrubberyCreationForm(void);
 public:
 	ShrubberyCreationForm(std::string const target);
-	ShrubberyCreationForm(Form const & src);
+	ShrubberyCreationForm(ShrubberyCreationForm const & src);
 	~ShrubberyCreationForm(void);
 	ShrubberyCreationForm & operator=(ShrubberyCreationForm const & rhs);
 

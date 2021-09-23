@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/15 12:22:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/15 20:23:30 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/15 07:51:25 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ Account::Account( int initial_deposit )
 	this->_nbWithdrawals = 0;
 	std::cout << "index:" << this->_accountIndex;
 	std::cout << ";amount:" << this->_amount;
-	std::cout << ";ceated" << std::endl;
+	std::cout << ";created" << std::endl;
 
 	Account::_nbAccounts += 1;
 	Account::_totalAmount += this->_amount;

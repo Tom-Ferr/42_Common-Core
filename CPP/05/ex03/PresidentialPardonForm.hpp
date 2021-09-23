@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 11:53:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/10 01:02:27 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 18:40:41 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 class PresidentialPardonForm : public Form
 {
 
+	PresidentialPardonForm(void);
 public:
 	PresidentialPardonForm(std::string const target);
 	PresidentialPardonForm(PresidentialPardonForm const & src);

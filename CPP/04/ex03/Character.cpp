@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 12:29:01 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/03 15:45:54 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 16:23:19 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ Character::Character(std::string name) : _name(name)
 
 Character::Character(Character const & src)
 {
+	for (int i = 0; i < 4; i++)
+		this->_inventory[i] = nullptr;
 	std::cout << "Character Copy constructor has been called" << std::endl;
 	*this = src;
 }
@@ -39,18 +41,20 @@ Character::~Character(void)
 		if (this->_inventory[i])
 			delete this->_inventory[i];
 	}
-	std::cout << "A Character has been destroyed" << std::endl;
+	std::cout << "Character " << this->_name << " has been destroyed" << std::endl;
 }
 
 Character & Character::operator=(Character const &rhs)
 {
 	for (int i = 0; i < 4; i++) {
-		delete this->_inventory[i];
+		if (this->_inventory[i])
+			delete this->_inventory[i];
 		this->_inventory[i] = nullptr;
 	}
 
 	for (int i = 0; i < 4; i++) {
-		this->_inventory[i] = rhs._inventory[i]->clone();
+		if (rhs._inventory[i])
+			this->_inventory[i] = rhs._inventory[i]->clone();
 	}
 	this->_name = rhs.getName();
 
@@ -69,7 +73,10 @@ void Character::equip(AMateria* m)
 	if (!m->getType().compare("ice") || !m->getType().compare("cure")){
 		for (int i = 0; i < 4; i++) {
 			if (!this->_inventory[i])
+			{
 				this->_inventory[i] = m;
+				return ;
+			}
 		}
 	}
 }
@@ -81,8 +88,7 @@ void Character::unequip(int idx)
 
 void Character::use(int idx, ICharacter& target)
 {
-	if (this->_inventory[idx]) {
+	if (this->_inventory[idx])
 		this->_inventory[idx]->use(target);
-	}
 
 };

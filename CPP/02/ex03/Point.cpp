@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Points.cpp                                         :+:      :+:    :+:   */
+/*   Point.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 11:53:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/03 20:58:23 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/16 11:00:41 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,51 @@
 
 Point::Point(void) : _x(Fixed(0)), _y(Fixed(0))
 {
-	std::cout << "Default constructor called"  << std::endl;
+	return ;
 }
 
-Point::Point(Point const & src)
+Point::Point(Point const & src) : _x(src.getXcoord()), _y(src.getYcoord())
 {
-	std::cout << "Copy constructor called"  << std::endl;
-	*this = src;
+	return ;
 }
 
 Point::Point(float const x, float const y) : _x(Fixed(x)), _y(Fixed(y))
 {
-	std::cout << "Default constructor called"  << std::endl;
+	return ;
+}
+
+Point::Point(Fixed const x, Fixed const y) : _x(x), _y(y)
+{
+	return ;
 }
 
 Point::~Point(void)
 {
-	std::cout << "Destructor called"  << std::endl;
 	return ;
 }
 
-Point & Point::operator =  (Point const & rhs)
+Point & Point::operator=(Point const & rhs)
 {
-	std::cout << "Assignation operator called"  << std::endl;
-	if (this != &rhs)
-	{
-		this->x = rhs.getXcoord();
-		this->y = rhs.getYcoord();
-	}
 	return *this;
 }
 
-float const getXcoord(void)
+Fixed const Point::getXcoord(void) const
 {
-	return this->x;
+	return this->_x;
 }
-float const getYcoord(void)
+
+Fixed const Point::getYcoord(void) const
 {
-	return this->y;
+	return this->_y;
+}
+
+Fixed Point::cross(Point const & rhs) const
+{
+	return ((this->getXcoord() * rhs.getYcoord()) - (rhs.getXcoord() * this->getYcoord()));
+}
+
+std::ostream & operator<<(std::ostream & o, Point const & rhs)
+{
+	o << rhs.getXcoord() << ";" << rhs.getYcoord();
+	return o;
 }

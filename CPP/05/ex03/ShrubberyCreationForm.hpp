@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 11:53:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/10 01:13:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 09:27:21 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 class ShrubberyCreationForm : public Form
 {
 
+	ShrubberyCreationForm(void);
 public:
 	ShrubberyCreationForm(std::string const target);
 	ShrubberyCreationForm(ShrubberyCreationForm const & src);

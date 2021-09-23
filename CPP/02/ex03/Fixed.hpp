@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 11:33:17 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/17 19:13:54 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/16 09:45:21 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ public:
 
 	Fixed operator++();
 	Fixed operator++(int);
+	Fixed operator--();
+	Fixed operator--(int);
 
 	static Fixed & min(Fixed& a, Fixed& b);
 	static Fixed & max(Fixed& a, Fixed& b);

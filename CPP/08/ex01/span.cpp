@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 20:54:34 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/13 11:29:54 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/22 10:19:00 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,16 @@ unsigned int Span::shortestSpan(void)
 	std::list<int>::iterator ptr = this->_l.begin();
 	ptr++;
 	return *ptr -  this->_l.front();
+}
+
+Span::iterator Span::begin(void)
+{
+	return this->_l.begin();
+}
+
+Span::iterator Span::end(void)
+{
+	return this->_l.end();
 }
 
 const char* Span::NoSpanException::what() const throw()

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 11:46:42 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/03 15:47:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/18 12:13:04 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ Cure & Cure::operator=(Cure const & rhs)
 AMateria* Cure::clone(void) const
 {
 
-	AMateria* clone = new Cure;
+	AMateria* clone = new Cure();
 
 	*clone = *this;
 	return clone;

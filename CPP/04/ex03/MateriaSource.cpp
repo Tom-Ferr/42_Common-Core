@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 12:29:01 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/03 16:11:27 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 15:17:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,24 @@ MateriaSource::MateriaSource(MateriaSource const & src)
 
 MateriaSource::~MateriaSource(void)
 {
+	for (int i = 0; i < 4; i++) {
+		if (this->_inventory[i])
+			delete this->_inventory[i];
+	}
 	std::cout << "A MateriaSource has been destroyed" << std::endl;
 }
 
 MateriaSource & MateriaSource::operator=(MateriaSource const &rhs)
 {
 	for (int i = 0; i < 4; i++) {
-		delete this->_inventory[i];
+		if (this->_inventory[i])
+			delete this->_inventory[i];
 		this->_inventory[i] = nullptr;
 	}
 
 	for (int i = 0; i < 4; i++) {
-		this->_inventory[i] = rhs._inventory[i]->clone();
+		if( rhs._inventory[i])
+			this->_inventory[i] = rhs._inventory[i]->clone();
 	}
 
 	return *this;
@@ -50,14 +56,17 @@ void MateriaSource::learnMateria(AMateria* m)
 		return;
 	for (int i = 0; i < 4; i++) {
 		if (!this->_inventory[i])
+		{
 			this->_inventory[i] = m;
+			return ;
+		}
 	}
 }
 
 AMateria* MateriaSource::createMateria(std::string const & type)
 {
 	for (int i = 0; i < 4; i++) {
-		if (!this->_inventory[i] && this->_inventory[i]->getType().compare(type))
+		if (this->_inventory[i] && !this->_inventory[i]->getType().compare(type))
 			return this->_inventory[i]->clone();
 	}
 	return (0);

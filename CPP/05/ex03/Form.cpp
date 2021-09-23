@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 12:29:28 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/10 01:16:55 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 18:13:09 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool Form::getStatus() const
 	return this->_signed;
 }
 
-std::string Form::getTarget() const
+std::string Form::getTaget() const
 {
 	return this->_target;
 }
@@ -78,12 +78,12 @@ void Form::beSigned(Bureaucrat const & bur)
 
 const char* Form::GradeTooLowException::what() const throw()
 {
-	return "Form grade's too low";
+	return "Bureaucrat grade's too low";
 }
 
 const char* Form::GradeTooHighException::what() const throw()
 {
-	return "Form grade's too high";
+	return "Bureaucrat grade's too high";
 }
 
 const char* Form::IsSignedException::what() const throw()

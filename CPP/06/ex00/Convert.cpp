@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 12:29:28 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/11 10:53:08 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 20:29:05 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,17 @@ Convert::Convert(char* target) : _s(target), _i(0), _c(0), _f(0), _d(0)
 	else if ((this->_s.find_first_not_of("0123456789.f-+") < size && size > 1)
 	|| (this->_s.find_first_of("f") < size - 1 || (pm > 0 && pm < size)))
 		Convert::NonSense();
+	else if (this->_s.find_first_of(".") != this->_s.find_last_of("."))
+		Convert::NonSense();
 	else {
 		Convert::Detect();
-		Convert::Cast();
-		Convert::Format();
+		if ((this->_i == INT_MAX && this->_s.compare("2147483647"))
+		||	(this->_i == INT_MIN && this->_s.compare("-2147483648")))
+			Convert::NonSense();
+		else{
+			Convert::Cast();
+			Convert::Format();
+		}
 	}
 	Convert::Print();
 }
@@ -137,9 +144,11 @@ void Convert::Format(void)
 		this->_oc.append(c.str());
 		this->_oc.append("\'");
 	}
-
-	d << this->_d;
-	f << this->_f;
+	this->_p = this->_s.find(".") + 2;
+	if (this->_p < 2)
+		this->_p = 10;
+	d << std::setprecision(_p) << this->_d;
+	f << std::setprecision(_p) << this->_f;
 	i << this->_i;
 
 	if (this->_i > CHAR_MAX || this->_i < CHAR_MIN)
@@ -148,6 +157,8 @@ void Convert::Format(void)
 	||	(this->_i == INT_MIN && this->_s.compare("-2147483648")))
 		this->_oi = "impossible";
 	else
+		this->_oi = i.str();
+	if(this->_d == INT_MAX || this->_d == INT_MIN)
 		this->_oi = i.str();
 	this->_od = d.str();
 	this->_of = f.str();
@@ -164,6 +175,6 @@ void Convert::Print(void)
 {
 	std::cout << "char: " << this->_oc << std::endl;
 	std::cout << "int: " << this->_oi << std::endl;
-	std::cout << "float: " << this->_of << std::endl;
-	std::cout << "double: " << this->_od << std::endl;
+	std::cout << "float: " << std::setprecision(_p) << this->_of << std::endl;
+	std::cout << "double: " << std::setprecision(_p) << this->_od << std::endl;
 }

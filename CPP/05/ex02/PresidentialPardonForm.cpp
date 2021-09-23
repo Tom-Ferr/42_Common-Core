@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 12:29:28 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/09 18:51:30 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 09:19:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ PresidentialPardonForm::PresidentialPardonForm(std::string target)
 }
 
 PresidentialPardonForm::PresidentialPardonForm(PresidentialPardonForm const & src)
-	: Form(src)
+	: Form("PresidentialPardonForm", src.getTaget(), 5, 25)
 {
 	*this = src;
 	std::cout << "PresidentialPardonForm Copy constructor has been called" << std::endl;
@@ -43,9 +43,9 @@ void PresidentialPardonForm::execute(Bureaucrat const & executor) const
 
 	if (!this->getStatus())
 		throw Form::IsNotSignedException();
-	if (executor->getGrade() > this->getExecGrade())
+	if (executor.getGrade() > this->getExecGrade())
 		throw Form::GradeTooLowException();
-
-		std::cout << this->getTaget() << " has been pardoned by Zafod Beeblebrox";
+		std::cout << executor.getName() << " executes " << this->getName() << std::endl;
+		std::cout << this->getTaget() << " has been pardoned by President Redford";
 		std::cout << std::endl;
 }

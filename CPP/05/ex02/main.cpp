@@ -6,72 +6,77 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 14:54:47 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/08 19:44:12 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 19:03:12 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Bureaucrat.hpp"
+#include "PresidentialPardonForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 
-int main() {
-	try
+int main()
+{
 	{
-		Bureaucrat a("Alice", 150);
-		a.inGrade();
-		std::cout << a << std::endl;
+		try
+		{
+			Bureaucrat a("Alice", 25);
+			Bureaucrat b("Bob", 1);
+			PresidentialPardonForm af("Scofield");
+			std::cout << a << std::endl;
+			std::cout << b << std::endl;
+			std::cout << af << std::endl;
+			a.signForm(af);
+			std::cout << af << std::endl;
+			a.executeForm(af);
+			b.executeForm(af);
+		}
+		catch (std::exception & e)
+		{
+			std::cout << e.what() << std::endl;
+		}
 	}
-	catch (std::exception & e)
+	std::cout << std::endl;
 	{
-		std::cout << e.what() << std::endl;
+		try
+		{
+			Bureaucrat a("Alice", 60);
+			Bureaucrat b("Bob", 1);
+			RobotomyRequestForm af("Scofield");
+			std::cout << a << std::endl;
+			std::cout << b << std::endl;
+			std::cout << af << std::endl;
+			a.signForm(af);
+			std::cout << af << std::endl;
+			a.executeForm(af);
+			for (int i = 0; i < 10; i++) {
+				b.executeForm(af);
+			}
+		}
+		catch (std::exception & e)
+		{
+			std::cout << e.what() << std::endl;
+		}
 	}
-	try
+	std::cout << std::endl;
 	{
-		Bureaucrat b("Bob", 150);
-		b.deGrade();
-		std::cout << b << std::endl;
+		try
+		{
+			Bureaucrat a("Alice", 145);
+			Bureaucrat b("Bob", 1);
+			ShrubberyCreationForm af("Scofield");
+			std::cout << a << std::endl;
+			std::cout << b << std::endl;
+			std::cout << af << std::endl;
+			a.signForm(af);
+			std::cout << af << std::endl;
+			a.executeForm(af);
+			b.executeForm(af);
+		}
+		catch (std::exception & e)
+		{
+			std::cout << e.what() << std::endl;
+		}
 	}
-	catch (std::exception & e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
-		Bureaucrat c("Charlie", 200);
-		c.deGrade();
-		std::cout << c << std::endl;
-	}
-	catch (std::exception & e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
-		Bureaucrat d("Deedee", 1);
-		d.deGrade();
-		std::cout << d << std::endl;
-	}
-	catch (std::exception & e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
-		Bureaucrat e("Eddy", 1);
-		e.inGrade();
-		std::cout << e << std::endl;
-	}
-	catch (std::exception & e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
-		Bureaucrat f("Fran", 0);
-		f.deGrade();
-		std::cout << f << std::endl;
-	}
-	catch (std::exception & e)
-	{
-		std::cout << e.what() << std::endl;
-	}
+
 	return 0;
 }

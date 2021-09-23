@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 11:53:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/08 16:27:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 17:43:33 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 class Form
 {
 
+	Form(void);
 public:
 	Form(std::string name, int ex_grade, int sign_grade);
 	Form(Form const & src);

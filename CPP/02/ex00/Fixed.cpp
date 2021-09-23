@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 11:53:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/18 18:32:36 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/15 13:22:44 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Fixed::~Fixed(void)
 	return ;
 }
 
-Fixed & Fixed::operator =  (Fixed const & rhs)
+Fixed & Fixed::operator=(Fixed const & rhs)
 {
 	std::cout << "Assignation operator called"  << std::endl;
 	if (this != &rhs)

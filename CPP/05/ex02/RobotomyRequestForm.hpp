@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 11:53:33 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/09 18:29:45 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 09:28:56 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 class RobotomyRequestForm : public Form
 {
 
+	RobotomyRequestForm(void);
 public:
 	RobotomyRequestForm(std::string const target);
-	RobotomyRequestForm(Form const & src);
+	RobotomyRequestForm(RobotomyRequestForm const & src);
 	~RobotomyRequestForm(void);
 	RobotomyRequestForm & operator=(RobotomyRequestForm const & rhs);
 

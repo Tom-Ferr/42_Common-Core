@@ -6,15 +6,15 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/09/16 09:50:51 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/09/16 13:50:42 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS			= main.cpp Fixed.cpp Point.cpp bsp.cpp
+SRCS			= main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp
 
 OBJS			= ${SRCS:.cpp=.o}
 
-NAME			= bsp
+NAME			= fragtrap
 
 CC				=	clang++
 

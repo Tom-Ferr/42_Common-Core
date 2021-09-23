@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 11:53:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/08/18 18:32:27 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/15 13:22:32 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ Fixed::Fixed(Fixed const & src)
 	*this = src;
 }
 
-Fixed::Fixed(int const d) : _widht(8)
+Fixed::Fixed(int const d)
 {
 	std::cout << "Int constructor called"  << std::endl;
-	this->_pointPosition = d * pow(2, _width);
+	this->_pointPosition = d << _width;
 }
 
-Fixed::Fixed(float const f) : _widht(8)
+Fixed::Fixed(float const f)
 {
 	std::cout << "Float constructor called"  << std::endl;
-	this->_pointPosition = roundf(f * pow(2, _width));
+	this->_pointPosition = roundf(f * (1 << _width));
 }
 
 Fixed::~Fixed(void)
@@ -43,7 +43,7 @@ Fixed::~Fixed(void)
 	return ;
 }
 
-Fixed & Fixed::operator =  (Fixed const & rhs)
+Fixed & Fixed::operator=(Fixed const & rhs)
 {
 	std::cout << "Assignation operator called"  << std::endl;
 	if (this != &rhs)
@@ -64,12 +64,12 @@ void Fixed::setRawBits( int const raw )
 
 float Fixed::toFloat( void ) const
 {
-	return (float)(this->_pointPosition / pow(2, _width));
+	return (float)this->_pointPosition / (1 << _width);
 }
 
 int Fixed::toInt( void ) const
 {
-	return this->_pointPosition / pow(2, _width);
+	return this->_pointPosition >> _width;
 }
 
 std::ostream & operator<<(std::ostream & o, Fixed const & rhs)

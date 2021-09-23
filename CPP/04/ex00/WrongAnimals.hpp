@@ -1,68 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Animals.hpp                                        :+:      :+:    :+:   */
+/*   WrongAnimals.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 10:41:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/17 18:05:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/17 12:23:42 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ANIMAL_HPP
-# define ANIMAL_HPP
+#ifndef WRONGANIMAL_HPP
+# define WRONGANIMAL_HPP
 
 # include <iostream>
-# include "Brain.hpp"
 
-class Animal
+class WrongAnimal
 {
 public:
-	Animal(void);
-	Animal(Animal const & rhs);
-	virtual ~Animal(void);
-	Animal & operator=(Animal const & rhs);
+	WrongAnimal(void);
+	WrongAnimal(WrongAnimal const & rhs);
+	~WrongAnimal(void);
+	WrongAnimal & operator=(WrongAnimal const & rhs);
 
 protected:
 	std::string _type;
 public:
-	virtual void makeSound(void) const;
+	void makeSound(void) const;
 	std::string getType(void) const;
 
 };
 
-class Dog : public Animal
+class WrongDog : public WrongAnimal
 {
 public:
-	Dog(void);
-	Dog(Dog const & rhs);
-	virtual ~Dog(void);
-	Dog & operator=(Dog const & rhs);
-	virtual void makeSound(void) const;
-
-	Brain* getBrain(void) const;
-	std::string mindReader(void) const;
-
-private:
-	Brain* _brain;
+	WrongDog(void);
+	WrongDog(WrongDog const & rhs);
+	~WrongDog(void);
+	WrongDog & operator=(WrongDog const & rhs);
+	void makeSound(void) const;
 
 };
 
-class Cat : public Animal
+class WrongCat : public WrongAnimal
 {
 public:
-	Cat(void);
-	Cat(Cat const & rhs);
-	virtual ~Cat(void);
-	Cat & operator=(Cat const & rhs);
-	virtual void makeSound(void) const;
-
-	Brain* getBrain(void) const;
-	std::string mindReader(void) const;
-
-private:
-	Brain* _brain;
+	WrongCat(void);
+	WrongCat(WrongCat const & rhs);
+	~WrongCat(void);
+	WrongCat & operator=(WrongCat const & rhs);
+	void makeSound(void) const;
 };
 
 # endif

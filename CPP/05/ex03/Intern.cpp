@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 12:29:28 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/10 00:54:45 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 19:34:35 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,23 @@ const char* Intern::InternException::what() const throw()
 
 Form* Intern::makeForm(std::string const & name, std::string const & target)
 {
-	Form* arr[3];
-	arr[0] = new RobotomyRequestForm(target);
-	arr[1] = new PresidentialPardonForm(target);
-	arr[2] = new ShrubberyCreationForm(target);
-
-	for (int i = 0; i < 3; i++) {
-		if (arr[i]->getName() == target){
-			std::cout << "Intern creates " << arr[i]->getName() << std::endl;
-			delete arr[i + 1 % 3];
-			delete arr[i + 2 % 3];
-			return arr[i];
-		}
+	std::string forms[3] = {"robotomy request", "presidential pardon", "shrubbery creation"};
+	int i;
+	for (i = 0; i <= 3; i++) {
+		if (forms[i] == name)
+			break;
 	}
-	throw Intern::InternException();
+	switch (i) {
+		case 0:
+			std::cout << "Intern creates " << "RobotomyRequestForm" << std::endl;
+			return new RobotomyRequestForm(target);
+		case 1:
+			std::cout << "Intern creates " << "PresidentialPardonForm" << std::endl;
+			return new PresidentialPardonForm(target);
+		case 2:
+			std::cout << "Intern creates " << "ShrubberyCreationForm" << std::endl;
+			return new ShrubberyCreationForm(target);
+		default:
+			throw Intern::InternException();
+	}
 }

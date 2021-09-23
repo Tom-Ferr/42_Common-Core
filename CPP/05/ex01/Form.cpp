@@ -6,21 +6,21 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 12:29:28 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/10 00:38:10 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/19 17:51:07 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Form.hpp"
 
-Form::Form(std::string name, std::string target, int ex_grade, int sign_grade)
-	: _name(name), _target(target), _exec_grade(ex_grade), _sign_grade (sign_grade), _signed(false)
+Form::Form(std::string name, int ex_grade, int sign_grade)
+	: _name(name), _exec_grade(ex_grade), _sign_grade (sign_grade), _signed(false)
 {
-	std::cout << "Form Default constructor has been called" << std::endl;
 
 	if (ex_grade > 150 || sign_grade > 150)
 		throw Form::GradeTooLowException();
 	else if (ex_grade < 1 || sign_grade < 1)
 		throw Form::GradeTooHighException();
+	std::cout << "Form Default constructor has been called" << std::endl;
 }
 
 Form::Form(Form const & src)
@@ -73,12 +73,12 @@ void Form::beSigned(Bureaucrat *bur)
 
 const char* Form::GradeTooLowException::what() const throw()
 {
-	return "Form grade's too low";
+	return "Bureaucrat grade's too low";
 }
 
 const char* Form::GradeTooHighException::what() const throw()
 {
-	return "Form grade's too high";
+	return "Bureaucrat grade's too high";
 }
 
 const char* Form::IsSignedException::what() const throw()

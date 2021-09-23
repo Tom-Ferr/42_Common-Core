@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 12:29:58 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/11 00:47:07 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 17:45:10 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include <sstream>
+# include <iomanip>
 # include <cfloat>
 # include <climits>
 
@@ -35,7 +36,7 @@ private:
 	void Format(void);
 	void Print(void);
 
-	int			_i;
+	int			_i, _p;
 	char		_c;
 	float		_f;
 	double		_d;

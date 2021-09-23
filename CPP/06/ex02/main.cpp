@@ -6,26 +6,25 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 11:44:11 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/11 12:56:45 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 20:46:32 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Base.hpp"
-#include <stdlib.h>
-#include <time.h>
 
 Base* generate(void)
 {
-	Base* ret;
-	srand(time(NULL));
-	int i = rand() % 3;
-	if (!i)
-		ret = new A;
-	else if (i == 1)
-		ret = new B;
-	else
-		ret = new C;
-	return ret;
+	std::srand(time(NULL));
+	int i = std::rand() % 3;
+	switch (i)
+	{
+		case 0:
+			return new A;
+		case 1:
+			return new B;
+		default:
+			return new C;
+	}
 }
 
 void identify(Base* p)
@@ -72,5 +71,6 @@ int main()
 	Base* p = generate();
 	identify(p);
 	identify(*p);
+	delete p;
 	return 0;
 }

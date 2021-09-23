@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Animal.cpp                                         :+:      :+:    :+:   */
+/*   WrongDog.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 11:57:56 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/17 20:15:24 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/17 12:22:21 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Animals.hpp"
+#include "WrongAnimals.hpp"
 
-AAnimal::AAnimal(void) : _type("UNKNOWN")
+WrongDog::WrongDog(void) : WrongAnimal()
 {
-	std::cout << "AAnimal Default constructor has been called" << std::endl;
+	std::cout << "WrongDog Default constructor has been called" << std::endl;
+	this->_type = "WrongDog";
 }
 
-AAnimal::AAnimal(AAnimal const & src)
+WrongDog::WrongDog(WrongDog const & src)
 {
-	std::cout << "AAnimal Copy constructor has been called" << std::endl;
+	std::cout << "WrongDog Copy constructor has been called" << std::endl;
 	*this = src;
 }
 
-AAnimal::~AAnimal(void)
+WrongDog::~WrongDog(void)
 {
-	std::cout << "A AAnimal has been destroyed" << std::endl;
+	std::cout << "A WrongDog has been destroyed" << std::endl;
 }
 
-AAnimal & AAnimal::operator=(AAnimal const & rhs)
+WrongDog & WrongDog::operator=(WrongDog const & rhs)
 {
 	if (this != &rhs)
 	{
@@ -37,7 +38,7 @@ AAnimal & AAnimal::operator=(AAnimal const & rhs)
 	return *this;
 }
 
-std::string AAnimal::getType(void) const
+void WrongDog::makeSound(void) const
 {
-	return (this->_type);
+	std::cout << "Au Au Au" << std::endl;
 }

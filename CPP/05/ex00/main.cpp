@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 14:54:47 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/08 19:44:12 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/20 10:18:12 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int main() {
 	{
 		std::cout << e.what() << std::endl;
 	}
+	std::cout << std::endl;
 	try
 	{
 		Bureaucrat b("Bob", 150);
@@ -33,6 +34,7 @@ int main() {
 	{
 		std::cout << e.what() << std::endl;
 	}
+	std::cout << std::endl;
 	try
 	{
 		Bureaucrat c("Charlie", 200);
@@ -43,6 +45,7 @@ int main() {
 	{
 		std::cout << e.what() << std::endl;
 	}
+	std::cout << std::endl;
 	try
 	{
 		Bureaucrat d("Deedee", 1);
@@ -53,6 +56,7 @@ int main() {
 	{
 		std::cout << e.what() << std::endl;
 	}
+	std::cout << std::endl;
 	try
 	{
 		Bureaucrat e("Eddy", 1);
@@ -63,6 +67,7 @@ int main() {
 	{
 		std::cout << e.what() << std::endl;
 	}
+	std::cout << std::endl;
 	try
 	{
 		Bureaucrat f("Fran", 0);

@@ -6,11 +6,12 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/08/19 12:36:01 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/09/17 13:59:33 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS			= main.cpp Cat.cpp Dog.cpp Animal.cpp
+SRCS			= main.cpp Cat.cpp Dog.cpp Animal.cpp \
+					WrongCat.cpp WrongDog.cpp WrongAnimal.cpp
 
 OBJS			= ${SRCS:.cpp=.o}
 
@@ -20,7 +21,7 @@ CC				=	clang++
 
 AR				=	ar -rcs
 
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror -std=c++98
 
 INCLUDE 		= -I.
 

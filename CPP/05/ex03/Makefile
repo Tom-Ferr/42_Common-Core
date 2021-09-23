@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/14 18:16:40 by tde-cama          #+#    #+#              #
-#    Updated: 2021/09/10 01:21:03 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/09/20 10:23:24 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,13 +15,13 @@ SRCS			= main.cpp Bureaucrat.cpp Form.cpp Intern.cpp PresidentialPardonForm.cpp\
 
 OBJS			= ${SRCS:.cpp=.o}
 
-NAME			= form
+NAME			= intern
 
 CC				=	clang++
 
 AR				=	ar -rcs
 
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror -std=c++98
 
 INCLUDE 		= -I.
 

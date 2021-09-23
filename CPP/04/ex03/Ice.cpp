@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 11:46:42 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/09/03 15:46:56 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/09/18 12:12:49 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ Ice & Ice::operator=(Ice const & rhs)
 AMateria* 	Ice::clone(void) const
 {
 
-	AMateria* clone = new Ice;
+	AMateria* clone = new Ice();
 
 	*clone = *this;
 	return clone;
