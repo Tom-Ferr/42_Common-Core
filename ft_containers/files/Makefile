@@ -6,16 +6,16 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/23 15:18:41 by tde-cama          #+#    #+#              #
-#    Updated: 2021/09/24 09:59:18 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/10/02 19:01:37 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-FILES			=
+FILES			=	exception.cpp
 
 SRCDIR			= 	src/
 
-SRCS			= 	$(addprefix $(SRCDIR), $(FILES)) main.cpp
+SRCS			= 	$(addprefix $(SRCDIR), $(FILES))
 
 OBJS			= 	${SRCS:.cpp=.o}
 
@@ -25,26 +25,30 @@ CXX				=	clang++
 
 AR				=	ar -rcs
 
-CFLAGS			= 	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS		= 	-Wall -Wextra -Werror -std=c++98
 
 INCLUDE 		= 	-I./includes
 
 SANITIZE 		= 	-fsanitize=address
 
-
-%.o: %.c
-				${CXX} ${CFLAGS} ${INCLUDE} -c $< -o $@
+%.o: %.cpp
+				${CXX} ${CXXFLAGS} ${INCLUDE} -c $< -o $@
 
 $(NAME):		${OBJS}
-				${CXX} ${CFLAGS} {SANITIZE} ${OBJS} -o ${NAME}
+				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL=0 ${INCLUDE} test.cpp -o ${NAME}
+				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL=1 ${INCLUDE} test.cpp -o ${NAME}_stl
 
 all:			${NAME}
+
+test:			all
+				./${NAME} > my.log
+				./${NAME}_stl > real.log
 
 clean:
 				rm -f ${OBJS}
 
 fclean:			clean
-				rm -f ${NAME}
+				rm -f ${NAME} ${NAME}_stl my.log real.log
 re:				fclean all
 
 .PHONY:			all clean fclean re
