@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/02 18:58:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/02 21:16:45 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ namespace ft {
 		typedef typename Allocator::const_reference const_reference;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
-		typedef ft::normal_iterator<pointer, vector> iterator;
-		typedef ft::normal_iterator<const_pointer, vector> const_iterator;
+		typedef ft::random_access_iterator<pointer, vector> iterator;
+		typedef ft::random_access_iterator<const_pointer, vector> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
