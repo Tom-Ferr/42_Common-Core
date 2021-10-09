@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 12:00:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/09 16:40:03 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/09 17:16:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,80 @@
 # include <iostream>
 # include <utility.hpp>
 namespace ft{
+
+	/*
+	 * BIDIRECTIONAL_ITERATOR
+	 */
+	template <typename P, class C>
+	class bidirectional_iterator{
+	public:
+		/*
+		 * Member types
+		 */
+		typedef typename C::value_type value_type;
+		typedef typename C::size_type size_type;
+		typedef typename C::difference_type difference_type;
+		typedef typename C::reference reference;
+		typedef P pointer;
+
+		/*
+		 * Orthodox Canonical Form
+		 */
+		bidirectional_iterator(void){};
+		bidirectional_iterator(P const ptr) : _ptr(ptr){};
+		bidirectional_iterator(bidirectional_iterator const & src){*this = src;};
+		~bidirectional_iterator(void){};
+		bidirectional_iterator & operator=(bidirectional_iterator const & rhs){
+			if (this != &rhs){
+				this->_ptr = rhs.get_ptr();
+			}
+			return *this;
+		};
+
+		/*
+		 * Dereference Operators
+		 */
+		reference operator*() const {
+			return *(this->_ptr);
+		};
+
+		pointer operator->() const {
+			return &(operator*());
+		};
+
+		/*
+		 * Incrementation/Decrementation Operators
+		 */
+		bidirectional_iterator& operator++(){
+			this->_ptr++;
+			return *this;
+		};
+
+		bidirectional_iterator operator++(int){
+			bidirectional_iterator tmp(*this);
+			this->_ptr++;
+			return tmp;
+		};
+
+		bidirectional_iterator& operator--(){
+			this->_ptr--;
+			return *this;
+		};
+
+		bidirectional_iterator operator--(int){
+			bidirectional_iterator tmp(*this);
+			this->_ptr--;
+			return tmp;
+		};
+
+		/*
+		 * Getter
+		 */
+		pointer get_ptr() const { return this->_ptr; };
+	private:
+		pointer _ptr;
+
+	};
 
 	/*
 	 * TREE_ITERATOR
