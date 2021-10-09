@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/23 15:18:41 by tde-cama          #+#    #+#              #
-#    Updated: 2021/10/02 19:01:37 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/10/08 13:59:31 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ CXX				=	clang++
 
 AR				=	ar -rcs
 
-CXXFLAGS		= 	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS		= 	-g -Wall -Wextra -Werror -std=c++98
 
 INCLUDE 		= 	-I./includes
 

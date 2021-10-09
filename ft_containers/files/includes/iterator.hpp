@@ -6,13 +6,14 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 12:00:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/06 20:32:13 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/07 18:09:05 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_ITERATOR_HPP
 # define FT_ITERATOR_HPP
 # include <iostream>
+# include <utility.hpp>
 namespace ft{
 
 	/*
@@ -39,7 +40,7 @@ namespace ft{
 		~bidirectional_iterator(void){};
 		bidirectional_iterator & operator=(bidirectional_iterator const & rhs){
 			if (this != &rhs){
-				this->_ptr = rhs.get_ptr();
+				this->_ptr = rhs._ptr;
 			}
 			return *this;
 		};
@@ -80,10 +81,6 @@ namespace ft{
 			return tmp;
 		};
 
-		/*
-		 * Getter
-		 */
-		pointer get_ptr() const { return this->_ptr; };
 	private:
 		pointer _ptr;
 
@@ -92,24 +89,26 @@ namespace ft{
 	/*
 	 * TREE_ITERATOR
 	 */
-	template <typename P, class C>
+	template <typename K, class C>
 	class tree_iterator{
 	public:
 		/*
 		 * Member types
 		 */
-		typedef typename C::value_type value_type;
-		typedef typename C::size_type size_type;
-		typedef typename C::difference_type difference_type;
-		typedef typename C::reference reference;
-		typedef P pointer;
+		typedef C value_type;
+		// typedef typename C::size_type size_type;
+		// typedef typename C::difference_type difference_type;
+		typedef  K key_compare;
+		typedef  value_type& reference;
+		typedef  value_type* pointer;
 
 		/*
 		 * Orthodox Canonical Form
 		 */
-		tree_iterator(void){};
-		tree_iterator(Node* const node) : _node(node), _cache(node->content){};
-		tree_iterator(tree_iterator const & src){*this = src;};
+		tree_iterator(void) : _comp(key_compare()){};
+		tree_iterator(Node<value_type>* const node)
+			: _comp(key_compare()), _node(node), _cache(node->content){};
+		tree_iterator(tree_iterator const & src):_comp(key_compare()){*this = src;};
 		~tree_iterator(void){};
 		tree_iterator & operator=(tree_iterator const & rhs){
 			if (this != &rhs){
@@ -123,7 +122,7 @@ namespace ft{
 		 * Dereference Operators
 		 */
 		reference operator*() const {
-			return *(this->_node->content);
+			return *(_node->content);
 		};
 
 		pointer operator->() const {
@@ -135,20 +134,20 @@ namespace ft{
 		 */
 		tree_iterator& operator++(){
 			if(_node->child[RIGHT] == NIL){
-				this->_node = this->_node->parent;
+				_node = _node->parent;
 			}
 			else if (_node->child[RIGHT]
 			&& _comp(_cache->first, _node->child[RIGHT]->content->first)){
-				this->_node = this->_node->child[RIGHT];
+				_node = _node->child[RIGHT];
 			}
 			if(!_comp(_cache->first, _node->content->first)){
-				this->_node = this->_node->parent;
+				_node = _node->parent;
 			}
 			if(_node->child[LEFT]
 			&& _comp(_cache->first, _node->child[LEFT]->content->first)){
-				this->_node = _node->child[LEFT];
+				_node = _node->child[LEFT];
 			}
-			_cache = this->_node->content;
+			_cache = _node->content;
 			return *this;
 		};
 
@@ -160,20 +159,20 @@ namespace ft{
 
 		tree_iterator& operator--(){
 			if(_node->child[LEFT] == NIL){
-				this->_node = this->_node->parent;
+				_node = _node->parent;
 			}
 			else if (_node->child[LEFT]
 			&& _comp(_node->child[LEFT]->content->first, _cache->first)){
-				this->_node = this->_node->child[LEFT];
+				_node = _node->child[LEFT];
 			}
 			if(!_comp(_node->content->first, _cache->first)){
-				this->_node = this->_node->parent;
+				_node = _node->parent;
 			}
 			if(_node->child[RIGHT]
 			&& _comp(_node->child[RIGHT]->content->first, _cache->first)){
-				this->_node = _node->child[RIGHT];
+				_node = _node->child[RIGHT];
 			}
-			_cache = this->_node->content;
+			_cache = _node->content;
 			return *this;
 		};
 
@@ -183,13 +182,13 @@ namespace ft{
 			return tmp;
 		};
 
-		/*
-		 * Getter
-		 */
-		pointer get_ptr() const { return this->_ptr; };
+		value_type* curr(){
+			return _node->content;
+		}
 	private:
-		Node* 			_node;
-		value_type* 	_cache;
+		key_compare			_comp;
+		Node<value_type>* 	_node;
+		value_type* 		_cache;
 
 	};
 
@@ -217,7 +216,7 @@ namespace ft{
 		~random_access_iterator(void){};
 		random_access_iterator & operator=(random_access_iterator const & rhs){
 			if (this != &rhs){
-				this->_ptr = rhs.get_ptr();
+				this->_ptr = rhs._ptr;
 			}
 			return *this;
 		};
@@ -262,7 +261,7 @@ namespace ft{
 		 * Relational Operators
 		 */
 		bool operator==(random_access_iterator const & rhs) const {
-			return this->_ptr == rhs.get_ptr();
+			return this->_ptr == rhs._ptr;
 		};
 
 		bool operator!=(random_access_iterator const & rhs) const {
@@ -270,7 +269,7 @@ namespace ft{
 		};
 
 		bool operator<(random_access_iterator const & rhs) const {
-			return this->_ptr < rhs.get_ptr();
+			return this->_ptr < rhs._ptr;
 		};
 
 		bool operator<=(random_access_iterator const & rhs) const {
@@ -309,7 +308,7 @@ namespace ft{
 		};
 		//difference operator
 		difference_type operator-(random_access_iterator const & rhs) const {
-			return this->_ptr - rhs.get_ptr();
+			return this->_ptr - rhs._ptr;
 		};
 
 		/*
@@ -319,10 +318,6 @@ namespace ft{
 			return this->_ptr[i];
 		}
 
-		/*
-		 * Getter
-		 */
-		pointer get_ptr() const { return this->_ptr; };
 	private:
 		pointer _ptr;
 

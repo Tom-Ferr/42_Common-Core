@@ -6,9 +6,18 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 23:36:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/03 00:16:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/08 10:03:43 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef FILE_HPP
+# define FILE_HPP
+
+# define NIL 	nullptr
+# define RED 	true
+# define BLACK 	false
+# define LEFT 	1
+# define RIGHT 	0
 
 namespace ft{
 
@@ -28,22 +37,18 @@ namespace ft{
 		 * Member Functions
 		 */
 		pair() : first(), second(){};
-		pair (const pair<first_type,second_type>& pr){*this = pr};
+		template< class U1, class U2 >
+		pair( const pair<U1, U2>& pr )
+			: first(pr.first), second(pr.second){};
 		pair (const first_type& a, const second_type& b)
 			: first(a), second(b){};
-		pair & operator=(const pair & rhs){
-			if(this != &rhs){
-				first = rhs.first;
-				second = rhs.second;
-			}
-			return(*this)
-		}
+
 
 		/*
 		 * Member Variables
 		 */
-		T1 first;
-		T2 second;
+		first_type first;
+		second_type second;
 	};
 
 	/*
@@ -86,4 +91,23 @@ namespace ft{
 	pair<T1,T2> make_pair (T1 x, T2 y){
 		return pair<T1,T2>(x,y);
 	}
+
+	/*
+	 * NODE
+	 */
+	template<typename T>
+	struct Node{
+		Node(T* val = NIL) :
+		 parent(NIL), content(val), color(RED){
+			child[0] = NIL;
+			child[1] = NIL;
+		};
+
+		Node<T>* 				parent;
+		Node<T>* 				child[2];
+		T* 						content;
+		bool  					color;
+	};
 }
+
+#endif
