@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 12:00:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/07 18:09:05 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/09 16:40:03 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,76 +17,6 @@
 namespace ft{
 
 	/*
-	 * BIDIRECTIONAL_ITERATOR
-	 */
-	template <typename P, class C>
-	class bidirectional_iterator{
-	public:
-		/*
-		 * Member types
-		 */
-		typedef typename C::value_type value_type;
-		typedef typename C::size_type size_type;
-		typedef typename C::difference_type difference_type;
-		typedef typename C::reference reference;
-		typedef P pointer;
-
-		/*
-		 * Orthodox Canonical Form
-		 */
-		bidirectional_iterator(void){};
-		bidirectional_iterator(P const ptr) : _ptr(ptr){};
-		bidirectional_iterator(bidirectional_iterator const & src){*this = src;};
-		~bidirectional_iterator(void){};
-		bidirectional_iterator & operator=(bidirectional_iterator const & rhs){
-			if (this != &rhs){
-				this->_ptr = rhs._ptr;
-			}
-			return *this;
-		};
-
-		/*
-		 * Dereference Operators
-		 */
-		reference operator*() const {
-			return *(this->_ptr);
-		};
-
-		pointer operator->() const {
-			return &(operator*());
-		};
-
-		/*
-		 * Incrementation/Decrementation Operators
-		 */
-		bidirectional_iterator& operator++(){
-			this->_ptr++;
-			return *this;
-		};
-
-		bidirectional_iterator operator++(int){
-			bidirectional_iterator tmp(*this);
-			this->_ptr++;
-			return tmp;
-		};
-
-		bidirectional_iterator& operator--(){
-			this->_ptr--;
-			return *this;
-		};
-
-		bidirectional_iterator operator--(int){
-			bidirectional_iterator tmp(*this);
-			this->_ptr--;
-			return tmp;
-		};
-
-	private:
-		pointer _ptr;
-
-	};
-
-	/*
 	 * TREE_ITERATOR
 	 */
 	template <typename K, class C>
@@ -95,19 +25,21 @@ namespace ft{
 		/*
 		 * Member types
 		 */
-		typedef C value_type;
-		// typedef typename C::size_type size_type;
-		// typedef typename C::difference_type difference_type;
-		typedef  K key_compare;
-		typedef  value_type& reference;
-		typedef  value_type* pointer;
+		typedef	C value_type;
+		typedef K key_compare;
+		typedef value_type& reference;
+		typedef value_type* pointer;
 
 		/*
 		 * Orthodox Canonical Form
 		 */
-		tree_iterator(void) : _comp(key_compare()){};
+		tree_iterator(void)
+			: _comp(key_compare()), _node(NIL), _cache(NIL){};
 		tree_iterator(Node<value_type>* const node)
-			: _comp(key_compare()), _node(node), _cache(node->content){};
+			: _comp(key_compare()), _node(node){
+				if (node)
+					this->_cache = node->content;
+			};
 		tree_iterator(tree_iterator const & src):_comp(key_compare()){*this = src;};
 		~tree_iterator(void){};
 		tree_iterator & operator=(tree_iterator const & rhs){
@@ -130,24 +62,38 @@ namespace ft{
 		};
 
 		/*
+		 * Relational Operators
+		 */
+		bool operator==(tree_iterator const & rhs) const {
+			if(this->_node == NIL || rhs._node == NIL)
+				return !this->_node && !rhs._node;
+			return _node->content == rhs._node->content;
+		};
+
+		bool operator!=(tree_iterator const & rhs) const {
+			return !(*this == rhs);
+		};
+
+		/*
 		 * Incrementation/Decrementation Operators
 		 */
 		tree_iterator& operator++(){
-			if(_node->child[RIGHT] == NIL){
+			if(_node && _node->child[RIGHT] == NIL){
 				_node = _node->parent;
 			}
-			else if (_node->child[RIGHT]
+			else if (_node && _node->child[RIGHT]
 			&& _comp(_cache->first, _node->child[RIGHT]->content->first)){
 				_node = _node->child[RIGHT];
 			}
-			if(!_comp(_cache->first, _node->content->first)){
+			while(_node && !_comp(_cache->first, _node->content->first)){
 				_node = _node->parent;
 			}
-			if(_node->child[LEFT]
+			if(_node && _node->child[LEFT]
 			&& _comp(_cache->first, _node->child[LEFT]->content->first)){
 				_node = _node->child[LEFT];
 			}
-			_cache = _node->content;
+			if(_node)
+				_cache = _node->content;
 			return *this;
 		};
 
@@ -158,21 +104,22 @@ namespace ft{
 		};
 
 		tree_iterator& operator--(){
-			if(_node->child[LEFT] == NIL){
+			if(_node && _node->child[LEFT] == NIL){
 				_node = _node->parent;
 			}
-			else if (_node->child[LEFT]
+			else if (_node && _node->child[LEFT]
 			&& _comp(_node->child[LEFT]->content->first, _cache->first)){
 				_node = _node->child[LEFT];
 			}
-			if(!_comp(_node->content->first, _cache->first)){
+			while(_node && !_comp(_node->content->first, _cache->first)){
 				_node = _node->parent;
 			}
-			if(_node->child[RIGHT]
+			if(_node && _node->child[RIGHT]
 			&& _comp(_node->child[RIGHT]->content->first, _cache->first)){
 				_node = _node->child[RIGHT];
 			}
-			_cache = _node->content;
+			if(_node)
+				_cache = _node->content;
 			return *this;
 		};
 
@@ -182,9 +129,6 @@ namespace ft{
 			return tmp;
 		};
 
-		value_type* curr(){
-			return _node->content;
-		}
 	private:
 		key_compare			_comp;
 		Node<value_type>* 	_node;

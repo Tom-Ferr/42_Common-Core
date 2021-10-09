@@ -13,35 +13,38 @@
 int main() {
 	ft::map<int,int> mp;
 
-	// mp.insert(ft::make_pair(0,1));
-	// mp.insert(ft::make_pair(1,2));
-	// mp.insert(ft::make_pair(2,3));
-	// mp.insert(ft::make_pair(3,4));
-	// mp.insert(ft::make_pair(4,5));
-	// mp.insert(ft::make_pair(5,6));
-	// mp.insert(ft::make_pair(6,7));
-	// mp.insert(ft::make_pair(7,8));
-	// mp.insert(ft::make_pair(8,9));
-	// mp.insert(ft::make_pair(9,10));
-	// std::cout << mp.size() << std::endl;
-	mp[10] = 10;
-	mp[18] = 18;
-	mp[7] = 7;
-	mp[15]= 15;
-	mp[16] = 16;
-	mp[30] = 30;
-	mp[25] = 25;
-	mp[40] = 40;
-	mp[60] = 60;
-	mp[2] = 2;
-	mp[1] = 1;
-	mp[70] = 70;
+	mp.insert(ft::make_pair(7,7));
+	mp.insert(ft::make_pair(0,0));
+	mp.insert(ft::make_pair(8,8));
+	mp.insert(ft::make_pair(5,5));
+	mp.insert(ft::make_pair(3,3));
+	mp.insert(ft::make_pair(4,4));
+	mp.insert(ft::make_pair(2,2));
+	mp.insert(ft::make_pair(6,6));
+	mp.insert(ft::make_pair(9,9));
+	mp.insert(ft::make_pair(11,11));
+	mp.insert(ft::make_pair(12,12));
+	mp.insert(ft::make_pair(10,10));
+	mp.insert(ft::make_pair(1,1));\
+	
+	// mp[10] = 10;
+	// mp[0] = 0;
+	// mp[18] = 18;
+	// mp[7] = 7;
+	// mp[15]= 15;
+	// mp[16] = 16;
+	// mp[30] = 30;
+	// mp[25] = 25;
+	// mp[40] = 40;
+	// mp[60] = 60;
+	// mp[2] = 2;
+	// mp[1] = 1;
+	// mp[70] = 70;
 	ft::map<int,int>::iterator it = mp.begin();
-// std::cout << "here" << std::endl;
-	for (int i = 0; i < 12; it++, i++){
+	ft::map<int,int>::iterator ite = mp.end();
+	for (; it != ite; it++){
 		std::cout << it->second << std::endl;
 	}
-
 
 	return 0;
 }

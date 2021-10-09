@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/09 01:02:43 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/09 16:31:51 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,33 +83,35 @@ namespace ft {
 		 */
 		iterator begin(){
 			Node<value_type>* b = _root;
-			while (b->child[LEFT])
-				b = b->child[LEFT];
+			if(!empty()){
+				while (b->child[LEFT])
+					b = b->child[LEFT];
+			}
 			return iterator(b);
 		};
 
-		const_iterator begin() const{ return const_iterator(this->_Data); };
+		const_iterator begin() const{ return const_iterator(begin()); };
 
-		iterator end(){
-			Node<value_type>* e = _root;
-			while (e->child[RIGHT])
-				e = e->child[RIGHT];
-			return iterator(e);
-		};
+		iterator end(){ return iterator(); };
 
-		const_iterator end() const{ return const_iterator(this->_Data + this->size()); };
+		const_iterator end() const{ return const_iterator(); };
 
 		reverse_iterator rbegin(){
-			return reverse_iterator(end() - 1);
+			Node<value_type>* b = _root;
+			if(!empty()){
+				while (b->child[RIGHT])
+					b = b->child[RIGHT];
+			}
+			return reverse_iterator(b);
 		};
 		const_reverse_iterator rbegin() const{
-			return const_reverse_iterator(end() - 1);
+			return const_reverse_iterator(rbegin());
 		};
 		reverse_iterator rend(){
-			return reverse_iterator(begin() - 1);
+			return reverse_iterator();
 		};
 		const_reverse_iterator rend() const{
-			return const_reverse_iterator(begin() - 1);
+			return const_reverse_iterator();
 		};
 
 		/*
@@ -146,10 +148,12 @@ namespace ft {
 		// iterator insert (iterator position, const value_type& val){
 		//
 		// };
+		
 		template <class InputIterator>
  		// void insert (InputIterator first, InputIterator last){
 		//
 		// };
+
 		// iterator erase (iterator position){
 		//
 		// };
@@ -238,7 +242,7 @@ namespace ft {
 		/*
 		 * Protected Methods
 		 */
-		//Red-Black tree
+		//Red-Black tree functions
 		void rotation(Node<value_type>* y, const bool& side){
 			bool other = !side;
 			Node<value_type>* tmp = y->parent->parent;
@@ -322,6 +326,7 @@ namespace ft {
 				check_conflict(seed->parent, k);
 			return iterator(seed);
 		};
+		//end of Red-Black tree functions
 
 		/*
 		 * Attributes
