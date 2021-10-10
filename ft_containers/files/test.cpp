@@ -37,6 +37,7 @@ int main() {
 	mp[15]= 15;
 	mp[16] = 16;
 	mp[30] = 30;
+	mp[42] = 42;
 	mp[25] = 25;
 	mp[40] = 40;
 	mp[60] = 60;
@@ -48,6 +49,7 @@ int main() {
 	for (; it != ite; it++){
 		std::cout << it->second << std::endl;
 	}
+	mp.clear();
 
 	return 0;
 }

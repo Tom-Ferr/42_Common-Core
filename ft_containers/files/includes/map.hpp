@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/09 20:42:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/10 19:47:09 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ namespace ft {
 		 */
 		typedef Key key_type;
 		typedef T mapped_type;
-		typedef pair<const key_type, mapped_type> value_type;
+		typedef ft::pair<const key_type, mapped_type> value_type;
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
 		typedef std::size_t size_type;
@@ -56,15 +56,12 @@ namespace ft {
 							const allocator_type& alloc = allocator_type()
 						) : _root(NIL), _size(0), _comp(comp), _Alloc(alloc){};
 
-		// template <class InputIterator>
-		// map (	InputIterator first, InputIterator last,
-		// 		const key_compare& comp = key_compare(),
-		// 		const allocator_type& alloc = allocator_type()
-		// 	) : _comp(comp), _Alloc(alloc), _size(0), _root(NIL)
-		// {
-		// 	insert(first, last);
-		// };
-		//destructor
+		template <class InputIterator>
+		map (	InputIterator first, InputIterator last,
+				const key_compare& comp = key_compare(),
+				const allocator_type& alloc = allocator_type()
+			) : _comp(comp), _Alloc(alloc), _size(0), _root(NIL) { insert(first, last); };
+		// destructor
 		// ~map(void) { this->clear(); };
 		//copy constructor
 		map (const map & src) { *this = src; };
@@ -138,15 +135,12 @@ namespace ft {
 			value_type* new_val = this->_Alloc.allocate(1);
 			this->_Alloc.construct(new_val, val);
 			Node<value_type>* node = new Node<value_type>(new_val);
-			iterator it = sprout(node, _root);
+			iterator it = this->sprout(node, _root);
 			bool ret = (&(*it) == new_val);
 			if(ret)
 				this->_size++;
-			else{
-				delete node;
-				this->_Alloc.destroy(new_val);
-				this->_Alloc.deallocate(new_val, 1);
-			}
+			else
+				this->node_deallocate(node);
 			return ft::make_pair(it, ret);
 		};
 
@@ -155,15 +149,12 @@ namespace ft {
 			this->_Alloc.construct(new_val, val);
 			Node<value_type>* node = new Node<value_type>(new_val);
 			Node<value_type> hint = Node<value_type>(&(*position));
-			iterator it = sprout(node, &hint);
+			iterator it = this->sprout(node, &hint);
 			bool ret = (&(*it) == new_val);
 			if(ret)
 				this->_size++;
-			else{
-				delete node;
-				this->_Alloc.destroy(new_val);
-				this->_Alloc.deallocate(new_val, 1);
-			}
+			else
+				this->node_deallocate(node);
 			return it;
 		};
 		
@@ -173,34 +164,41 @@ namespace ft {
 				value_type* new_val = this->_Alloc.allocate(1);
 				this->_Alloc.construct(new_val, *first);
 				Node<value_type>* node = new Node<value_type>(new_val);
-				iterator it = sprout(node, _root);
+				iterator it = this->sprout(node, _root);
 				bool ret = (&(*it) == new_val);
 				if(ret)
 					this->_size++;
-				else{
-					delete node;
-					this->_Alloc.destroy(new_val);
-					this->_Alloc.deallocate(new_val, 1);
-				
-				}
+				else
+					this->node_deallocate(node);
 			}
 		};
 
-		// iterator erase (iterator position){
+		void erase (iterator position){
+			if (delete_node(position->first))
+				this->_size--;
+		};
+		
+		size_type erase (const key_type& k){
+			if (delete_node(k)){
+				this->_size--;
+				return 1;
+			}
+			return 0;
+		};
 		//
-		// };
+		void erase (iterator first, iterator last){
+			iterator next, target;
+			for (next = first; next != last;){
+				target = next;
+				next++;
+				if (delete_node(target->first))
+					this->_size--;
+			}
+		};
 		//
-		// size_type erase (const key_type& k){
-		//
-		// };
-		//
-		// iterator erase (iterator first, iterator last){
-		//
-		// };
-		//
-		// void clear(){
-		//
-		// };
+		void clear(){
+			erase(begin(), end());
+		};
 
 		void swap(map& other){
 			map<key_type, mapped_type> tmp(*this);
@@ -275,6 +273,8 @@ namespace ft {
 		 * Protected Methods
 		 */
 		//Red-Black tree functions
+
+		//rotaions
 		void rotation(Node<value_type>* y, const bool& side){
 			bool other = !side;
 			Node<value_type>* tmp = y->parent->parent;
@@ -303,6 +303,7 @@ namespace ft {
 			rotation(z->parent, other);
 		};
 
+		//Insertion
 		void recolor(Node<value_type>* seed, const bool& clr){
 			bool k = false;
 			seed->child[RIGHT]->color = clr;
@@ -355,7 +356,111 @@ namespace ft {
 				check_conflict(seed->parent, k);
 			return iterator(seed);
 		};
+
+		// Delete
+		void transplant(Node<value_type>* & seed, Node<value_type>* & x){
+			if (seed->parent == NIL)
+				_root = x;
+			else if (seed == seed->parent->child[LEFT])
+				seed->parent->child[LEFT] = x;
+			else
+				seed->parent->child[RIGHT] = x;
+			if(x)
+				x->parent = seed->parent;
+		};
+		void fix_cases(Node<value_type>* & x, Node<value_type>* & w, bool const & side){
+			w = x->parent->child[side];
+			if (w->color == RED){
+				w->color = BLACK;
+				x->parent->color = RED;
+				rotation(x->parent, !side);
+				w = x->parent->child[side];
+			}
+			if (w->child[!side]->color == BLACK
+			&& w->child[side]->color == BLACK){
+				w->color = RED;
+				x = x->parent;
+			}
+			else if (w->child[side]->color == BLACK){
+					w->child[!side]->color = BLACK;
+					w->color = RED;
+					rotation(w, side);
+					w = x->parent->child[side];
+			}
+			else{
+				w->color = x->parent->color;
+				x->parent->color = BLACK;
+				w->child[side]->color = BLACK;
+				rotation(x->parent, !side);
+				x = _root;
+			}
+		};
+		void fix_tree(Node<value_type>* & x){
+			Node<value_type>* w;
+			while (x->parent && x->color == BLACK){
+				if(x == x->parent->child[LEFT])
+					fix_cases(x, w, RIGHT);
+				else
+					fix_cases(x, w, LEFT);
+			}
+			x->color = BLACK;
+		};
+
+		bool delete_node(key_type const & key){
+			Node<value_type>* target = _root;
+			Node<value_type>* x;
+			Node<value_type>* y;
+			Node<value_type>* min;
+			bool side, o_clr;
+
+			while (target){
+				if (target->content->first == key)
+					break;
+				side = _comp(key, target->content->first);
+				target = target->child[side];
+			}
+			if (target){
+				o_clr = target->color;
+				if(target->child[LEFT] == NIL){
+					x = target->child[RIGHT];
+					transplant(target, x);
+				}
+				else if(target->child[RIGHT] == NIL){
+					x = target->child[LEFT];
+					transplant(target, x);
+				}
+				else{
+					min = target->child[RIGHT];
+					while (min->child[LEFT])
+						min = min->child[LEFT];
+					y = min;
+					o_clr = y->color;
+					x = y->child[RIGHT];
+					if (y->parent == target)
+						x->parent = y;
+					else{
+						transplant(y, y->child[RIGHT]);
+						y->child[RIGHT] = target->child[RIGHT];
+						y->child[RIGHT]->parent = y;
+					}
+					transplant(target, y);
+					y->child[LEFT] = target->child[LEFT];
+					y->child[LEFT]->parent = y;
+					y->color = target->color;
+				}
+				node_deallocate(seed);
+				if (o_clr == BLACK)
+					fix_tree(x);
+				return true;
+			}
+			return false;
+		};
 		//end of Red-Black tree functions
+		void node_deallocate(Node<value_type>* node){
+			this->_Alloc.destroy(node->content);
+			this->_Alloc.deallocate(node->content, 1);
+			delete node;
+		}
 
 		/*
 		 * Attributes
