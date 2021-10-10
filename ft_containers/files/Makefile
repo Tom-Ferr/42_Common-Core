@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/23 15:18:41 by tde-cama          #+#    #+#              #
-#    Updated: 2021/10/09 17:15:58 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/10/09 19:43:26 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ INC				= 	./includes/
 
 DEPS			= 	$(addprefix ${INC}, $(HEADS))
 
+MAIN			=	test.cpp
+
 NAME			= 	ft_containers
 
 CXX				=	clang++
@@ -41,9 +43,9 @@ SANITIZE 		= 	-fsanitize=address
 %.o: %.cpp		
 				${CXX} ${CXXFLAGS} ${INCLUDE} -c $< -o $@
 
-$(NAME):		${OBJS} $(DEPS)
-				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL=0 ${INCLUDE} test.cpp -o ${NAME}
-				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL=1 ${INCLUDE} test.cpp -o ${NAME}_stl
+$(NAME):		${OBJS} $(DEPS) ${MAIN}
+				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL=0 ${INCLUDE} ${MAIN} -o ${NAME}
+				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL=1 ${INCLUDE} ${MAIN} -o ${NAME}_stl
 
 all:			${NAME}
 
@@ -55,7 +57,7 @@ clean:
 				rm -f ${OBJS}
 
 fclean:			clean
-				rm -f ${NAME} ${NAME}_stl my.log real.log
+				rm -f ${NAME} ${NAME}_stl *.log
 re:				fclean all
 
 .PHONY:			all clean fclean re

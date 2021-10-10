@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/09 16:31:51 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/09 20:42:11 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,21 +138,53 @@ namespace ft {
 			value_type* new_val = this->_Alloc.allocate(1);
 			this->_Alloc.construct(new_val, val);
 			Node<value_type>* node = new Node<value_type>(new_val);
-			iterator it = sprout(node);
+			iterator it = sprout(node, _root);
 			bool ret = (&(*it) == new_val);
 			if(ret)
 				this->_size++;
+			else{
+				delete node;
+				this->_Alloc.destroy(new_val);
+				this->_Alloc.deallocate(new_val, 1);
+			}
 			return ft::make_pair(it, ret);
 		};
 
-		// iterator insert (iterator position, const value_type& val){
-		//
-		// };
+		iterator insert (iterator position, const value_type& val){
+			value_type* new_val = this->_Alloc.allocate(1);
+			this->_Alloc.construct(new_val, val);
+			Node<value_type>* node = new Node<value_type>(new_val);
+			Node<value_type> hint = Node<value_type>(&(*position));
+			iterator it = sprout(node, &hint);
+			bool ret = (&(*it) == new_val);
+			if(ret)
+				this->_size++;
+			else{
+				delete node;
+				this->_Alloc.destroy(new_val);
+				this->_Alloc.deallocate(new_val, 1);
+			}
+			return it;
+		};
 		
 		template <class InputIterator>
- 		// void insert (InputIterator first, InputIterator last){
-		//
-		// };
+ 		void insert (InputIterator first, InputIterator last){
+			for (; first != last; first++){
+				value_type* new_val = this->_Alloc.allocate(1);
+				this->_Alloc.construct(new_val, *first);
+				Node<value_type>* node = new Node<value_type>(new_val);
+				iterator it = sprout(node, _root);
+				bool ret = (&(*it) == new_val);
+				if(ret)
+					this->_size++;
+				else{
+					delete node;
+					this->_Alloc.destroy(new_val);
+					this->_Alloc.deallocate(new_val, 1);
+				
+				}
+			}
+		};
 
 		// iterator erase (iterator position){
 		//
@@ -247,12 +279,10 @@ namespace ft {
 			bool other = !side;
 			Node<value_type>* tmp = y->parent->parent;
 			if(tmp){
-				for (int i = 0; i < 2; i++) {
-					if (tmp->child[i] == y->parent){
-						tmp->child[i] = y;
-						break;
-					}
-				}
+				if (tmp->child[RIGHT] == y->parent)
+					tmp->child[RIGHT] = y;
+				else
+					tmp->child[LEFT] = y;
 			}
 			else
 				this->_root = y;
@@ -275,9 +305,8 @@ namespace ft {
 
 		void recolor(Node<value_type>* seed, const bool& clr){
 			bool k = false;
-			for(int i = 0; i < 2; i++){
-				seed->child[i]->color = clr;
-			}
+			seed->child[RIGHT]->color = clr;
+			seed->child[LEFT]->color = clr;
 			if(seed->parent){
 				seed->color = !clr;
 				if (seed->parent->child[k] != seed)
@@ -307,8 +336,8 @@ namespace ft {
 				check_conflict(mid->parent, c);
 		};
 
-		iterator sprout(Node<value_type>* new_node){
-			Node<value_type>* seed = _root;
+		iterator sprout(Node<value_type>* new_node, Node<value_type>* hint){
+			Node<value_type>* seed = hint;
 			bool k;
 			if((new_node->color = !this->empty()) == BLACK)
 				return	(_root = new_node, iterator(_root));

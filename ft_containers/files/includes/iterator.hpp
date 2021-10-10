@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 12:00:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/09 17:16:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/09 19:32:42 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ namespace ft{
 			while(_node && !_comp(_cache->first, _node->content->first)){
 				_node = _node->parent;
 			}
-			if(_node && _node->child[LEFT]
+			while(_node && _node->child[LEFT]
 			&& _comp(_cache->first, _node->child[LEFT]->content->first)){
 				_node = _node->child[LEFT];
 			}
@@ -188,7 +188,7 @@ namespace ft{
 			while(_node && !_comp(_node->content->first, _cache->first)){
 				_node = _node->parent;
 			}
-			if(_node && _node->child[RIGHT]
+			while(_node && _node->child[RIGHT]
 			&& _comp(_node->child[RIGHT]->content->first, _cache->first)){
 				_node = _node->child[RIGHT];
 			}
