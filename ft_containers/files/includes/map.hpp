@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/10 19:47:09 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/11 19:17:31 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,99 +358,125 @@ namespace ft {
 		};
 
 		// Delete
-		void transplant(Node<value_type>* & seed, Node<value_type>* & x){
-			if (seed->parent == NIL)
-				_root = x;
-			else if (seed == seed->parent->child[LEFT])
-				seed->parent->child[LEFT] = x;
+		void transplant(Node<value_type>* & del, Node<value_type>* & heir){
+			Node<value_type>	tmp(heir);
+			if (del->parent == NIL)
+				_root = heir;
+			else if (del == del->parent->child[LEFT])
+				del->parent->child[LEFT] = heir;
 			else
-				seed->parent->child[RIGHT] = x;
-			if(x)
-				x->parent = seed->parent;
+				del->parent->child[RIGHT] = heir;
+			if(heir){
+				heir->parent = del->parent;
+				heir->child[0] = del->child[0];
+				heir->child[1] = del->child[1];
+				heir->color = del->color;
+
+				del->parent = tmp.parent;
+				del->child[0] = tmp.child[0];
+				del->child[1] = tmp.child[1];
+				del->color = tmp.color;
+			}		
 		};
-		void fix_cases(Node<value_type>* & x, Node<value_type>* & w, bool const & side){
-			w = x->parent->child[side];
-			if (w->color == RED){
-				w->color = BLACK;
-				x->parent->color = RED;
-				rotation(x->parent, !side);
-				w = x->parent->child[side];
+		void fix_cases(Node<value_type>* & seed, bool const & side){
+			Node<value_type>* bro = seed->child[!side];
+			if (bro->color == RED){
+				bro->color = BLACK;
+				seed->color = RED;
+				rotation(seed, side);
+				bro = seed->child[!side];
 			}
-			if (w->child[!side]->color == BLACK
-			&& w->child[side]->color == BLACK){
-				w->color = RED;
-				x = x->parent;
-			}
-			else if (w->child[side]->color == BLACK){
-					w->child[!side]->color = BLACK;
-					w->color = RED;
-					rotation(w, side);
-					w = x->parent->child[side];
+			if ( (bro->child[side] == NIL || bro->child[side]->color == BLACK)
+			&& (bro->child[!side] == NIL || bro->child[!side]->color == BLACK) ){
+				bro->color = RED;
+				seed = seed->parent;
 			}
 			else{
-				w->color = x->parent->color;
-				x->parent->color = BLACK;
-				w->child[side]->color = BLACK;
-				rotation(x->parent, !side);
-				x = _root;
-			}
+				if ( bro->child[!side] == NIL || bro->child[!side]->color == BLACK ){
+					bro->child[side]->color = BLACK;
+					bro->color = RED;
+					rotation(bro, !side);
+					bro = seed->child[!side];
+				}
+				bro->color = seed->color;
+				seed->color = BLACK;
+				bro->child[!side]->color = BLACK;
+				rotation(seed, side);
+				seed = NIL;
+			}	
 		};
-		void fix_tree(Node<value_type>* & x){
-			Node<value_type>* w;
-			while (x->parent && x->color == BLACK){
-				if(x == x->parent->child[LEFT])
-					fix_cases(x, w, RIGHT);
+		void fix_tree(Node<value_type>* & seed, bool const & side){
+			Node<value_type>* db = seed->child[side];
+			while ( seed && (db == NIL || db->color == BLACK) ){
+				if(db == seed->child[LEFT])
+					fix_cases(seed, LEFT);
 				else
-					fix_cases(x, w, LEFT);
+					fix_cases(seed, RIGHT);
 			}
-			x->color = BLACK;
+			if (seed)
+				seed->color = BLACK;
 		};
 
 		bool delete_node(key_type const & key){
-			Node<value_type>* target = _root;
-			Node<value_type>* x;
-			Node<value_type>* y;
-			Node<value_type>* min;
+			Node<value_type>* 	seed = _root;
+			Node<value_type>*	min;
+			Node<value_type>* 	del;
+			value_type* 		swap;
 			bool side, o_clr;
 
-			while (target){
-				if (target->content->first == key)
+			while (seed){
+				if (seed->content->first == key)
 					break;
-				side = _comp(key, target->content->first);
-				target = target->child[side];
+				side = _comp(key, seed->content->first);
+				seed = seed->child[side];
 			}
-			if (target){
-				o_clr = target->color;
-				if(target->child[LEFT] == NIL){
-					x = target->child[RIGHT];
-					transplant(target, x);
+			if (seed){
+				seed = seed->parent;
+				del = seed->child[side];
+				o_clr = del->color;
+				if(del->child[LEFT] == NIL){
+					if(del->child[RIGHT]){
+						swap = del->content;
+						del->content = del->child[RIGHT]->content;
+						del->child[RIGHT]->content = swap;
+						del = seed->child[side]->child[RIGHT];
+						seed->child[side]->child[RIGHT] = NIL;
+						o_clr = del->color;
+					}
+					else
+						seed->child[side] = NIL;
 				}
-				else if(target->child[RIGHT] == NIL){
-					x = target->child[LEFT];
-					transplant(target, x);
+				else if(seed->child[RIGHT] == NIL){
+					if(del->child[LEFT]){
+						swap = del->content;
+						del->content = del->child[LEFT]->content;
+						del->child[LEFT]->content = swap;
+						del = seed->child[side]->child[LEFT];
+						seed->child[side]->child[LEFT] = NIL;
+						o_clr = del->color;
+					}
+					else
+						seed->child[side] = NIL;
 				}
 				else{
-					min = target->child[RIGHT];
-					while (min->child[LEFT])
-						min = min->child[LEFT];
-					y = min;
-					o_clr = y->color;
-					x = y->child[RIGHT];
-					if (y->parent == target)
-						x->parent = y;
-					else{
-						transplant(y, y->child[RIGHT]);
-						y->child[RIGHT] = target->child[RIGHT];
-						y->child[RIGHT]->parent = y;
+					while(del->child[LEFT] || del->child[RIGHT]){
+						min = del->child[RIGHT];
+						while (min->child[LEFT])
+							min = min->child[LEFT];
+						swap = del->content;
+						del->content = min->content;
+						min->content = swap;
+						del = min;
 					}
-					transplant(target, y);
-					y->child[LEFT] = target->child[LEFT];
-					y->child[LEFT]->parent = y;
-					y->color = target->color;
+						o_clr = del->color;
+						if (del->parent->child[LEFT] == del)
+							del->parent->child[LEFT] = NIL;
+						else
+							del->parent->child[RIGHT] = NIL;
 				}
-				node_deallocate(seed);
+				node_deallocate(del);
 				if (o_clr == BLACK)
-					fix_tree(x);
+					fix_tree(seed, side);
 				return true;
 			}
 			return false;
