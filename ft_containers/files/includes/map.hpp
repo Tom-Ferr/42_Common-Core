@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/11 19:17:31 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/12 22:38:36 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,13 +284,16 @@ namespace ft {
 				else
 					tmp->child[LEFT] = y;
 			}
-			else
+			else{
+
 				this->_root = y;
+			}
 			y->parent->child[other] = y->child[side];
+			if (y->child[side])
+				y->child[side]->parent =  y->parent;
 			y->child[side] = y->parent;
 			y->parent = tmp;
 			y->child[side]->parent = y;
-			recolor(y, RED);
 		};
 
 		void double_rotation(Node<value_type>* z, const bool& side){
@@ -301,6 +304,7 @@ namespace ft {
 			z->parent->child[side] = z;
 			z->child[other] = NIL;
 			rotation(z->parent, other);
+			recolor(z->parent, RED);
 		};
 
 		//Insertion
@@ -329,8 +333,10 @@ namespace ft {
 				recolor(mid->parent, BLACK);
 				return ;
 			}
-			if (c == k)
+			if (c == k){
 				rotation(mid, !k);
+				recolor(mid, RED);
+			}
 			else
 				double_rotation(mid, c);
 			if(mid->color == RED)
@@ -358,70 +364,88 @@ namespace ft {
 		};
 
 		// Delete
+		void fix_cases(Node<value_type>* & seed, Node<value_type>* & db, bool const & side){
+			Node<value_type>* bro = seed->child[!side];
+			if (bro->color == RED){
+				bro->color = BLACK;
+				seed->color = RED;
+				rotation(bro, side);
+				bro = seed->child[!side];
+			}
+			if ( (bro->child[side] == NIL || bro->child[side]->color == BLACK)
+			&& (bro->child[!side] == NIL || bro->child[!side]->color == BLACK) ){
+				bro->color = RED;
+				if (seed->color == BLACK){
+					db = seed;
+					seed = seed->parent;
+				}
+				else{
+					seed->color = BLACK;
+					seed = NIL;
+				}
+			}
+			else{
+				if ( bro->child[!side] == NIL || bro->child[!side]->color == BLACK ){
+					bro->child[side]->color = BLACK;
+					bro->color = RED;
+					rotation(bro->child[side], !side);
+					bro = seed->child[!side];
+				}
+				bro->color = seed->color;
+				seed->color = BLACK;
+				if (seed->parent == NIL)
+					seed->color = BLACK;
+				bro->child[!side]->color = BLACK;
+				rotation(seed->child[!side], side);
+				seed = NIL;
+			}	
+		};
+		void fix_tree(Node<value_type>* & seed, bool const & side){
+			Node<value_type>* db;
+			if(seed)
+				db = seed->child[side];
+			while ( seed && (db == NIL || db->color == BLACK) ){
+				if(db == seed->child[LEFT])
+					fix_cases(seed, db, LEFT);
+				else
+					fix_cases(seed, db, RIGHT);
+			}
+			if (seed)
+				seed->color = BLACK;
+		};
+
 		void transplant(Node<value_type>* & del, Node<value_type>* & heir){
-			Node<value_type>	tmp(heir);
 			if (del->parent == NIL)
 				_root = heir;
 			else if (del == del->parent->child[LEFT])
 				del->parent->child[LEFT] = heir;
 			else
 				del->parent->child[RIGHT] = heir;
-			if(heir){
+			if(heir)
 				heir->parent = del->parent;
-				heir->child[0] = del->child[0];
-				heir->child[1] = del->child[1];
-				heir->color = del->color;
+		};
 
-				del->parent = tmp.parent;
-				del->child[0] = tmp.child[0];
-				del->child[1] = tmp.child[1];
-				del->color = tmp.color;
-			}		
-		};
-		void fix_cases(Node<value_type>* & seed, bool const & side){
-			Node<value_type>* bro = seed->child[!side];
-			if (bro->color == RED){
-				bro->color = BLACK;
-				seed->color = RED;
-				rotation(seed, side);
-				bro = seed->child[!side];
-			}
-			if ( (bro->child[side] == NIL || bro->child[side]->color == BLACK)
-			&& (bro->child[!side] == NIL || bro->child[!side]->color == BLACK) ){
-				bro->color = RED;
-				seed = seed->parent;
-			}
-			else{
-				if ( bro->child[!side] == NIL || bro->child[!side]->color == BLACK ){
-					bro->child[side]->color = BLACK;
-					bro->color = RED;
-					rotation(bro, !side);
-					bro = seed->child[!side];
-				}
-				bro->color = seed->color;
-				seed->color = BLACK;
-				bro->child[!side]->color = BLACK;
-				rotation(seed, side);
-				seed = NIL;
-			}	
-		};
-		void fix_tree(Node<value_type>* & seed, bool const & side){
-			Node<value_type>* db = seed->child[side];
-			while ( seed && (db == NIL || db->color == BLACK) ){
-				if(db == seed->child[LEFT])
-					fix_cases(seed, LEFT);
-				else
-					fix_cases(seed, RIGHT);
-			}
-			if (seed)
-				seed->color = BLACK;
+		void estate(Node<value_type>* & del, Node<value_type>* & heir){
+			Node<value_type> 	tmp;
+
+			tmp.child[LEFT] = heir->child[LEFT];
+			tmp.child[RIGHT] = heir->child[RIGHT];
+			tmp.color = heir->color;
+
+			heir->child[LEFT] = del->child[LEFT];
+			heir->child[RIGHT] = del->child[RIGHT];
+			heir->color = del->color;
+
+			del->child[LEFT] = tmp.child[LEFT];
+			del->child[RIGHT] = tmp.child[RIGHT];
+			del->color = tmp.color;
 		};
 
 		bool delete_node(key_type const & key){
 			Node<value_type>* 	seed = _root;
-			Node<value_type>*	min;
 			Node<value_type>* 	del;
-			value_type* 		swap;
+			Node<value_type>* 	heir;
+			
 			bool side, o_clr;
 
 			while (seed){
@@ -432,48 +456,55 @@ namespace ft {
 			}
 			if (seed){
 				seed = seed->parent;
-				del = seed->child[side];
+				if (seed == NIL)
+					del = _root;
+				else
+					del = seed->child[side];
 				o_clr = del->color;
 				if(del->child[LEFT] == NIL){
-					if(del->child[RIGHT]){
-						swap = del->content;
-						del->content = del->child[RIGHT]->content;
-						del->child[RIGHT]->content = swap;
-						del = seed->child[side]->child[RIGHT];
-						seed->child[side]->child[RIGHT] = NIL;
-						o_clr = del->color;
+					heir = del->child[RIGHT];
+					transplant(del, heir);
+					if(heir){
+						del->parent = heir;
+						estate(del, heir);
+						heir->child[RIGHT] = NIL;
+						if(heir->child[LEFT])
+							heir->child[LEFT]->parent = heir;
 					}
-					else
-						seed->child[side] = NIL;
 				}
 				else if(seed->child[RIGHT] == NIL){
-					if(del->child[LEFT]){
-						swap = del->content;
-						del->content = del->child[LEFT]->content;
-						del->child[LEFT]->content = swap;
-						del = seed->child[side]->child[LEFT];
-						seed->child[side]->child[LEFT] = NIL;
-						o_clr = del->color;
+					heir = del->child[LEFT];
+					transplant(del, heir);
+					if(heir){
+						del->parent = heir;
+						estate(del, heir);
+						heir->child[LEFT] = NIL;
+						if(heir->child[RIGHT])
+							heir->child[RIGHT]->parent = heir;
 					}
-					else
-						seed->child[side] = NIL;
 				}
 				else{
 					while(del->child[LEFT] || del->child[RIGHT]){
-						min = del->child[RIGHT];
-						while (min->child[LEFT])
-							min = min->child[LEFT];
-						swap = del->content;
-						del->content = min->content;
-						min->content = swap;
-						del = min;
-					}
-						o_clr = del->color;
-						if (del->parent->child[LEFT] == del)
-							del->parent->child[LEFT] = NIL;
+						heir = del->child[RIGHT];
+						while (heir->child[LEFT])
+							heir = heir->child[LEFT];
+						transplant(del, heir);
+						if(heir->parent == del)
+							del->parent = heir;
 						else
-							del->parent->child[RIGHT] = NIL;
+							del->parent = heir->parent;
+						estate(del, heir);
+						if(heir->child[RIGHT])
+							heir->child[RIGHT]->parent = heir;
+						if(heir->child[LEFT])
+							heir->child[LEFT]->parent = heir;
+					}
+					if (del->parent->child[LEFT] == del)
+						del->parent->child[LEFT] = NIL;
+					else
+						del->parent->child[RIGHT] = NIL;
 				}
+				o_clr = del->color;
 				node_deallocate(del);
 				if (o_clr == BLACK)
 					fix_tree(seed, side);
@@ -482,7 +513,7 @@ namespace ft {
 			return false;
 		};
 		//end of Red-Black tree functions
-		void node_deallocate(Node<value_type>* node){
+		void node_deallocate(Node<value_type>* & node){
 			this->_Alloc.destroy(node->content);
 			this->_Alloc.deallocate(node->content, 1);
 			delete node;

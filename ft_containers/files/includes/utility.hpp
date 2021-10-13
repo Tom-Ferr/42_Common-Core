@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 23:36:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/11 19:10:49 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/12 22:36:50 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,6 @@ namespace ft{
 		 parent(NIL), content(val), color(RED){
 			child[0] = NIL;
 			child[1] = NIL;
-		};
-		Node(Node<T> const & src) { *this = src; };
-		Node(Node<T>* const & src) :
-		 parent(src->parent), content(src->content), color(src->color){
-			child[0] = src->child[0];
-			child[1] = src->child[1];
 		};
 		Node<T> operator=(Node<T> const & rhs){
 			if (this != &rhs){

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/02 21:16:45 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/12 12:58:35 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,7 @@ namespace ft {
 			for (iterator it = position; it != end(); it++) {
 				*it = *(it + 1);
 			}
+			this->_Alloc.destroy(*position);
 			this->size--;
 			return ++position;
 		};
