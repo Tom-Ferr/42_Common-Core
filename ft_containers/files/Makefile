@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/23 15:18:41 by tde-cama          #+#    #+#              #
-#    Updated: 2021/10/09 22:36:17 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/10/14 10:01:58 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,8 @@ MAIN			=	test.cpp
 
 NAME			= 	ft_containers
 
+SEED			=	$(shell date +%s)
+
 CXX				=	clang++
 
 AR				=	ar -rcs
@@ -50,8 +52,8 @@ $(NAME):		${OBJS} $(DEPS) ${MAIN}
 all:			${NAME}
 
 test:			all
-				./${NAME} > my.log
-				./${NAME}_stl > real.log
+				./${NAME} ${SEED} > my.log
+				./${NAME}_stl ${SEED} > real.log
 
 clean:
 				rm -f ${OBJS}

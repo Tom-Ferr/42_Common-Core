@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 17:50:53 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/02 17:56:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/13 19:09:10 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 const char* ft::out_of_range::what() const throw()
 {
-	return "out of range";
+	return "vector";
 }
