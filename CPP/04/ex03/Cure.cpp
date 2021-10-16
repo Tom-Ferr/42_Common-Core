@@ -17,7 +17,7 @@ Cure::Cure(void) : AMateria("cure")
 	std::cout << "Cure Default constructor has been called" << std::endl;
 }
 
-Cure::Cure(Cure const & src)
+Cure::Cure(Cure const & src) : AMateria("cure")
 {
 	std::cout << "Cure Copy constructor has been called" << std::endl;
 	*this = src;
