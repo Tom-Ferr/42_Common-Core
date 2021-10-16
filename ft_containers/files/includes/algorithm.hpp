@@ -6,12 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 12:38:45 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/02 13:10:21 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/15 18:17:07 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ALGORITHM_HPP
-# define ALGORITHM_HPP
+#ifndef FT_ALGORITHM_HPP
+# define FT_ALGORITHM_HPP
 
 namespace ft{
 

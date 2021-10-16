@@ -6,12 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 23:36:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/12 22:36:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/15 18:15:52 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FILE_HPP
-# define FILE_HPP
+#ifndef FT_UTILITY_HPP
+# define FT_UTILITY_HPP
 
 # define NIL 	nullptr
 # define RED 	true

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/12 22:38:36 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/15 18:26:45 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ namespace ft {
 		typedef typename Allocator::const_reference const_reference;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
-		typedef ft::tree_iterator<key_compare, value_type> iterator;
-		typedef ft::tree_iterator<key_compare, value_type> const_iterator;
+		typedef ft::map_iterator<key_compare, value_type> iterator;
+		typedef ft::map_iterator<key_compare, value_type> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef typename Allocator::template rebind<value_type>::other a_node;

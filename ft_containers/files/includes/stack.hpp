@@ -6,12 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 09:14:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/02 18:56:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/15 18:16:13 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STACK_HPP
-# define STACK_HPP
+#ifndef FT_STACK_HPP
+# define FT_STACK_HPP
 # include <vector.hpp>
 
 namespace ft{

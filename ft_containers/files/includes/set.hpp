@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/13 10:41:35 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/15 19:42:56 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 namespace ft {
 
-	template<typename T, class Compare = std::less<Key>,
+	template<typename T, class Compare = std::less<T>,
 		class Allocator = std::allocator<T> >
 	class set
 	{
@@ -29,7 +29,7 @@ namespace ft {
 		/*
 		 * Member types
 		 */
-		typedef Key key_type;
+		typedef T key_type;
 		typedef T value_type;
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
@@ -39,8 +39,8 @@ namespace ft {
 		typedef typename Allocator::const_reference const_reference;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
-		typedef ft::tree_iterator<key_compare, value_type> iterator;
-		typedef ft::tree_iterator<key_compare, value_type> const_iterator;
+		typedef ft::set_iterator<key_compare, value_type> iterator;
+		typedef ft::set_iterator<key_compare, value_type> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef typename Allocator::template rebind<value_type>::other a_node;
