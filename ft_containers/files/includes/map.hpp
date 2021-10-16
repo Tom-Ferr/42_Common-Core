@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/15 18:26:45 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/16 16:28:02 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ namespace ft {
 				const allocator_type& alloc = allocator_type()
 			) : _comp(comp), _Alloc(alloc), _size(0), _root(NIL) { insert(first, last); };
 		// destructor
-		// ~map(void) { this->clear(); };
+		~map(void) { this->clear(); };
 		//copy constructor
 		map (const map & src) { *this = src; };
 		//assign operator

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector_test.c                                      :+:      :+:    :+:   */
+/*   vector_test.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 17:43:51 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/16 08:33:20 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/16 08:38:00 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTOR_TEST_C 
-# define VECTOR_TEST_C 
+#ifndef VECTOR_TEST_CPP
+# define VECTOR_TEST_CPP
 std::cout << "::::::::::::::: VECTOR :::::::::::::::" << std::endl;
 	std::cout << std::endl;
 	std::cout << std::endl;

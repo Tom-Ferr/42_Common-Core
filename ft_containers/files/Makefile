@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/23 15:18:41 by tde-cama          #+#    #+#              #
-#    Updated: 2021/10/15 18:25:58 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/10/16 08:36:40 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ OBJS			= 	${SRCS:.cpp=.o}
 HEADS			=	algorithm.hpp exception.hpp iterator.hpp map.hpp set.hpp\
 					stack.hpp utility.hpp vector.hpp type_traits.hpp\
 					random_access_iterator.hpp set_iterator.hpp map_iterator.hpp \
-					reverse_iterator.hpp vector_test.c\
+					reverse_iterator.hpp vector_test.cpp\
 
 INC				= 	./includes/
 

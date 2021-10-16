@@ -28,8 +28,10 @@ int main(int argc, char *argv[]) {
 	std::cout << " ************" << std::endl;
 	std::cout << std::endl;
 
-	#include <vector_test.c>
-
+	#include <vector_test.cpp>
+	#include <stack_test.cpp>
+	// #include <map_test.cpp>
+	// #include <set_test.cpp>
 	
 	return 0 ;
 }
