@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/15 19:42:56 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/17 22:49:07 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -440,9 +440,9 @@ namespace ft {
 			bool side, o_clr;
 
 			while (seed){
-				if (seed->content->first == key)
+				if (seed->content == key)
 					break;
-				side = _comp(key, seed->content->first);
+				side = _comp(key, seed->content);
 				seed = seed->child[side];
 			}
 			if (seed){

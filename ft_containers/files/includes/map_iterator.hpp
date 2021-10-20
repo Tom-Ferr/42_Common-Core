@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 17:58:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/15 18:16:42 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/19 01:00:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ namespace ft{
 			this->operator--();
 			return tmp;
 		};
+
+		Node<value_type>* curr(){ return this->_node; };
 
 	private:
 		key_compare			_comp;
