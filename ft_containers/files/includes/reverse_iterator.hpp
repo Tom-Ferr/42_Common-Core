@@ -6,12 +6,14 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 18:18:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/18 14:44:41 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/21 00:36:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_REVERSE_ITERATOR
 # define FT_REVERSE_ITERATOR
+
+# include <iterator_traits.hpp>
 
 namespace ft{
     /*
@@ -24,11 +26,12 @@ namespace ft{
 		 * Member types
 		 */
 		typedef Iter iterator_type;
-		typedef typename Iter::pointer pointer;
-		typedef typename Iter::reference reference;
+		typedef typename ft::iterator_traits<Iter>::iterator_category iterator_category;
+		typedef typename ft::iterator_traits<Iter>::pointer pointer;
+		typedef typename ft::iterator_traits<Iter>::reference reference;
+		typedef typename ft::iterator_traits<Iter>::value_type value_type;
+		typedef typename ft::iterator_traits<Iter>::difference_type difference_type;
 		typedef typename Iter::size_type size_type;
-		typedef typename Iter::value_type value_type;
-		typedef typename Iter::difference_type difference_type;
 
 		/*
 		 * Orthodox Canonical Form
@@ -63,24 +66,34 @@ namespace ft{
 		 * Incrementation/Decrementation Operators
 		 */
 		reverse_iterator& operator++(){
-			this->_it--;
+			if(_it.curr())
+				this->_it--;
 			return *this;
 		};
 
 		reverse_iterator operator++(int){
 			reverse_iterator tmp(*this);
-			this->_it--;
+			if(_it.curr())
+				this->_it--;
 			return tmp;
 		};
 
 		reverse_iterator& operator--(){
-			this->_it++;
+			if(typeid( iterator_category) == typeid(std::bidirectional_iterator_tag)
+			&& _it.curr() == NIL)
+				_it.update();
+			else
+				this->_it++;
 			return *this;
 		};
 
 		reverse_iterator operator--(int){
 			reverse_iterator tmp(*this);
-			this->_it++;
+			if(typeid( iterator_category) == typeid(std::bidirectional_iterator_tag)
+			&& _it.curr() == NIL)
+				_it.update();
+			else
+				this->_it++;
 			return tmp;
 		};
 

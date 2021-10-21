@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 12:00:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/15 18:45:27 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/21 00:36:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ namespace ft{
 		typedef typename C::size_type size_type;
 		typedef typename C::difference_type difference_type;
 		typedef typename C::reference reference;
+		typedef typename std::random_access_iterator_tag iterator_category;
 		typedef P pointer;
 
 		/*
@@ -140,6 +141,9 @@ namespace ft{
 			return this->_ptr[i];
 		}
 
+		bool curr(){return 1;};
+		bool update(){return 1;} ;
+	private:
 	private:
 		pointer _ptr;
 

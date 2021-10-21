@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/17 22:49:07 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/20 23:59:32 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ namespace ft {
 		typedef T key_type;
 		typedef T value_type;
 		typedef Compare key_compare;
+		typedef Compare value_compare;
 		typedef Allocator allocator_type;
 		typedef std::size_t size_type;
 		typedef std::ptrdiff_t difference_type;
@@ -39,11 +40,10 @@ namespace ft {
 		typedef typename Allocator::const_reference const_reference;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
-		typedef ft::set_iterator<key_compare, value_type> iterator;
-		typedef ft::set_iterator<key_compare, value_type> const_iterator;
+		typedef ft::set_iterator< ft::set<key_type> > iterator;
+		typedef ft::set_iterator< ft::set<key_type> > const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-		typedef typename Allocator::template rebind<value_type>::other a_node;
 
 		/*
 		 * Orthodox Canonical Form
@@ -59,17 +59,18 @@ namespace ft {
 		set (	InputIterator first, InputIterator last,
 				const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type()
-			) : _comp(comp), _Alloc(alloc), _size(0), _root(NIL) { insert(first, last); };
+			) :  _root(NIL), _size(0), _comp(comp), _Alloc(alloc){ insert(first, last); };
 		// destructor
 		~set(void) { this->clear(); };
 		//copy constructor
-		set (const set & src) { *this = src; };
+		set (const set & src) : _root(NIL), _size(0){ *this = src; };
 		//assign operator
 		set & operator=(const set & rhs){
 			if(this != &rhs){
-				this->_root = rhs._root;
-				this->_size = rhs._size;
+				if(this->_root)
+					this->clear();
 				this->_comp = rhs._comp;
+				this->insert(rhs.begin(), rhs.end());
 			}
 			return *this;
 		};
@@ -86,11 +87,32 @@ namespace ft {
 			return iterator(b);
 		};
 
-		const_iterator begin() const{ return const_iterator(begin()); };
+		const_iterator begin() const{
+			Node<value_type>* b = _root;
+			if(!empty()){
+				while (b->child[LEFT])
+					b = b->child[LEFT];
+			}
+			return const_iterator(b);
+		};
 
-		iterator end(){ return iterator(); };
+		iterator end(){
+			Node<value_type>* b = _root;
+			if(!empty()){
+				while (b->child[RIGHT])
+					b = b->child[RIGHT];
+			}
+			return ++iterator(b);
+		};
 
-		const_iterator end() const{ return const_iterator(); };
+		const_iterator end() const{
+			Node<value_type>* b = _root;
+			if(!empty()){
+				while (b->child[RIGHT])
+					b = b->child[RIGHT];
+			}
+			return ++iterator(b); 
+		};
 
 		reverse_iterator rbegin(){
 			Node<value_type>* b = _root;
@@ -101,13 +123,18 @@ namespace ft {
 			return reverse_iterator(b);
 		};
 		const_reverse_iterator rbegin() const{
-			return const_reverse_iterator(rbegin());
+			Node<value_type>* b = _root;
+			if(!empty()){
+				while (b->child[RIGHT])
+					b = b->child[RIGHT];
+			}
+			return const_reverse_iterator(b);
 		};
 		reverse_iterator rend(){
-			return reverse_iterator();
+			return reverse_iterator(--begin());
 		};
 		const_reverse_iterator rend() const{
-			return const_reverse_iterator();
+			return const_reverse_iterator(--begin());
 		};
 
 		/*
@@ -115,9 +142,10 @@ namespace ft {
 		 */
 		size_type size() const { return this->_size; };
 
-		size_type max_size() const{ return -1ul / sizeof(value_type);};
+		size_type max_size() const{ return -1ul / (sizeof(Node<value_type>) - sizeof(value_type*)); };
 
 		bool empty() const { return this->_size == 0; };
+
 
 		/*
 		 * Modifiers
@@ -139,8 +167,15 @@ namespace ft {
 			value_type* new_val = this->_Alloc.allocate(1);
 			this->_Alloc.construct(new_val, val);
 			Node<value_type>* node = new Node<value_type>(new_val);
-			Node<value_type> hint = Node<value_type>(&(*position));
-			iterator it = this->sprout(node, &hint);
+			Node<value_type>* hint = _root;
+			for (; position != end(); position++){
+				if (!_comp(*position, *(node->content))){
+					hint = position.curr();
+					break;
+				}
+			}
+			 
+			iterator it = this->sprout(node, hint);
 			bool ret = (&(*it) == new_val);
 			if(ret)
 				this->_size++;
@@ -148,7 +183,7 @@ namespace ft {
 				this->node_deallocate(node);
 			return it;
 		};
-
+		
 		template <class InputIterator>
  		void insert (InputIterator first, InputIterator last){
 			for (; first != last; first++){
@@ -168,7 +203,7 @@ namespace ft {
 			if (delete_node(*position))
 				this->_size--;
 		};
-
+		
 		size_type erase (const key_type& k){
 			if (delete_node(k)){
 				this->_size--;
@@ -205,15 +240,14 @@ namespace ft {
 		/*
 		 * Operations
 		 */
-		iterator find(const key_type& k){
+		iterator find(const key_type& k) const {
 			Node<value_type>* seed = _root;
 			bool c;
 			while (seed){
 				if (k == *(seed->content))
 					return iterator(seed);
-				if ((c = _comp(k, *(seed->content)))){
-					seed = seed->child[c];
-				}
+				c = _comp(k, *(seed->content));
+				seed = seed->child[c];
 			}
 			return end();
 		};
@@ -225,7 +259,7 @@ namespace ft {
 		iterator lower_bound (const key_type& k){
 			iterator it;
 			for(it = begin(); it != end(); it++){
-				if (!(k < *(it->content)))
+				if ((k <= *it))
 					break;
 			}
 			return it;
@@ -237,7 +271,7 @@ namespace ft {
 
 		iterator upper_bound (const key_type& k){
 			iterator it = lower_bound(k);
-			if(it != end() && *(it->content) == k)
+			if(it != end() && *it == k)
 				it++;
 			return it;
 		};
@@ -247,17 +281,19 @@ namespace ft {
 		};
 
 		pair<iterator,iterator> equal_range (const key_type& k){
-			return make_pair(lower_bound(k), upper_bound(k));
+			return ft::make_pair(lower_bound(k), upper_bound(k));
 		};
 
 		pair<const_iterator,const_iterator> equal_range (const key_type& k) const{
-			return make_pair(lower_bound(k), upper_bound(k));
+			return ft::make_pair(lower_bound(k), upper_bound(k));
 		};
 
 		/*
 		 * Observers
 		 */
 		key_compare key_comp() const{ return _comp; };
+
+		value_compare value_comp() const { return value_compare(_comp); };
 
 	protected:
 		/*
@@ -292,8 +328,10 @@ namespace ft {
 			z->child[other]->parent = z->parent;
 			z->parent->child[side] = z->child[other];
 			z->parent = z->child[other];
+			z->child[other] = z->parent->child[side];
+			if (z->child[other])
+				z->child[other]->parent = z;
 			z->parent->child[side] = z;
-			z->child[other] = NIL;
 			rotation(z->parent, other);
 			recolor(z->parent, RED);
 		};
@@ -389,7 +427,7 @@ namespace ft {
 				bro->child[!side]->color = BLACK;
 				rotation(seed->child[!side], side);
 				seed = NIL;
-			}
+			}	
 		};
 		void fix_tree(Node<value_type>* & seed, bool const & side){
 			Node<value_type>* db;
@@ -436,13 +474,13 @@ namespace ft {
 			Node<value_type>* 	seed = _root;
 			Node<value_type>* 	del;
 			Node<value_type>* 	heir;
-
+			
 			bool side, o_clr;
 
 			while (seed){
-				if (seed->content == key)
+				if (*(seed->content) == key)
 					break;
-				side = _comp(key, seed->content);
+				side = _comp(key, *(seed->content));
 				seed = seed->child[side];
 			}
 			if (seed){
@@ -463,7 +501,7 @@ namespace ft {
 							heir->child[LEFT]->parent = heir;
 					}
 				}
-				else if(seed->child[RIGHT] == NIL){
+				else if(del->child[RIGHT] == NIL){
 					heir = del->child[LEFT];
 					transplant(del, heir);
 					if(heir){
@@ -475,25 +513,40 @@ namespace ft {
 					}
 				}
 				else{
+					Node<value_type> 	tmp;
 					while(del->child[LEFT] || del->child[RIGHT]){
 						heir = del->child[RIGHT];
 						while (heir->child[LEFT])
 							heir = heir->child[LEFT];
+						tmp = *heir;
 						transplant(del, heir);
-						if(heir->parent == del)
-							del->parent = heir;
-						else
-							del->parent = heir->parent;
 						estate(del, heir);
+						if(tmp.parent == del){
+							del->parent = heir;
+							heir->child[RIGHT] = del;
+						}
+						else{
+							del->parent = tmp.parent;
+							del->parent->child[LEFT] = del;
+						}
 						if(heir->child[RIGHT])
 							heir->child[RIGHT]->parent = heir;
 						if(heir->child[LEFT])
 							heir->child[LEFT]->parent = heir;
+						if(del->child[RIGHT])
+							del->child[RIGHT]->parent = del;
+						if(del->child[LEFT])
+							del->child[LEFT]->parent = del;
 					}
-					if (del->parent->child[LEFT] == del)
-						del->parent->child[LEFT] = NIL;
-					else
-						del->parent->child[RIGHT] = NIL;
+					seed = del->parent;
+					if (seed->child[LEFT] == del){
+						seed->child[LEFT] = NIL;
+						side = LEFT;
+					}
+					else{
+						seed->child[RIGHT] = NIL;
+						side = RIGHT;
+					}
 				}
 				o_clr = del->color;
 				node_deallocate(del);

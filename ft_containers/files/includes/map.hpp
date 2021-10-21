@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/19 23:48:55 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/20 22:37:01 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,28 @@ namespace ft {
 		typedef typename Allocator::const_reference const_reference;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
-		typedef ft::map_iterator<key_compare, value_type> iterator;
-		typedef ft::map_iterator<key_compare, value_type> const_iterator;
+		typedef ft::map_iterator< ft::map<key_type, mapped_type> > iterator;
+		typedef ft::map_iterator< ft::map<key_type, mapped_type> > const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef typename Allocator::template rebind<value_type>::other a_node;
+
+
+
+		class value_compare
+		{
+		protected:
+		  Compare comp;
+		  value_compare(Compare c) : comp(c) {}
+		public:
+		  typedef bool result_type;
+		  typedef value_type first_argument_type;
+		  typedef value_type second_argument_type;
+		  bool operator() (const value_type& x, const value_type& y) const
+		  {
+		    return comp(x.first, y.first);
+		  }
+		};
 
 		/*
 		 * Orthodox Canonical Form
@@ -98,9 +115,23 @@ namespace ft {
 			return const_iterator(b);
 		};
 
-		iterator end(){ return iterator(); };
+		iterator end(){
+			Node<value_type>* b = _root;
+			if(!empty()){
+				while (b->child[RIGHT])
+					b = b->child[RIGHT];
+			}
+			return ++iterator(b); 
+		};
 
-		const_iterator end() const{ return const_iterator(); };
+		const_iterator end() const{
+		Node<value_type>* b = _root;
+			if(!empty()){
+				while (b->child[RIGHT])
+					b = b->child[RIGHT];
+			}
+			return ++const_iterator(b);
+		};
 
 		reverse_iterator rbegin(){
 			Node<value_type>* b = _root;
@@ -111,14 +142,18 @@ namespace ft {
 			return reverse_iterator(b);
 		};
 		const_reverse_iterator rbegin() const{
-			return const_reverse_iterator(rbegin());
+			Node<value_type>* b = _root;
+			if(!empty()){
+				while (b->child[RIGHT])
+					b = b->child[RIGHT];
+			}
+			return const_reverse_iterator(b);
 		};
 		reverse_iterator rend(){
-			return reverse_iterator();
+			return reverse_iterator(--begin());
 		};
-		const_reverse_iterator rend() const{
-			return const_reverse_iterator();
-		};
+		const_reverse_iterator rend() const{ 
+			return const_reverse_iterator(--begin()); };
 
 		/*
 		 * Capacity
@@ -282,6 +317,8 @@ namespace ft {
 		 * Observers
 		 */
 		key_compare key_comp() const{ return _comp; };
+
+		value_compare value_comp() const { return value_compare(_comp); };
 
 	protected:
 		/*
