@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 17:43:51 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/20 23:55:24 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/21 15:09:24 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,41 @@ std::cout << "::::::::::::::: STACK :::::::::::::::" << std::endl;
 			std::cout << "post size: " << stk.size() << std::endl;
 			std::cout << "----------------" << std::endl;
 
+		}
+		std::cout << std::endl;
+		std::cout << "•••• Non-Member ••••" << std::endl;
+		std::cout << std::endl;
+		{
+			std::cout << std::endl;
+
+			ft::stack<int> small;
+			ft::stack<int> big;
+
+			for (size_t i = 0; i < 50; i++)
+			{
+				big.push(std::rand());
+			}
+			for (size_t i = 0; i < 10; i++)
+			{
+				small.push(std::rand());
+			}
+			
+			if (big == big)
+				std::cout << "equal overload ok" << std::endl;
+			if (big != small)
+				std::cout << "non equal overload ok" << std::endl;
+			if (big > small)
+				std::cout << "bigger than overload ok" << std::endl;
+			if (small < big)
+				std::cout << "smaller than overload ok" << std::endl;
+			if (big >= big && big >= small)
+				std::cout << "bigger or equal overload ok" << std::endl;
+			if (small <= small && small <= big)
+				std::cout << "smaller or equal overload ok" << std::endl;
+
+			std::cout << std::endl;
+		
+		
 		}
 
 #endif

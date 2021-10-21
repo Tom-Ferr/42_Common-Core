@@ -1,6 +1,8 @@
 
 #include <iostream>
+#include <iomanip> 
 #include <sstream>
+#include <ctime>
 #if _STL
 	# include <vector>
 	# include <stack>
@@ -29,11 +31,22 @@ int main(int argc, char *argv[]) {
 	std::cout << _VERSION ;
 	std::cout << " ************" << std::endl;
 	std::cout << std::endl;
-
+	
+	clock_t start = clock();
 	#include <vector_test.cpp>
 	#include <stack_test.cpp>
 	#include <map_test.cpp>
 	#include <set_test.cpp>
+	clock_t end = clock();
+
+	std::cout << std::endl;
+
+	 double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+    std::cout << "Time taken by program is : " << *std::fixed 
+         << time_taken << std::setprecision(5);
+    std::cout << " sec " << std::endl;
+
+
 	
 	return 0 ;
 }

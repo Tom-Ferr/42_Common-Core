@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 17:58:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/20 23:54:45 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/21 17:06:52 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ namespace ft{
 		bool operator==(set_iterator const & rhs) const {
 			if(this->_node == NIL || rhs._node == NIL)
 				return !this->_node && !rhs._node;
-			return _node->content == rhs._node->content;
+			return *(_node->content) == *(rhs._node->content);
 		};
 
 		bool operator!=(set_iterator const & rhs) const {

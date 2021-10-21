@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/20 22:37:01 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/21 17:02:40 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -601,32 +601,34 @@ namespace ft {
 	/*
 	 * Non-member function overloads
 	 */
-	template <typename T, class Alloc>
-	bool operator==(const map<T,Alloc>& lhs, const map<T,Alloc>& rhs){
-		return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	template <typename Key, class T, class Compare, class Alloc>
+	bool operator==(const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs){
+		if(lhs.size() == rhs.size())
+			return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+		return false;
 	};
-	template <typename T, class Alloc>
-	bool operator!=(const map<T,Alloc>& lhs, const map<T,Alloc>& rhs){
+	template <typename Key, class T, class Compare, class Alloc>
+	bool operator!=(const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs){
 		return !(lhs == rhs);
 	};
-	template <typename T, class Alloc>
-	bool operator< (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs){
+	template <typename Key, class T, class Compare, class Alloc>
+	bool operator< (const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs){
 		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	};
-	template <typename T, class Alloc>
-	bool operator<=(const map<T,Alloc>& lhs, const map<T,Alloc>& rhs){
+	template <typename Key, class T, class Compare, class Alloc>
+	bool operator<=(const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs){
 		return !(rhs < lhs);
 	};
-	template <typename T, class Alloc>
-	bool operator> (const map<T,Alloc>& lhs, const map<T,Alloc>& rhs){
+	template <typename Key, class T, class Compare, class Alloc>
+	bool operator> (const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs){
 		return rhs < lhs;
 	};
-	template <typename T, class Alloc>
-	bool operator>=(const map<T,Alloc>& lhs, const map<T,Alloc>& rhs){
+	template <typename Key, class T, class Compare, class Alloc>
+	bool operator>=(const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs){
 		return !(lhs < rhs);
 	};
 
-	template <class T, class Alloc>
-  	void swap (map<T,Alloc>& x, map<T,Alloc>& y){ x.swap(y); };
+	template <typename Key, class T, class Compare, class Alloc>
+  	void swap (const map<Key,T,Compare,Alloc>& x, const map<Key,T,Compare,Alloc>& y){ x.swap(y); };
 };
 #endif

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 12:00:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/21 00:36:54 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/21 15:06:15 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ namespace ft{
 	/*
 	 * RANDOM_ACCESSL_ITERATOR
 	 */
-	template <typename P, class C>
+	template <class C>
 	class random_access_iterator{
 	public:
 		/*
@@ -28,13 +28,13 @@ namespace ft{
 		typedef typename C::difference_type difference_type;
 		typedef typename C::reference reference;
 		typedef typename std::random_access_iterator_tag iterator_category;
-		typedef P pointer;
+		typedef typename C::pointer pointer;
 
 		/*
 		 * Orthodox Canonical Form
 		 */
 		random_access_iterator(void){};
-		random_access_iterator(P const ptr) : _ptr(ptr){};
+		random_access_iterator(pointer const ptr) : _ptr(ptr){};
 		random_access_iterator(random_access_iterator const & src){*this = src;};
 		~random_access_iterator(void){};
 		random_access_iterator & operator=(random_access_iterator const & rhs){
