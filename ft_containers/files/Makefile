@@ -6,7 +6,7 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/23 15:18:41 by tde-cama          #+#    #+#              #
-#    Updated: 2021/10/20 16:07:03 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/10/25 09:33:09 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,12 +45,20 @@ INCLUDE 		= 	-I${INC}
 
 SANITIZE 		= 	-fsanitize=address
 
+UNAME			=	$(shell uname)
+
+LINUX			= -D _LINUX
+
+ifeq ($(UNAME),Linux)
+	CXXFLAGS += $(LINUX)
+endif
+
 %.o: %.cpp		
 				${CXX} ${CXXFLAGS} ${INCLUDE} -c $< -o $@
 
 $(NAME):		${OBJS} $(DEPS) ${MAIN}
-				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL=0 ${INCLUDE} ${MAIN} -o ${NAME}
-				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL=1 ${INCLUDE} ${MAIN} -o ${NAME}_stl
+				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} ${INCLUDE} ${MAIN} -o ${NAME}
+				${CXX} ${CXXFLAGS} ${SANITIZE} ${OBJS} -D _STL ${INCLUDE} ${MAIN} -o ${NAME}_stl
 
 all:			${NAME}
 

@@ -3,7 +3,12 @@
 #include <iomanip> 
 #include <sstream>
 #include <ctime>
-#if _STL
+#ifdef _LINUX
+	# include <cstdlib>
+	# include <typeinfo>
+	# define nullptr NULL
+#endif
+#ifdef _STL
 	# include <vector>
 	# include <stack>
 	# include <map>

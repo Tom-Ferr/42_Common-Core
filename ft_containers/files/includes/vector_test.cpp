@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 17:43:51 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/21 15:02:42 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/25 13:14:42 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,6 +392,27 @@ std::cout << "::::::::::::::: VECTOR :::::::::::::::" << std::endl;
 			
 			std::cout << "capacity: " << vec.capacity() << std::endl;
 			std::cout << "size: " << vec.size() << std::endl;
+
+			std::cout << std::endl;
+			std::cout << "Test 3: Relational Operators" << std::endl;
+			std::cout << std::endl;
+
+			ft::vector<int>::iterator small = vec.begin();
+			ft::vector<int>::iterator big = vec.end();
+
+			if (big == big)
+				std::cout << "equal overload ok" << std::endl;
+			if (big != small)
+				std::cout << "non equal overload ok" << std::endl;
+			if (big > small)
+				std::cout << "bigger than overload ok" << std::endl;
+			if (small < big)
+				std::cout << "smaller than overload ok" << std::endl;
+			if (big >= big && big >= small)
+				std::cout << "bigger or equal overload ok" << std::endl;
+			if (small <= small && small <= big)
+				std::cout << "smaller or equal overload ok" << std::endl;
+
 		}
 	}
 	std::cout << std::endl;
@@ -832,12 +853,14 @@ std::cout << "::::::::::::::: VECTOR :::::::::::::::" << std::endl;
 			std::cout << "b's pre size: " << b.size() << std::endl;
 			std::cout << "----------------" << std::endl;
 
-			for (size_t i = 0; i < a.size(); i++){
-				std::cout << a[i] << ", ";
+			ft::vector<int>::iterator ita = a.begin();
+			for (ft::vector<int>::iterator it = ita; it != a.end(); it++){
+				std::cout << *it << ", ";
 			}
 			std::cout << std::endl;
-			for (size_t i = 0; i < b.size(); i++){
-				std::cout << b[i] << ", ";
+			ft::vector<int>::iterator itb = b.begin();
+			for (ft::vector<int>::iterator it = itb; it != b.end(); it++){
+				std::cout << *it << ", ";
 			}
 
 			std::cout << std::endl;
@@ -853,12 +876,12 @@ std::cout << "::::::::::::::: VECTOR :::::::::::::::" << std::endl;
 			std::cout << "b's post size: " << b.size() << std::endl;
 			std::cout << "----------------" << std::endl;
 
-			for (size_t i = 0; i < a.size(); i++){
-				std::cout << a[i] << ", ";
+			for (ft::vector<int>::iterator it = ita; it != b.end(); it++){
+				std::cout << *it << ", ";
 			}
 			std::cout << std::endl;
-			for (size_t i = 0; i < b.size(); i++){
-				std::cout << b[i] << ", ";
+			for (ft::vector<int>::iterator it = itb; it != a.end(); it++){
+				std::cout << *it << ", ";
 			}
 
 			std::cout << std::endl;

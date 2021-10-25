@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 23:28:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/21 17:02:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/25 09:48:08 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ namespace ft {
 		typedef ft::map_iterator< ft::map<key_type, mapped_type> > const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-		typedef typename Allocator::template rebind<value_type>::other a_node;
+		typedef typename Allocator::template rebind< Node<value_type> >::other a_node;
 
 
 
@@ -178,7 +178,8 @@ namespace ft {
 		pair<iterator,bool> insert (const value_type& val){
 			value_type* new_val = this->_Alloc.allocate(1);
 			this->_Alloc.construct(new_val, val);
-			Node<value_type>* node = new Node<value_type>(new_val);
+			Node<value_type>* node = this->n_Alloc.allocate(1);
+			this->n_Alloc.construct(node, new_val);
 			iterator it = this->sprout(node, _root);
 			bool ret = (&(*it) == new_val);
 			if(ret)
@@ -191,7 +192,8 @@ namespace ft {
 		iterator insert (iterator position, const value_type& val){
 			value_type* new_val = this->_Alloc.allocate(1);
 			this->_Alloc.construct(new_val, val);
-			Node<value_type>* node = new Node<value_type>(new_val);
+			Node<value_type>* node = this->n_Alloc.allocate(1);
+			this->n_Alloc.construct(node, new_val);
 			Node<value_type>* hint = _root;
 			for (; position != end(); position++){
 				if (!_comp(position->first, node->content->first)){
@@ -214,7 +216,8 @@ namespace ft {
 			for (; first != last; first++){
 				value_type* new_val = this->_Alloc.allocate(1);
 				this->_Alloc.construct(new_val, *first);
-				Node<value_type>* node = new Node<value_type>(new_val);
+				Node<value_type>* node = this->n_Alloc.allocate(1);
+				this->n_Alloc.construct(node, new_val);
 				iterator it = this->sprout(node, _root);
 				bool ret = (&(*it) == new_val);
 				if(ret)
@@ -363,13 +366,13 @@ namespace ft {
 
 		//Insertion
 		void recolor(Node<value_type>* seed, const bool& clr){
-			bool k = false;
+			bool k = RIGHT;
 			seed->child[RIGHT]->color = clr;
 			seed->child[LEFT]->color = clr;
 			if(seed->parent){
 				seed->color = !clr;
 				if (seed->parent->child[k] != seed)
-					k = true;
+					k = LEFT;
 				if(seed->color == RED)
 					check_conflict(seed->parent, k);
 			}
@@ -378,11 +381,11 @@ namespace ft {
 		};
 
 		void check_conflict(Node<value_type>* mid, const bool& k){
-			bool c = false;
+			bool c = RIGHT;
 			if (mid == NIL || mid->color == BLACK)
 				return;
 			if (mid->parent->child[c] != mid)
-				c = true;
+				c = LEFT;
 			if (mid->parent->child[!c] && mid->parent->child[!c]->color){
 				recolor(mid->parent, BLACK);
 				return ;
@@ -585,7 +588,8 @@ namespace ft {
 		void node_deallocate(Node<value_type>* & node){
 			this->_Alloc.destroy(node->content);
 			this->_Alloc.deallocate(node->content, 1);
-			delete node;
+			this->n_Alloc.destroy(node);
+			this->n_Alloc.deallocate(node, 1);
 		}
 
 		/*
@@ -596,6 +600,7 @@ namespace ft {
 		size_type 			_size;
 		key_compare			_comp;
 		allocator_type 		_Alloc;
+		a_node 				n_Alloc;
 	};
 
 	/*

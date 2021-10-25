@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 09:14:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/10/21 16:15:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/10/23 22:28:10 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 namespace ft{
 
 	template< typename T, class Parent = ft::vector<T> >
-	class stack : protected Parent{
+	class stack{
 
 	public:
 
