@@ -1,0 +1,54 @@
+version: '3.3'
+
+networks:
+    this_inception:
+
+services:
+    mariadb:
+        build:
+            context: ./requirements/mariadb
+            dockerfile: Dockerfile
+        restart: always
+        env_file:
+            - .env
+        container_name: mariadb
+        volumes: 
+            - ./requirements/mariadb/db-data:/var/lib/mysql
+        networks:
+            - this_inception
+    wordpress:
+        build:
+            context: ./requirements/wordpress
+            dockerfile: Dockerfile
+        restart: always
+        # environment:
+        #     - WORDPRESS_DB_HOST=mariadb
+        #     - WORDPRESS_DB_USER=wp
+        #     - WORDPRESS_DB_PASSWORD=secret
+        #     - WORDPRESS_DB_NAME=mariadb
+        container_name: wordpress
+        depends_on:
+            - mariadb
+        volumes: 
+            - ./requirements/wordpress/wp-data:/var/www/localhost/htdocs
+        networks:
+            - this_inception
+    nginx:
+        build:
+            context: ./requirements/nginx
+            dockerfile: Dockerfile
+        restart: always
+        container_name: nginx
+        volumes: 
+            - ./requirements/wordpress/wp-data:/var/www/localhost/htdocs
+        ports:
+            - 443:443
+        depends_on:
+            - wordpress
+            - mariadb
+        networks:
+            - this_inception
+# volumes:
+#     wp-data:
+#     db-data:
+    
