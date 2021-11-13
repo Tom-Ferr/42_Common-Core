@@ -9,11 +9,10 @@ services:
             context: ./requirements/mariadb
             dockerfile: Dockerfile
         restart: always
-        env_file:
-            - .env
         container_name: mariadb
+        env_file: .env
         volumes: 
-            - ./requirements/mariadb/db-data:/var/lib/mysql
+            - db-data:/var/lib/mysql
         networks:
             - this_inception
     wordpress:
@@ -21,16 +20,11 @@ services:
             context: ./requirements/wordpress
             dockerfile: Dockerfile
         restart: always
-        # environment:
-        #     - WORDPRESS_DB_HOST=mariadb
-        #     - WORDPRESS_DB_USER=wp
-        #     - WORDPRESS_DB_PASSWORD=secret
-        #     - WORDPRESS_DB_NAME=mariadb
         container_name: wordpress
         depends_on:
             - mariadb
         volumes: 
-            - ./requirements/wordpress/wp-data:/var/www/localhost/htdocs
+            - wp-data:/var/www/localhost/htdocs
         networks:
             - this_inception
     nginx:
@@ -40,7 +34,7 @@ services:
         restart: always
         container_name: nginx
         volumes: 
-            - ./requirements/wordpress/wp-data:/var/www/localhost/htdocs
+            - wp-data:/var/www/localhost/htdocs
         ports:
             - 443:443
         depends_on:
@@ -48,7 +42,17 @@ services:
             - mariadb
         networks:
             - this_inception
-# volumes:
-#     wp-data:
-#     db-data:
+volumes:
+    wp-data:
+        driver: local
+        driver_opts:
+            type: 'volume'
+            o: 'bind'
+            device: '/home/tde-cama/wp-data'
+    db-data:
+        driver: local
+        driver_opts:
+            type: 'volume'
+            o: 'bind'
+            device: '/home/tde-cama/db-data'
     

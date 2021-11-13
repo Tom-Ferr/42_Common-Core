@@ -1,14 +1,10 @@
 FROM alpine:3.13
 RUN apk update
-RUN apk add mariadb mariadb-common mariadb-client
 RUN apk add openrc
-RUN mkdir -p /run/openrc
-RUN mkdir -p /run/mysqld
+RUN apk add mariadb mariadb-common mariadb-client
+RUN openrc
 RUN touch /run/openrc/softlevel
-COPY ./script.sh /
-RUN chmod +x /script.sh
-RUN chown mysql:mysql /script.sh
-RUN /etc/init.d/mariadb setup
-USER mysql
-# EXPOSE 3306
-# CMD ["sh", "/script.sh"]
+COPY ./tools/run_db.sh  /
+COPY ./conf/mariadb-server.cnf /etc/my.cnf.d
+EXPOSE 3306
+ENTRYPOINT /bin/sh  /run_db.sh

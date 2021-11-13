@@ -2,8 +2,14 @@
 
 #IMG	=	$(shell docker images | awk '{if(NR > 1){print $$3}} ')
 DOMAIN	=	$(shell awk '/tde-cama.42.fr/{print $$2}' /etc/hosts)
+DIR		=	$(shell ls | awk '/tde-cama/{print $$1}')
+
 
 all:	
+ifneq (${DIR},tde-cama)
+	sudo mkdir -p /home/tde-cama/wp-data
+	sudo mkdir -p /home/tde-cama/db-data
+endif
 ifneq (${DOMAIN},tde-cama.42.fr)
 	echo "127.0.0.1	tde-cama.42.fr" >> /etc/hosts
 endif
