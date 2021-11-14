@@ -1,15 +1,23 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/11/13 22:04:40 by tde-cama          #+#    #+#              #
+#    Updated: 2021/11/13 22:04:42 by tde-cama         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 
 
 #IMG	=	$(shell docker images | awk '{if(NR > 1){print $$3}} ')
 DOMAIN	=	$(shell awk '/tde-cama.42.fr/{print $$2}' /etc/hosts)
-DIR		=	$(shell ls | awk '/tde-cama/{print $$1}')
 
 
-all:	
-ifneq (${DIR},tde-cama)
-	sudo mkdir -p /home/tde-cama/wp-data
-	sudo mkdir -p /home/tde-cama/db-data
-endif
+all:
+	sudo mkdir -p /home/tde-cama/wp-data /home/tde-cama/db-data
 ifneq (${DOMAIN},tde-cama.42.fr)
 	echo "127.0.0.1	tde-cama.42.fr" >> /etc/hosts
 endif
@@ -21,8 +29,8 @@ stop:
 clean:	stop
 		docker system prune -a --force
 
-fclean:	stop
-		docker system prune -a --volumes --force
+fclean:	clean
+		sudo rm -fr /home/tde-cama/
 
 re:		fclean all
 
