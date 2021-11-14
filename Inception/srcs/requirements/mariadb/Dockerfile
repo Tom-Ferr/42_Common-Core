@@ -20,4 +20,4 @@ COPY ./tools/run_db.sh  /
 COPY ./conf/mariadb-server.cnf /etc/my.cnf.d
 COPY ./conf/wp-db.sql /
 EXPOSE 3306
-ENTRYPOINT /bin/sh  /run_db.sh
+ENTRYPOINT ["sh", "/run_db.sh"]

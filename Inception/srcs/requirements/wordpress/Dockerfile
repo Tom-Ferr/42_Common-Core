@@ -18,4 +18,5 @@ WORKDIR /var/www/localhost/htdocs
 EXPOSE 9000
 COPY ./conf/wp-config.php /
 COPY ./tools/run_wp.sh /
+COPY ./tools/script.sh /
 ENTRYPOINT ["sh", "/run_wp.sh"]
