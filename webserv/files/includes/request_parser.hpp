@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   req_parser.hpp                                     :+:      :+:    :+:   */
+/*   request_parser.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/11/29 13:19:49 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/11/29 15:56:19 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REQ_PARSER_HPP
-# define REQ_PARSER_HPP
+#ifndef REQUEST_PARSER_HPP
+# define REQUEST_PARSER_HPP
 
 # include <string>
 # include <sstream>

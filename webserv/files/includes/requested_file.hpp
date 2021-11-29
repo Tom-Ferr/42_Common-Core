@@ -1,5 +1,5 @@
-#ifndef REQ_FILE_HPP
-# define REQ_FILE_HPP
+#ifndef REQUESTED_FILE_HPP
+# define REQUESTED_FILE_HPP
 
 # include <string>
 # include <fstream>

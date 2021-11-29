@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/11/29 15:18:09 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:55:11 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include <bind.hpp>
 #include <listen.hpp>
 #include <accept.hpp>
-#include <req_parser.hpp>
+#include <request_parser.hpp>
 #include <requested_file.hpp>
+#include <response.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -28,8 +29,6 @@ int main()
     int addrlen = sizeof(address);
     std::string site_Dir = "site";
     
-    std::string res = "HTTP/1.1 200 OK\nContent-Type: text/html;charset=UTF-8\nContent-Length: 2431\n\n";
-    
     try
     {
         Socket  s;
@@ -37,7 +36,6 @@ int main()
         Listen  l(s.getSock());
         while (1)
         {
-            std::string c_res = res;
             std::cout << "\n+++ Waiting for new connection +++\n" << std::endl;;
 
             Accept  a(s.getSock(), address, addrlen);
@@ -46,9 +44,9 @@ int main()
             recv( a.getSock() , buffer, 30000, 0);
             Req_Parser req(buffer);
             Req_File file(site_Dir + req.getFile());
-            c_res += file.getContent();
+            Response res(file.getContent());
             std::cout << buffer << std::endl;
-            send(a.getSock() , c_res.c_str() , c_res.length(), 0);
+            send(a.getSock() , res.getResponse().c_str() , res.getSize(), 0);
             std::cout << "------Hello message sent------" << std::endl;
             close(a.getSock());
         }

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   req_parser.cpp                                     :+:      :+:    :+:   */
+/*   request_parser.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/11/29 13:24:16 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/11/29 15:57:14 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <req_parser.hpp>
+#include <request_parser.hpp>
 
 Req_Parser::Req_Parser(void){
     return ;
