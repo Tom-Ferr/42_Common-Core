@@ -1,43 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   socket.cpp                                         :+:      :+:    :+:   */
+/*   Poll.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 10:46:55 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/06 15:49:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/02 13:43:24 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <socket.hpp>
+#include <poll.hpp>
 
-Socket::Socket(void){
-    if ((_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-        throw Socket::FdFailedException();
+Poll::Poll(Socket const & sock, struct sockaddr_in const & address, int const & addrlen){
+    fd_set read_fd, write_fd;
+
+    FD_ZERO(&read_fd);
+    FD_SET(sock.getSock(), &read_fd);
+    FD_ZERO(&write_fd);
+    FD_SET(sock.getSock(), &write_fd);
+    while(1){
+        select(1, &read_fd, &write_fd, NULL, NULL);
+        if (FD_ISSET(sock.getSock(), &read_fd)){
+           Accept  acc(sock.getSock(), address, addrlen);
+           a = acc;
+        }
     }
-    // fcntl(_fd, F_SETFL, O_NONBLOCK);
 };
 
-Socket::~Socket(void){
+Poll::~Poll(void){
     return ;
 };
 
-Socket::Socket(Socket const & src){
+Poll::Poll(Poll const & src){
     *this = src;
 };
 
-Socket & Socket::operator=(Socket const & rhs){
+Poll & Poll::operator=(Poll const & rhs){
     if (this != &rhs){
-        this->_fd = rhs._fd;
+
     }
     return *this;
 };
 
-const char* Socket::FdFailedException::what() const throw(){
-    return "socket() has failed";
-};
-
-int Socket::getSock() const{
-    return this->_fd;
-};
+// const char* Poll::FdFailedException::what() const throw(){
+//     return "select() has failed";
+// };

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/11/29 14:52:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/02 11:14:17 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,18 @@ Req_File::Req_File(void){
 
 Req_File::Req_File(std::string const & target){
     std::ifstream	ifs(target);
-    std::string line;
-    while (std::getline(ifs, line)){
-    	_content += line;
+    if (!ifs){
+        _content = "<html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /t.html was not found on this server.</p></body></html>";
+        _status = "404 Not Found";
     }
-    ifs.close();
+    else{
+        std::string line;
+        while (std::getline(ifs, line)){
+        	_content += line;
+        }
+        _status = "200 OK";
+        ifs.close();
+    }
     _size = _content.length();
 };
 
@@ -48,4 +55,8 @@ std::string Req_File::getContent() const{
 
 size_t Req_File::getSize() const{
     return _size;
+};
+
+std::string Req_File::getStatus() const{
+    return _status;
 };

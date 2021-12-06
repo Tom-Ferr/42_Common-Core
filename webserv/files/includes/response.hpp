@@ -3,6 +3,7 @@
 
 # include <string>
 # include <sstream>
+# include <requested_file.hpp>
 
 
 class Response
@@ -11,7 +12,7 @@ private:
     std::string _res;
     Response(void);
 public:
-    Response(std::string const & target);
+    Response(Req_File const & file);
     ~Response();
     Response(Response const & src);
     Response & operator=(Response const & rhs);

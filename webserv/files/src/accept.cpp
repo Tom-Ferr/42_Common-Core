@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:23:14 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/11/28 16:41:09 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/05 11:22:10 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Accept::Accept(int sock_fd, struct sockaddr_in const & address, int const & addr
     if ((_fd = accept(sock_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0){
         throw Accept::FdFailedException();
     }
+    fcntl(_fd, F_SETFL, O_NONBLOCK);
 };
 
 Accept::~Accept(void){

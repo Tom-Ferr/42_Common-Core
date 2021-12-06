@@ -10,6 +10,7 @@ class Req_File
 private:
     std::string _content;
     size_t _size;
+    std::string _status;
     Req_File(void);
 public:
     Req_File(std::string const & target);
@@ -19,6 +20,7 @@ public:
 
     std::string getContent() const;
     size_t getSize() const;
+    std::string getStatus() const;
 };
 
 #endif
