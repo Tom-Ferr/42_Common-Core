@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:17:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/11/28 18:34:14 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/07 18:57:19 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,15 @@
 # define BIND_HPP
 
 # include <sys/socket.h>
-// # include <sys/types.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <exception>
 # include <cstring>
+# include <config.hpp>
 
 class Bind
 {
 private:
-    int _port;
 
     class FdFailedException : public std::exception
 	{
@@ -32,7 +31,7 @@ private:
 	};
     Bind(void);
 public:
-    Bind(int sock_fd, struct sockaddr_in & address, int const & port);
+    Bind(int sock_fd, struct sockaddr_in & address, Config const & conf);
     ~Bind(void);
     Bind(Bind const & src);
     Bind & operator=(Bind const & rhs);

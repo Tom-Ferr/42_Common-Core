@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/11/29 15:57:14 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/07 18:45:39 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ Req_Parser::Req_Parser(void){
     return ;
 };
 
-Req_Parser::Req_Parser(char const *buffer) : _req(buffer){
+Req_Parser::Req_Parser(char const *buffer, std::string const & index)
+    : _req(buffer), _index(index){
     
 };
 
@@ -42,7 +43,7 @@ std::string Req_Parser::getFile() const{
     while (std::getline(s_req, token, ' ')){
         if (i){
             if (!token.compare("/"))
-                token = "/index.html";
+                token = _index;
             return token;
         }
         i++;

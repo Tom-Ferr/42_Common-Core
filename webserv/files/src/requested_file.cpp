@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/02 11:14:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/07 10:21:17 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Req_File::Req_File(void){
 };
 
 Req_File::Req_File(std::string const & target){
-    std::ifstream	ifs(target);
+    std::ifstream	ifs(target.c_str());
     if (!ifs){
         _content = "<html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /t.html was not found on this server.</p></body></html>";
         _status = "404 Not Found";
