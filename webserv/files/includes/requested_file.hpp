@@ -3,6 +3,7 @@
 
 # include <string>
 # include <fstream>
+# include <cstdio>
 
 
 class Req_File

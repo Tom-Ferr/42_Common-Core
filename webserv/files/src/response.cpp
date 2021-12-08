@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/07 21:25:51 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/08 13:51:11 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,22 @@ Response::Response(void){
     return ;
 };
 
-Response::Response(Req_File const & file, std::string const & version){
+Response::Response(Req_File const & file, Req_Parser const & req){
     std::stringstream conv;
-    std::string len;
-    _res = version + " " + file.getStatus() + "\n";
-    _res += "Content-Type: text/html;charset=UTF-8\nContent-Length: ";
+    if(req.getFile().find(".html") < std::string::npos)
+        _type = "text/html";
+    else if(req.getFile().find(".css") < std::string::npos)
+        _type = "text/css";
+    else if(req.getFile().find(".jpg") < std::string::npos)
+        _type = "image/jpeg";
+    _res = req.getVersion() + " " + file.getStatus() + "\n";
+    _res += "Content-Type: " + _type;
+    if (_res.find("text/") < std::string::npos)
+        _res += ";charset=UTF-8";
+    _res += "\nContent-Length: ";
     conv << file.getContent().length();
-    conv >> len;
-    _res += len;
+    conv >> _len;
+    _res += _len;
     _res += "\n\n";
     _res += file.getContent();
 };
