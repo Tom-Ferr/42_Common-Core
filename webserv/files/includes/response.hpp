@@ -12,7 +12,7 @@ private:
     std::string _res;
     Response(void);
 public:
-    Response(Req_File const & file);
+    Response(Req_File const & file, std::string const & version);
     ~Response();
     Response(Response const & src);
     Response & operator=(Response const & rhs);

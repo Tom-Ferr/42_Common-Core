@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/07 18:55:06 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/07 21:02:30 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int main()
             recv( a.getSock() , buffer, 30000, 0);
             Req_Parser req(buffer, conf.getIndex());
             Req_File file(conf.getRoot() + req.getFile());
-            Response res(file);
+            Response res(file, req.getVersion());
             std::cout << buffer << std::endl;
             send(a.getSock() , res.getResponse().c_str() , res.getSize(), 0);
             std::cout << "------Hello message sent------" << std::endl;

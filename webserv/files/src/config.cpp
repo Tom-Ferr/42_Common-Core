@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/07 18:40:33 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/07 20:36:01 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,7 @@ void Config::parseConfig(std::ifstream & ifs){
             }
             else if (!line.compare("root")){
                 std::getline(token, line, ' ');
-                if (line.find_last_of("/") == line.length())
-                    _root = line;
-                else
-                    _root = line + "/";
+                _root = line;
             }
             else if (!line.compare("index")){
                 std::getline(token, line, ' ');
