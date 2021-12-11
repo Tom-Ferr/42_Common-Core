@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/08 13:51:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/10 23:04:22 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ Response::Response(Req_File const & file, Req_Parser const & req){
     if (_res.find("text/") < std::string::npos)
         _res += ";charset=UTF-8";
     _res += "\nContent-Length: ";
-    conv << file.getContent().length();
+    conv << file.getSize();
     conv >> _len;
     _res += _len;
-    _res += "\n\n";
-    _res += file.getContent();
+    _res += "\r\n\r\n";
+    // _res += file.getContent();
 };
 
 Response::~Response(void){

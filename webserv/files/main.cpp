@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/08 14:19:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/11 00:03:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,18 @@ int main()
             Accept  a(s.getSock(), address, addrlen);
             pfds[0].fd = a.getSock();
             pfds[0].events = POLLIN;
-            poll(pfds, 1, 50000);
+            poll(pfds, 1, 5000);
             char buffer[30000] = {0};
             recv( a.getSock() , buffer, 30000, 0);
             Req_Parser req(buffer, conf.getIndex());
             Req_File file(conf.getRoot() + req.getFile());
             Response res(file, req);
             std::cout << buffer << std::endl;
-            send(a.getSock() , res.getResponse().c_str() , res.getSize(), 0);
+            send(a.getSock() , res.getResponse().data() , res.getSize(), 0);
+            while (file.getSize() > 0) {
+                size_t bytes = send(a.getSock(), file.getContent().data(), file.getSize(), 0);
+                file.resize(bytes);
+            }
             std::cout << "------Hello message sent------" << std::endl;
             close(a.getSock());
         }

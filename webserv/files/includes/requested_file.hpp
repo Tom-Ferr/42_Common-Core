@@ -22,6 +22,7 @@ public:
     std::string getContent() const;
     size_t getSize() const;
     std::string getStatus() const;
+    void resize(size_t const & len);
 };
 
 #endif
