@@ -4,6 +4,9 @@
 # include <string>
 # include <fstream>
 # include <cstdio>
+# include <vector>
+# include <sys/stat.h>
+# include <dirent.h>
 
 
 class Req_File
@@ -12,6 +15,7 @@ private:
     std::string _content;
     size_t _size;
     std::string _status;
+    // struct stat _file_stat;
     Req_File(void);
 public:
     Req_File(std::string const & target);

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/11 00:03:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/11 12:21:32 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int main()
             Accept  a(s.getSock(), address, addrlen);
             pfds[0].fd = a.getSock();
             pfds[0].events = POLLIN;
-            poll(pfds, 1, 5000);
+            poll(pfds, 1, 50000);
             char buffer[30000] = {0};
             recv( a.getSock() , buffer, 30000, 0);
             Req_Parser req(buffer, conf.getIndex());

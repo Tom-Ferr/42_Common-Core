@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 10:51:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/07 18:20:12 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/11 15:56:03 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@
 class Config
 {
 private:
-    std::vector<std::string> _port;
-    std::string _host;
-    std::string _root;
-    std::string _index;
-    std::string _server_name;
+    // bool                        _dir_indexing;
+    std::string                 _host;
+    std::string                 _root;
+    std::string                 _index;
+    std::string                 _server_name;
+    std::vector<std::string>    _port;
+
     Config(void);
     void parseConfig(std::ifstream & ifs);
     class FdFailedException : public std::exception
