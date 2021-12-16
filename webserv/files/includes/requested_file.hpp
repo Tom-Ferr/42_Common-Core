@@ -17,6 +17,7 @@ private:
     std::string _content;
     size_t _size;
     std::string _status;
+    std::string _req_file;
     Req_File(void);
 public:
     Req_File(Config const & conf, Req_Parser const & parser);
@@ -25,6 +26,7 @@ public:
     Req_File & operator=(Req_File const & rhs);
 
     std::string getContent() const;
+    std::string getReqFile() const;
     size_t getSize() const;
     std::string getStatus() const;
     void resize(size_t const & len);

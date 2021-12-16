@@ -6,11 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 10:47:06 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/16 14:37:00 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <requested_file.hpp>
+#include <iostream>
 
 Req_File::Req_File(void){
     return ;
@@ -20,11 +21,18 @@ Req_File::Req_File(Config const & conf, Req_Parser const & parser){
     std::ifstream   ifs;
     struct stat file_stat;
      std::string target;
-    if(!parser.getFile().compare("/")){
-        target = conf.getRoot() + parser.getFile() + conf.getIndex();
+    // if(!parser.getFile().compare("/")){
+    //     target = conf.getRoot() + parser.getFile() + conf.getIndex();
+    // }
+    if(parser.getFile() == conf.getTag() || parser.getFile() == conf.getTag() + "/"){
+        target = conf.getRoot() + parser.getFile() + "/" + conf.getIndex();
+        _req_file = parser.getFile() + "/" + conf.getIndex();
     }
-    else
+    else{
         target = conf.getRoot() + parser.getFile();
+        _req_file = parser.getFile();
+    }
+        std::cout << target << std::endl;
     bool is_allowed = false;
 
     if (conf.getAllowedMethods().size()){
@@ -111,6 +119,9 @@ Req_File & Req_File::operator=(Req_File const & rhs){
 
 std::string Req_File::getContent() const{
     return _content;
+};
+std::string Req_File::getReqFile() const{
+    return _req_file;
 };
 
 size_t Req_File::getSize() const{

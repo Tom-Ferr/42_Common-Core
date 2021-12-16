@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 10:45:10 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/16 14:23:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ Config & Config::operator=(Config const & rhs){
         this->_error_page = rhs._error_page;
         this->_client_max_body_size = rhs._client_max_body_size;
         this->_port = rhs._port;
+        this->_tag = rhs._tag;
         this->_locations  = rhs._locations;
         this->_allowed_methods  = rhs._allowed_methods;
     }
@@ -98,6 +99,10 @@ std::string Config::getIndex() const{
 
 std::string Config::getServerName() const{
     return _server_name;
+};
+
+std::string Config::getTag() const{
+    return _tag;
 };
 
 bool Config::getDirIndexing() const{
@@ -166,7 +171,8 @@ void Config::parseConfig(std::istream & ifs){
                 token << ";";
                 token << line;
                 Config loc_conf(token);
-                _locations.push_back(std::make_pair(loc, loc_conf));
+                _locations.push_back(loc_conf);
+                _locations.back()._tag = loc;
             }
             else if (!line.compare("auto_index")){
                 std::getline(token, line, ' ');
@@ -194,18 +200,15 @@ void Config::parseConfig(std::istream & ifs){
 };
 
 const Config & Config::select(std::string const & dir) const{
-    size_t pos = 0;
-    size_t selected = 0;
     size_t index = 0;
     if(_locations.size()){
         for (size_t i = 0; i < _locations.size(); i++){
-            pos = _locations.at(i).first.find(dir.c_str(), 0, dir.length());
-            if (pos > selected && pos < std::string::npos){
-                selected = pos;
+            if (_locations.at(i).getTag() == dir || _locations.at(i).getTag() + "/" == dir){
                 index = i;
+                break ;
             }
         }
-        return _locations[index].second ;
+        return _locations[index] ;
     }
     else
         return *this ;

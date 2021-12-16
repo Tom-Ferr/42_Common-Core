@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 10:49:12 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/16 12:26:18 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,26 @@
 #include <unistd.h>
 #include <poll.h>
 
-int main()
+int main(int argc, char* argv[])
 {
 
+    if(argc > 2){
+        std::cout << "Too many arguments" << std::endl;
+        return 1;
+    }
+    std::string config_path;
+    if(argc > 1){
+        config_path = argv[1];
+    }
+    else
+        config_path = "default.conf";
     struct sockaddr_in address;
     int addrlen = sizeof(address);
     struct pollfd pfds[1];
     
     try
     {
-        Config conf("default.conf");
+        Config conf(config_path);
         Socket  s;
         Bind    b(s.getSock(), address, conf);
         Listen  l(s.getSock());

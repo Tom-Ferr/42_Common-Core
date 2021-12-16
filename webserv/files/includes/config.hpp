@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 10:51:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 10:11:24 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/16 14:23:44 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ private:
     std::string                 _index;
     std::string                 _server_name;
     std::string                 _error_page;
+    std::string                 _tag;
     size_t                      _client_max_body_size;
     std::vector<std::string>    _port;
-    std::vector< std::pair<std::string, Config> > _locations;
+    std::vector<Config> _locations;
     std::vector<std::string>    _allowed_methods;
 
     Config(void);
@@ -53,6 +54,7 @@ public:
     std::string getRoot() const;
     std::string getIndex() const;
     std::string getServerName() const;
+    std::string getTag() const;
     std::vector<std::string> getAllowedMethods() const;
     bool getDirIndexing() const;
     const Config & select(std::string const & dir) const;
