@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/11 12:21:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/16 10:49:12 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ int main()
             poll(pfds, 1, 50000);
             char buffer[30000] = {0};
             recv( a.getSock() , buffer, 30000, 0);
-            Req_Parser req(buffer, conf.getIndex());
-            Req_File file(conf.getRoot() + req.getFile());
+            Req_Parser req(buffer);
+            Config conf_l = conf.select(req.getFile());
+            Req_File file(conf_l, req);
             Response res(file, req);
             std::cout << buffer << std::endl;
             send(a.getSock() , res.getResponse().data() , res.getSize(), 0);

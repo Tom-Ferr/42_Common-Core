@@ -5,6 +5,8 @@
 # include <fstream>
 # include <cstdio>
 # include <vector>
+# include <request_parser.hpp>
+# include <config.hpp>
 # include <sys/stat.h>
 # include <dirent.h>
 
@@ -15,10 +17,9 @@ private:
     std::string _content;
     size_t _size;
     std::string _status;
-    // struct stat _file_stat;
     Req_File(void);
 public:
-    Req_File(std::string const & target);
+    Req_File(Config const & conf, Req_Parser const & parser);
     ~Req_File();
     Req_File(Req_File const & src);
     Req_File & operator=(Req_File const & rhs);

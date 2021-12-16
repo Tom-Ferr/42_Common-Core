@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/11 16:14:14 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/16 10:48:38 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ Req_Parser::Req_Parser(void){
     return ;
 };
 
-Req_Parser::Req_Parser(char const *buffer, std::string const & index)
-    : _req(buffer), _index(index){
+Req_Parser::Req_Parser(char const *buffer)
+    : _req(buffer){
     std::stringstream s_req(_req);
     std::string token;
     std::getline(s_req, token, ' ');
@@ -39,7 +39,6 @@ Req_Parser::Req_Parser(Req_Parser const & src){
 Req_Parser & Req_Parser::operator=(Req_Parser const & rhs){
     if (this != &rhs){
         this->_req = rhs._req;
-        this->_index = rhs._index;
         this->_method = rhs._method;
         this->_file = rhs._file;
         this->_version = rhs._version;
@@ -48,8 +47,6 @@ Req_Parser & Req_Parser::operator=(Req_Parser const & rhs){
 };
 
 std::string Req_Parser::getFile() const{
-    if (!_file.compare("/"))
-        return _file + _index;
     return _file;
 };
 
@@ -59,4 +56,8 @@ std::string Req_Parser::getVersion() const{
 
 std::string Req_Parser::getType() const{
     return _type;
+};
+
+std::string Req_Parser::getMethod() const{
+    return _method;
 };

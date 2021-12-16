@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 10:51:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/11 15:56:03 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/16 10:11:24 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,25 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <utility>
 
 class Config
 {
 private:
-    // bool                        _dir_indexing;
+    bool                        _dir_indexing;
     std::string                 _host;
     std::string                 _root;
     std::string                 _index;
     std::string                 _server_name;
+    std::string                 _error_page;
+    size_t                      _client_max_body_size;
     std::vector<std::string>    _port;
+    std::vector< std::pair<std::string, Config> > _locations;
+    std::vector<std::string>    _allowed_methods;
 
     Config(void);
-    void parseConfig(std::ifstream & ifs);
+    Config(std::istream & block);
+    void parseConfig(std::istream & ifs);
     class FdFailedException : public std::exception
 	{
 	public:
@@ -47,5 +53,8 @@ public:
     std::string getRoot() const;
     std::string getIndex() const;
     std::string getServerName() const;
+    std::vector<std::string> getAllowedMethods() const;
+    bool getDirIndexing() const;
+    const Config & select(std::string const & dir) const;
 };
 #endif

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/12 14:19:20 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/15 10:13:31 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ Response::Response(Req_File const & file, Req_Parser const & req){
         _type = "text/css";
     else if(req.getFile().find(".jpg") < std::string::npos)
         _type = "image/jpeg";
-    else /*(req.getFile().find(".html") < std::string::npos)*/
+    else if(req.getFile().find(".gif") < std::string::npos)
+        _type = "image/gif";
+    else if(req.getFile().find(".png") < std::string::npos)
+        _type = "image/png";
+    else
         _type = "text/html";
     _res = req.getVersion() + " " + file.getStatus() + "\n";
     _res += "Content-Type: " + _type;
