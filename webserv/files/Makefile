@@ -6,13 +6,13 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 18:00:07 by tde-cama          #+#    #+#              #
-#    Updated: 2021/12/07 16:10:01 by tde-cama         ###   ########.fr        #
+#    Updated: 2021/12/18 18:50:02 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 FILES			=	accept.cpp bind.cpp listen.cpp socket.cpp request_parser.cpp requested_file.cpp\
-					response.cpp config.cpp
+					response.cpp config.cpp cgi.cpp
 
 SRCDIR			= 	src/
 
@@ -21,7 +21,7 @@ SRCS			= 	$(addprefix $(SRCDIR), $(FILES)) main.cpp
 OBJS			= 	${SRCS:.cpp=.o}
 
 HEADS			=	accept.hpp bind.hpp listen.hpp socket.hpp requested_file.hpp\
-					response.hpp config.hpp
+					response.hpp config.hpp cgi.hpp
 
 INC				= 	./includes/
 

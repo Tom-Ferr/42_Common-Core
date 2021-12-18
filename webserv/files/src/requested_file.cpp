@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 14:37:00 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/17 22:56:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,54 @@ Req_File::Req_File(void){
 };
 
 Req_File::Req_File(Config const & conf, Req_Parser const & parser){
+    if(!parser.getMethod().compare("GET"))
+        isGET(conf, parser);
+    else if(!parser.getMethod().compare("POST"))
+        isPOST(conf, parser);
+    else if(!parser.getMethod().compare("DELETE"))
+        isDELETE(conf, parser);
+};
+
+Req_File::~Req_File(void){
+    return ;
+};
+
+Req_File::Req_File(Req_File const & src){
+    *this = src;
+};
+
+Req_File & Req_File::operator=(Req_File const & rhs){
+    if (this != &rhs){
+        this->_content= rhs._content;
+        this->_size = rhs._size;
+        this->_status = rhs._status;
+    }
+    return *this;
+};
+
+std::string Req_File::getContent() const{
+    return _content;
+};
+std::string Req_File::getReqFile() const{
+    return _req_file;
+};
+
+size_t Req_File::getSize() const{
+    return _size;
+};
+
+std::string Req_File::getStatus() const{
+    return _status;
+};
+void Req_File::resize(size_t const & len) {
+    _content.erase(0, len);
+    _size -= len;
+};
+
+void Req_File::isGET(Config const & conf, Req_Parser const & parser){
     std::ifstream   ifs;
     struct stat file_stat;
      std::string target;
-    // if(!parser.getFile().compare("/")){
-    //     target = conf.getRoot() + parser.getFile() + conf.getIndex();
-    // }
     if(parser.getFile() == conf.getTag() || parser.getFile() == conf.getTag() + "/"){
         target = conf.getRoot() + parser.getFile() + "/" + conf.getIndex();
         _req_file = parser.getFile() + "/" + conf.getIndex();
@@ -32,7 +74,6 @@ Req_File::Req_File(Config const & conf, Req_Parser const & parser){
         target = conf.getRoot() + parser.getFile();
         _req_file = parser.getFile();
     }
-        std::cout << target << std::endl;
     bool is_allowed = false;
 
     if (conf.getAllowedMethods().size()){
@@ -100,38 +141,31 @@ Req_File::Req_File(Config const & conf, Req_Parser const & parser){
     }
 };
 
-Req_File::~Req_File(void){
-    return ;
+void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
+        std::ofstream ofs;
+        std::string path = conf.getRoot() + parser.getFile();
+
+        ofs.open(path, std::ios::binary);
+        ofs.write(parser.getBody().c_str(), parser.getBodyLen());
+        _content = "{\"success\":\"true\"}";
+        _status = "200 OK";
+        _size = _content.length();
+        ofs.close();
 };
 
-Req_File::Req_File(Req_File const & src){
-    *this = src;
-};
-
-Req_File & Req_File::operator=(Req_File const & rhs){
-    if (this != &rhs){
-        this->_content= rhs._content;
-        this->_size = rhs._size;
-        this->_status = rhs._status;
+void Req_File::isDELETE(Config const & conf, Req_Parser const & parser){
+    std::string path = conf.getRoot() + parser.getFile();
+    
+    if (!remove(path.c_str())){
+        _content = "{\"success\":\"true\"}";
+        _status = "200 OK";
+        _size = _content.length();
     }
-    return *this;
-};
+    else{
+        _content = "{\"success\":\"false\"}";
+        _status = "404 Not Found";
+        _size = _content.length();
+    }
 
-std::string Req_File::getContent() const{
-    return _content;
-};
-std::string Req_File::getReqFile() const{
-    return _req_file;
-};
 
-size_t Req_File::getSize() const{
-    return _size;
-};
-
-std::string Req_File::getStatus() const{
-    return _status;
-};
-void Req_File::resize(size_t const & len) {
-    _content.erase(0, len);
-    _size -= len;
-};
+}

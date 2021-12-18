@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 12:26:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/18 19:41:51 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <requested_file.hpp>
 #include <response.hpp>
 #include <config.hpp>
+#include <cgi.hpp>
 #include <iostream>
 #include <unistd.h>
 #include <poll.h>
@@ -45,6 +46,7 @@ int main(int argc, char* argv[])
         Socket  s;
         Bind    b(s.getSock(), address, conf);
         Listen  l(s.getSock());
+        Cgi cgi(s);
 
         while (1)
         {

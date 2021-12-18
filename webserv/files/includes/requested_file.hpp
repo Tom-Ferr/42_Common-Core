@@ -19,6 +19,9 @@ private:
     std::string _status;
     std::string _req_file;
     Req_File(void);
+    void isGET(Config const & conf, Req_Parser const & parser);
+    void isPOST(Config const & conf, Req_Parser const & parser);
+    void isDELETE(Config const & conf, Req_Parser const & parser);
 public:
     Req_File(Config const & conf, Req_Parser const & parser);
     ~Req_File();
