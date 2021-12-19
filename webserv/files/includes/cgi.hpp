@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:02:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/18 18:58:14 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/19 13:32:20 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ class Cgi
 private:
     size_t      _size;
     std::string _content;
-    FILE*       _pFile;
-    int         _tmpFd;
-    int         _stdout;
 
-    Cgi(void);
-    void run();
 public:
-    Cgi(Socket const & sock);
+    Cgi(void);
     ~Cgi();
+    Cgi(Cgi const & src);
+    Cgi & operator=(Cgi const & rhs);
+
+    size_t getSize() const;
+    std::string getContent() const;
 };
 
 

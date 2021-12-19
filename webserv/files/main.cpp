@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/18 19:41:51 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/18 21:26:15 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
         Socket  s;
         Bind    b(s.getSock(), address, conf);
         Listen  l(s.getSock());
-        Cgi cgi(s);
+        Cgi cgi;
 
         while (1)
         {
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
             pfds[0].events = POLLIN;
             poll(pfds, 1, 50000);
             char buffer[30000] = {0};
-            recv( a.getSock() , buffer, 30000, 0);
+            recv(a.getSock() , buffer, 30000, 0);
             Req_Parser req(buffer);
             Config conf_l = conf.select(req.getFile());
             Req_File file(conf_l, req);
