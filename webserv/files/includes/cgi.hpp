@@ -6,14 +6,13 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:02:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/19 13:32:20 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/20 10:10:24 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CGI_HPP
 # define CGI_HPP
 
-# include <socket.hpp>
 # include <sys/wait.h>
 # include <unistd.h>
 # include <cstdio>
@@ -25,8 +24,9 @@ private:
     size_t      _size;
     std::string _content;
 
-public:
     Cgi(void);
+public:
+    Cgi(std::string const & target);
     ~Cgi();
     Cgi(Cgi const & src);
     Cgi & operator=(Cgi const & rhs);

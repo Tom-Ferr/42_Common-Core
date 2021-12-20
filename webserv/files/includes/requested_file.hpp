@@ -6,6 +6,7 @@
 # include <cstdio>
 # include <vector>
 # include <request_parser.hpp>
+# include <cgi.hpp>
 # include <config.hpp>
 # include <sys/stat.h>
 # include <dirent.h>

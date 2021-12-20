@@ -6,13 +6,13 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:04:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/19 13:34:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/20 10:33:15 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cgi.hpp>
 
-Cgi::Cgi(){
+Cgi::Cgi(std::string const & target){
     FILE* pFile = tmpfile();
     int tmpFd = fileno(pFile);
     
@@ -24,11 +24,20 @@ Cgi::Cgi(){
     env[1] = const_cast<char*>(s2.c_str());
     env[2] = NULL;
     
-    std::string s3("/usr/bin/php");
-    std::string s4("./test.php");
+    std::string cgi;
+    if (target.find(".php"))
+        cgi = "/usr/bin/php";
+    else if (target.find(".py"))
+        cgi = "/usr/bin/python";
+    else
+        cgi = target;
+
     char* cmd[3];
-    cmd[0] = const_cast<char*>(s3.c_str());
-    cmd[1] = const_cast<char*>(s4.c_str());
+    cmd[0] = const_cast<char*>(cgi.c_str());
+    if (cgi != target)
+        cmd[1] = const_cast<char*>(target.c_str());
+    else
+        cmd[1] = NULL;
     cmd[2] = NULL;
 
     int id = fork();
