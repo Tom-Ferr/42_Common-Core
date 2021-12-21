@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/20 10:10:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/21 11:58:03 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
         }
         _size = _content.length();
     }
-    else if(target.find(".php") || target.find(".py") || target.find(".cgi")){
+    else if((target.find(".php") < std::string::npos)
+    || (target.find(".py") < std::string::npos)
+    || (target.find(".cgi") < std::string::npos)){
         Cgi cgi(target);
         this->_content = cgi.getContent();
         this->_size = cgi.getSize();
@@ -154,6 +156,12 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
             _content = "{\"success\":\"false\"}";
             _status = "404 Not Found";
             _size = _content.length();
+        }
+        else if(parser.getBodyLen() > conf.getMaxBody()){
+            _content = "{\"success\":\"false\"}";
+            _status = "431 Request Header Fields Too Large";
+            _size = _content.length();
+            ofs.close();
         }
         else{
             ofs.write(parser.getBody().c_str(), parser.getBodyLen());

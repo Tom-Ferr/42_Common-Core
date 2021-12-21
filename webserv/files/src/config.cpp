@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 14:23:37 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/21 11:57:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ Config::Config(void){
     return ;
 };
 
-Config::Config(std::string const & path) : _dir_indexing(false), _host("127.0.0.1"){
+Config::Config(std::string const & path)
+    : _dir_indexing(false), _client_max_body_size(ULLONG_MAX), _host("127.0.0.1"){
     std::ifstream	ifs(path.c_str());
     if (!ifs){
         throw Config::FdFailedException();
@@ -38,20 +39,9 @@ Config::Config(std::string const & path) : _dir_indexing(false), _host("127.0.0.
     }
 };
 
-Config::Config(std::istream & block) : _host("127.0.0.1"){
-
-        std::string line;
-
-        // size_t option ;
-        
-        // while (std::getline(ifs, line, '{')){
-        // 	if ((option = line.rfind("server")) < std::string::npos){
-        //         if ((option + 5) == line.find_last_not_of(" \n"))
-                    parseConfig(block);
-                // else 
-                //     throw Config::FdFailedException();
-            // }
-        // }
+Config::Config(std::istream & block, Config const & mother)
+    : _client_max_body_size(ULLONG_MAX), _root(mother.getRoot()){
+        parseConfig(block);
 };
 
 Config::~Config(void){
@@ -103,6 +93,10 @@ std::string Config::getServerName() const{
 
 std::string Config::getTag() const{
     return _tag;
+};
+
+size_t Config::getMaxBody() const{
+    return _client_max_body_size;
 };
 
 bool Config::getDirIndexing() const{
@@ -170,7 +164,7 @@ void Config::parseConfig(std::istream & ifs){
                 std::getline(ifs, line, '}');
                 token << ";";
                 token << line;
-                Config loc_conf(token);
+                Config loc_conf(token, *this);
                 _locations.push_back(loc_conf);
                 _locations.back()._tag = loc;
             }

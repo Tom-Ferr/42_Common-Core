@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 10:51:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 14:23:44 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/21 11:58:21 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,25 @@
 #include <sstream>
 #include <vector>
 #include <utility>
+#include <climits>
 
 class Config
 {
 private:
     bool                        _dir_indexing;
+    size_t                      _client_max_body_size;
     std::string                 _host;
     std::string                 _root;
     std::string                 _index;
     std::string                 _server_name;
     std::string                 _error_page;
     std::string                 _tag;
-    size_t                      _client_max_body_size;
+    std::vector<Config>         _locations;
     std::vector<std::string>    _port;
-    std::vector<Config> _locations;
     std::vector<std::string>    _allowed_methods;
 
     Config(void);
-    Config(std::istream & block);
+    Config(std::istream & block, Config const & mother);
     void parseConfig(std::istream & ifs);
     class FdFailedException : public std::exception
 	{
@@ -55,6 +56,7 @@ public:
     std::string getIndex() const;
     std::string getServerName() const;
     std::string getTag() const;
+    size_t getMaxBody() const;
     std::vector<std::string> getAllowedMethods() const;
     bool getDirIndexing() const;
     const Config & select(std::string const & dir) const;
