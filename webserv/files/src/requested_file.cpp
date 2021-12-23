@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/21 11:58:03 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/23 18:00:40 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,23 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
     std::ifstream   ifs;
     struct stat file_stat;
     std::string target;
-    
-    if(parser.getFile() == conf.getTag() || parser.getFile() == conf.getTag() + "/"){
-        target = conf.getRoot() + parser.getFile() + "/" + conf.getIndex();
-        _req_file = parser.getFile() + "/" + conf.getIndex();
+
+    if (!conf.getRedirection().empty()){
+        target = conf.getRoot() + "/" + conf.getRedirection();
+        _req_file = conf.getRedirection();
     }
+
     else{
-        target = conf.getRoot() + parser.getFile();
-        _req_file = parser.getFile();
+        if(parser.getFile() == conf.getTag() || parser.getFile() == conf.getTag() + "/"){
+            target = conf.getRoot() + parser.getFile() + "/" + conf.getIndex();
+            _req_file = parser.getFile() + "/" + conf.getIndex();
+        }
+        else{
+            target = conf.getRoot() + parser.getFile();
+            _req_file = parser.getFile();
+        }
     }
+    
     
     stat(target.c_str(), &file_stat);
     if (S_ISDIR(file_stat.st_mode)){
@@ -120,9 +128,7 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
         }
         _size = _content.length();
     }
-    else if((target.find(".php") < std::string::npos)
-    || (target.find(".py") < std::string::npos)
-    || (target.find(".cgi") < std::string::npos)){
+    else if(conf.checkCgi(target)){
         Cgi cgi(target);
         this->_content = cgi.getContent();
         this->_size = cgi.getSize();
@@ -164,7 +170,7 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
             ofs.close();
         }
         else{
-            ofs.write(parser.getBody().c_str(), parser.getBodyLen());
+            ofs.write(parser.getBody().data(), parser.getBodyLen());
             _content = "{\"success\":\"true\"}";
             _status = "200 OK";
             _size = _content.length();

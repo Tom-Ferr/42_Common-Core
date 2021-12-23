@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 10:51:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/21 11:58:21 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/23 18:01:15 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ private:
     std::string                 _server_name;
     std::string                 _error_page;
     std::string                 _tag;
+    std::string                 _redirection;
     std::vector<Config>         _locations;
     std::vector<std::string>    _port;
+    std::vector<std::string>    _cgi_list;
     std::vector<std::string>    _allowed_methods;
 
     Config(void);
@@ -56,9 +58,12 @@ public:
     std::string getIndex() const;
     std::string getServerName() const;
     std::string getTag() const;
+    std::string getRedirection() const;
     size_t getMaxBody() const;
+    std::vector<std::string> getCgiList() const;
     std::vector<std::string> getAllowedMethods() const;
     bool getDirIndexing() const;
     const Config & select(std::string const & dir) const;
+    bool checkCgi(std::string const & target) const;
 };
 #endif

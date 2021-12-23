@@ -6,11 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/21 11:57:53 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/23 17:58:21 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <config.hpp>
+#include <iostream>
 
 Config::Config(void){
     return ;
@@ -63,8 +64,10 @@ Config & Config::operator=(Config const & rhs){
         this->_client_max_body_size = rhs._client_max_body_size;
         this->_port = rhs._port;
         this->_tag = rhs._tag;
+        this->_redirection = rhs._redirection;
         this->_locations  = rhs._locations;
         this->_allowed_methods  = rhs._allowed_methods;
+        this->_cgi_list  = rhs._cgi_list;
     }
     return *this;
 };
@@ -95,12 +98,20 @@ std::string Config::getTag() const{
     return _tag;
 };
 
+std::string Config::getRedirection() const{
+    return _redirection;
+};
+
 size_t Config::getMaxBody() const{
     return _client_max_body_size;
 };
 
 bool Config::getDirIndexing() const{
     return _dir_indexing;
+};
+
+std::vector<std::string> Config::getCgiList() const{
+    return _cgi_list;
 };
 
 std::vector<std::string> Config::getAllowedMethods() const{
@@ -183,10 +194,20 @@ void Config::parseConfig(std::istream & ifs){
                 std::getline(token, line, ' ');
                 _error_page = line;
             }
+            else if (!line.compare("return")){
+                std::getline(token, line, ' ');
+                _redirection = line;
+            }
             else if (!line.compare("allowed_methods")){
                 while (std::getline(token, line, ' ')){
                     if(line.compare(" "))
                     _allowed_methods.push_back(line);
+                }
+            }
+            else if (!line.compare("is_cgi")){
+                while (std::getline(token, line, ' ')){
+                    if(line.compare(" "))
+                    _cgi_list.push_back(line);
                 }
             }
         }
@@ -207,3 +228,12 @@ const Config & Config::select(std::string const & dir) const{
     else
         return *this ;
 };
+
+bool Config::checkCgi(std::string const & target) const{
+    size_t dot = target.length() - 3;
+    for (size_t i = 0; i < _cgi_list.size(); i++){
+        if(target.find(_cgi_list[i], dot) < std::string::npos)
+            return true;
+    }
+    return false;
+}
