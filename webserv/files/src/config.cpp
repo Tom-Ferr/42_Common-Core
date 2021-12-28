@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/23 17:58:21 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 14:54:29 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,31 @@ Config::Config(void){
     return ;
 };
 
-Config::Config(std::string const & path)
-    : _dir_indexing(false), _client_max_body_size(ULLONG_MAX), _host("127.0.0.1"){
-    std::ifstream	ifs(path.c_str());
-    if (!ifs){
-        throw Config::FdFailedException();
-    }
-    else{
-        std::string line;
+Config::Config(std::istream & ifs)
+    : _dir_indexing(false), _client_max_body_size(ULLONG_MAX), _host("0.0.0.0"), _port("80"){
+    // std::ifstream	ifs(path.c_str());
+    // if (!ifs){
+    //     throw Config::FdFailedException();
+    // }
+    // else{
+        // std::string line;
 
-        size_t option ;
+        // size_t option ;
         
-        while (std::getline(ifs, line, '{')){
-        	if ((option = line.rfind("server")) < std::string::npos){
-                if ((option + 5) == line.find_last_not_of(" \n"))
+        // while (std::getline(ifs, line, '{')){
+        // 	if ((option = line.rfind("server")) < std::string::npos){
+        //         if ((option + 5) == line.find_last_not_of(" \n"))
                     parseConfig(ifs);
-                else 
-                    throw Config::FdFailedException();
-            }
-        }
-        ifs.close();
-    }
+        //         else 
+        //             throw Config::FdFailedException();
+        //     }
+        // }
+        // ifs.close();
+    // }
 };
 
 Config::Config(std::istream & block, Config const & mother)
-    : _client_max_body_size(ULLONG_MAX), _root(mother.getRoot()){
+    : _client_max_body_size(ULLONG_MAX), _root(mother.getRoot()), _upload(mother.getUpload()){
         parseConfig(block);
 };
 
@@ -68,6 +68,7 @@ Config & Config::operator=(Config const & rhs){
         this->_locations  = rhs._locations;
         this->_allowed_methods  = rhs._allowed_methods;
         this->_cgi_list  = rhs._cgi_list;
+        this->_upload  = rhs._upload;
     }
     return *this;
 };
@@ -77,7 +78,7 @@ std::string Config::getHost() const{
 };
 
 int Config::getPort() const{
-    std::stringstream tar(_port[0]);
+    std::stringstream tar(_port);
     int ret;
     tar >> ret;
     return ret;
@@ -100,6 +101,10 @@ std::string Config::getTag() const{
 
 std::string Config::getRedirection() const{
     return _redirection;
+};
+
+std::string Config::getUpload() const{
+    return _upload;
 };
 
 size_t Config::getMaxBody() const{
@@ -143,14 +148,14 @@ void Config::parseConfig(std::istream & ifs){
                     std::getline(token, line, ':');
                     _host = line;
                     std::getline(token, line, ' ');
-                    _port.push_back(line);
+                    _port = line;
                 }
                 else
-                    _port.push_back(line);
+                    _port = line;
             }
             else if (!line.compare("port")){
                 std::getline(token, line, ' ');
-                _port.push_back(line);
+                _port = line;
             }
             else if (!line.compare("host")){
                 std::getline(token, line, ' ');
@@ -159,6 +164,7 @@ void Config::parseConfig(std::istream & ifs){
             else if (!line.compare("root")){
                 std::getline(token, line, ' ');
                 _root = line;
+                _upload = line;
             }
             else if (!line.compare("index")){
                 std::getline(token, line, ' ');
@@ -209,6 +215,10 @@ void Config::parseConfig(std::istream & ifs){
                     if(line.compare(" "))
                     _cgi_list.push_back(line);
                 }
+            }
+            else if (!line.compare("save_at")){
+                std::getline(token, line, ' ');
+                _upload += line;
             }
         }
     }

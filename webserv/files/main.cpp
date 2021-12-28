@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/23 14:29:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 15:59:17 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <accept.hpp>
 #include <requested_file.hpp>
 #include <response.hpp>
-#include <config.hpp>
+#include <server.hpp>
 #include <iostream>
 #include <unistd.h>
 #include <poll.h>
@@ -40,9 +40,9 @@ int main(int argc, char* argv[])
     
     try
     {
-        Config conf(config_path);
+        Server serv(config_path);
         Socket  s;
-        Bind    b(s.getSock(), address, conf);
+        Bind    b(s.getSock(), address, serv[1]);
         Listen  l(s.getSock());
 
         while (1)
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
             char buffer[30000] = {0};
             recv(a.getSock() , buffer, 30000, 0);
             Req_Parser req(buffer);
-            Config conf_l = conf.select(req.getFile());
+            Config conf_l = serv[1].select(req.getFile());
             Req_File file(conf_l, req);
             Response res(file, req);
             std::cout << buffer << std::endl;
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
     catch(std::exception & e)
     {
         std::cout << e.what() << std::endl;
-        return 1;
+        return 2;
     }
     return 0;
 }

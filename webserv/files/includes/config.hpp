@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 10:51:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/23 18:01:15 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 14:53:34 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ private:
     std::string                 _error_page;
     std::string                 _tag;
     std::string                 _redirection;
+    std::string                 _upload;
+    std::string                 _port;
     std::vector<Config>         _locations;
-    std::vector<std::string>    _port;
     std::vector<std::string>    _cgi_list;
     std::vector<std::string>    _allowed_methods;
 
@@ -48,6 +49,7 @@ private:
 	};
 public:
     Config(std::string const & path);
+    Config(std::istream & ifs);
     ~Config();
     Config(Config const & src);
     Config & operator=(Config const & rhs);
@@ -59,6 +61,7 @@ public:
     std::string getServerName() const;
     std::string getTag() const;
     std::string getRedirection() const;
+    std::string getUpload() const;
     size_t getMaxBody() const;
     std::vector<std::string> getCgiList() const;
     std::vector<std::string> getAllowedMethods() const;

@@ -6,11 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/23 18:00:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/27 11:33:12 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <requested_file.hpp>
+#include <iostream>
 
 Req_File::Req_File(void){
     return ;
@@ -155,13 +156,14 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
 
 void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
         std::ofstream ofs;
-        std::string path = conf.getRoot() + parser.getFile();
+        // std::string path = conf.getRoot() + parser.getFile();
 
-        ofs.open(path, std::ios::binary);
+        ofs.open(conf.getUpload() + "/test.txt", std::ios::binary);
         if(!ofs.is_open()){
             _content = "{\"success\":\"false\"}";
             _status = "404 Not Found";
             _size = _content.length();
+            std::cout << conf.getUpload() << std::endl;
         }
         else if(parser.getBodyLen() > conf.getMaxBody()){
             _content = "{\"success\":\"false\"}";
