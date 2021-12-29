@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 11:50:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 19:12:31 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ int main(int argc, char* argv[])
             char buffer[30000] = {0};
             recv(a.getSock() , buffer, 30000, 0);
             Req_Parser req(buffer);
-            Config conf_l = serv[i].select(req.getFile());
+            // if (serv.getSize() > 1){
+            //     serv.select();
+            // }
+            Config conf_l = serv[i].select(req.getFile()); 
             Req_File file(conf_l, req);
             Response res(file, req);
             std::cout << buffer << std::endl;
@@ -56,7 +59,7 @@ int main(int argc, char* argv[])
                 size_t bytes = send(a.getSock(), file.getContent().data(), file.getSize(), 0);
                 file.resize(bytes);
             }
-            std::cout << "------Hello message sent------" << std::endl;
+            std::cout << "------Response sent------" << std::endl;
             close(a.getSock());
         }
     }

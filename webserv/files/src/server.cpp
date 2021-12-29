@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 22:07:44 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 14:16:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,27 @@ Server::Server(std::string const & path){
         	if ((option = line.rfind("server")) < std::string::npos){
                 if ((option + 5) == line.find_last_not_of(" \n")){
                     Config conf(ifs);
-                    Socket  s;
-                    Bind    b(s.getSock(), conf);
-                    Listen  l(s.getSock());
-                    _servers.push_back(conf);
-                    _sockets.push_back(s);
-                    _binds.push_back(b);
+                    
+                    size_t i = 0;
+                    for(; i < _servers.size(); ++i){
+                        if( conf.getHost() == _servers[i].getHost()
+                        && conf.getPort() == _servers[i].getPort() ){
+                            Socket  s(_sockets[i]);
+                            Bind    b(_binds[i]);
+                            _sockets.push_back(s);
+                            _binds.push_back(b);
+                            break ;
+                        }
+                    }
+                    if(i == _servers.size()){
+                        Socket  s;
+                        Bind    b(s.getSock(), conf);
+                        Listen  l(s.getSock());
+                        _servers.push_back(conf);
+                        _sockets.push_back(s);
+                        _binds.push_back(b);
+                    }
+
                 }
                 else 
                     throw Server::SyntaxErrorException();

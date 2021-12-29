@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:17:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 23:29:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 15:59:02 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ private:
 	public:
 		virtual const char* what() const throw();
 	};
-public:
     Accept(void);
+public:
     Accept(int const & sock, Bind const & bind);
     ~Accept(void);
     Accept(Accept const & src);
