@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/17 12:27:21 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 10:41:38 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ private:
     std::string _version;
     std::string _type;
     std::string _body;
+    std::string _host;
     size_t _body_len;
     Req_Parser(void);
 public:

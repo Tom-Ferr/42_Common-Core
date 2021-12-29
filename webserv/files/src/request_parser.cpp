@@ -6,18 +6,20 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/17 12:27:58 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 11:42:18 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <request_parser.hpp>
+#include <iostream>
 
 Req_Parser::Req_Parser(void){
     return ;
 };
 
 Req_Parser::Req_Parser(char const *buffer)
-    : _req(buffer){
+    : _req(buffer)  {
+
     std::stringstream s_req(_req);
     std::string token;
     std::getline(s_req, token, ' ');
@@ -26,28 +28,35 @@ Req_Parser::Req_Parser(char const *buffer)
     _file = token;
     std::getline(s_req, token, '\r');
     _version = token;
-
-    if(!_method.compare("POST")){
-        std::string data;
-        std::getline(s_req, token, '{');
-        std::stringstream head(token);
-        while (std::getline(head, token, '\n')){
-            if(token.find("Content-Type") < std::string::npos){
-                std::stringstream doi(token);
-                std::getline(doi, data, ' ');
-                std::getline(doi, data, ' ');
-                _type = data;
-            }
-            else if(token.find("Content-Length") < std::string::npos){
-                std::stringstream doi(token);
-                std::getline(doi, data, ' ');
-                std::getline(doi, data, ' ');
-                std::stringstream conv(data);
-                conv >> _body_len;
-            }
+    
+    std::string data;
+    while (std::getline(s_req, token, '\n')){
+        if(!token.compare("\r"))
+            break ;
+        if(token.find("Host") < std::string::npos){
+            std::stringstream doi(token);
+            std::getline(doi, data, ' ');
+            std::getline(doi, data, ' ');
+            _host = data;
         }
-        std::getline(s_req, token, '}');
-        _body = token;
+        else if(token.find("Content-Type") < std::string::npos){
+            std::stringstream doi(token);
+            std::getline(doi, data, ' ');
+            std::getline(doi, data, ' ');
+            _type = data;
+        }
+        else if(token.find("Content-Length") < std::string::npos){
+            std::stringstream doi(token);
+            std::getline(doi, data, ' ');
+            std::getline(doi, data, ' ');
+            std::stringstream conv(data);
+            conv >> _body_len;
+        }
+    }
+    
+    if(!_method.compare("POST")){
+        while(std::getline(s_req, token, '\b'))
+            _body += token;
     }
 };
 
