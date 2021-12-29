@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 11:42:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 20:38:50 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,10 @@ std::string Req_Parser::getMethod() const{
 
 std::string Req_Parser::getBody() const{
     return _body;
+};
+
+std::string Req_Parser::getHost() const{
+    return _host;
 };
 
 size_t Req_Parser::getBodyLen() const{

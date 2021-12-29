@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 10:41:38 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 19:57:58 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ public:
     std::string getType() const;
     std::string getMethod() const;
     std::string getBody() const;
+    std::string getHost() const;
     size_t getBodyLen() const;
 };
 
