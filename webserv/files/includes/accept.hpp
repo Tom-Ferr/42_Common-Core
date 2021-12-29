@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:17:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/04 20:43:10 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 23:29:50 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <exception>
 # include <cstring>
 # include <fcntl.h>
+# include <socket.hpp>
+# include <bind.hpp>
 
 class Accept
 {
@@ -32,7 +34,7 @@ private:
 	};
 public:
     Accept(void);
-    Accept(int sock_fd, struct sockaddr_in const & address, int const & addrlen);
+    Accept(int const & sock, Bind const & bind);
     ~Accept(void);
     Accept(Accept const & src);
     Accept & operator=(Accept const & rhs);

@@ -6,20 +6,18 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 15:59:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 23:23:09 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <socket.hpp>
-#include <bind.hpp>
-#include <listen.hpp>
+
 #include <accept.hpp>
 #include <requested_file.hpp>
 #include <response.hpp>
 #include <server.hpp>
+#include <poll.hpp>
 #include <iostream>
 #include <unistd.h>
-#include <poll.h>
 
 int main(int argc, char* argv[])
 {
@@ -34,28 +32,22 @@ int main(int argc, char* argv[])
     }
     else
         config_path = "default.conf";
-    struct sockaddr_in address;
-    int addrlen = sizeof(address);
-    struct pollfd pfds[1];
     
     try
     {
         Server serv(config_path);
-        Socket  s;
-        Bind    b(s.getSock(), address, serv[1]);
-        Listen  l(s.getSock());
+        struct pollfd pfds[serv.getSize()];
 
         while (1)
         {
             std::cout << "\n+++ Waiting for new connection +++\n" << std::endl;
-            Accept  a(s.getSock(), address, addrlen);
-            pfds[0].fd = a.getSock();
-            pfds[0].events = POLLIN;
-            poll(pfds, 1, 50000);
+            Poll poll(serv, pfds);
+            size_t i = poll.getSelected();
+            Accept  a(serv.getSock(i), serv.getBind(i));
             char buffer[30000] = {0};
             recv(a.getSock() , buffer, 30000, 0);
             Req_Parser req(buffer);
-            Config conf_l = serv[1].select(req.getFile());
+            Config conf_l = serv[i].select(req.getFile());
             Req_File file(conf_l, req);
             Response res(file, req);
             std::cout << buffer << std::endl;

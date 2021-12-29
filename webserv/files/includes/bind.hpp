@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:17:52 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/07 18:57:19 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 20:14:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ class Bind
 {
 private:
 
+    struct sockaddr_in _address;
+    int                _addrlen;
     class FdFailedException : public std::exception
 	{
 	public:
@@ -31,10 +33,13 @@ private:
 	};
     Bind(void);
 public:
-    Bind(int sock_fd, struct sockaddr_in & address, Config const & conf);
+    Bind(int sock_fd, Config const & conf);
     ~Bind(void);
     Bind(Bind const & src);
     Bind & operator=(Bind const & rhs);
+
+    struct sockaddr * getSockAddress() const;
+    socklen_t* getSockLen() const;
 };
 
 #endif

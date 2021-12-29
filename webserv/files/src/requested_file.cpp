@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/27 11:33:12 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 17:26:19 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,10 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
         else{
             ofs.write(parser.getBody().data(), parser.getBodyLen());
             _content = "{\"success\":\"true\"}";
-            _status = "200 OK";
+            if(parser.getBodyLen())
+                _status = "201 Created";
+            else
+                _status = "204 No Content";
             _size = _content.length();
             ofs.close();
         }

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 15:55:41 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 22:07:44 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,12 @@ Server::Server(std::string const & path){
         	if ((option = line.rfind("server")) < std::string::npos){
                 if ((option + 5) == line.find_last_not_of(" \n")){
                     Config conf(ifs);
+                    Socket  s;
+                    Bind    b(s.getSock(), conf);
+                    Listen  l(s.getSock());
                     _servers.push_back(conf);
+                    _sockets.push_back(s);
+                    _binds.push_back(b);
                 }
                 else 
                     throw Server::SyntaxErrorException();
@@ -61,7 +66,7 @@ const char* Server::SyntaxErrorException::what() const throw(){
     return "configuration file could not be read due to a syntax error";
 };
 
-Config & Server::operator[](size_t i){
+Config & Server::operator[](size_t const & i){
     if(i >= _servers.size())
        throw Server::FdFailedException();
     return _servers.at(i);
@@ -69,4 +74,12 @@ Config & Server::operator[](size_t i){
 
 size_t Server::getSize() const{
     return _servers.size();
+};
+
+int Server::getSock(size_t const & i) const{
+    return _sockets.at(i).getSock();
+};
+
+Bind Server::getBind(size_t const & i) const{
+    return _binds.at(i);
 };

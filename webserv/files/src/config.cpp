@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 14:54:29 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/28 19:08:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,7 @@ Config::Config(void){
 
 Config::Config(std::istream & ifs)
     : _dir_indexing(false), _client_max_body_size(ULLONG_MAX), _host("0.0.0.0"), _port("80"){
-    // std::ifstream	ifs(path.c_str());
-    // if (!ifs){
-    //     throw Config::FdFailedException();
-    // }
-    // else{
-        // std::string line;
-
-        // size_t option ;
-        
-        // while (std::getline(ifs, line, '{')){
-        // 	if ((option = line.rfind("server")) < std::string::npos){
-        //         if ((option + 5) == line.find_last_not_of(" \n"))
-                    parseConfig(ifs);
-        //         else 
-        //             throw Config::FdFailedException();
-        //     }
-        // }
-        // ifs.close();
-    // }
+        parseConfig(ifs);
 };
 
 Config::Config(std::istream & block, Config const & mother)
