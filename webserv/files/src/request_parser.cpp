@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 20:38:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 22:37:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ Req_Parser::Req_Parser(char const *buffer)
     _version = token;
     
     std::string data;
-    while (std::getline(s_req, token, '\n')){
-        if(!token.compare("\r"))
+    while (std::getline(s_req, token, '\r')){
+        if(!token.compare("\n")){
+            std::getline(s_req, token, '\n');
             break ;
+        }
         if(token.find("Host") < std::string::npos){
             std::stringstream doi(token);
             std::getline(doi, data, ' ');
@@ -44,6 +46,12 @@ Req_Parser::Req_Parser(char const *buffer)
             std::getline(doi, data, ' ');
             std::getline(doi, data, ' ');
             _type = data;
+        }
+        else if(token.find("Transfer-Encoding") < std::string::npos){
+            std::stringstream doi(token);
+            std::getline(doi, data, ' ');
+            std::getline(doi, data, ' ');
+            _trans_enc = data;
         }
         else if(token.find("Content-Length") < std::string::npos){
             std::stringstream doi(token);

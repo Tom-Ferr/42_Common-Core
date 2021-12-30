@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 20:40:39 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 22:34:50 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ size_t Server::select(size_t const & i, std::string const & host) const{
 
     size_t j = 0;
     for(; j < _servers[i].size(); ++j){
-        if (_servers[i].at(j).getServerName().append("\r") == host)
+        if (_servers[i].at(j).getServerName() == host)
             break ;
     }
     return j % _servers[i].size();
