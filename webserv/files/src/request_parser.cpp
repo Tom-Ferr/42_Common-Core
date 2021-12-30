@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 17:09:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 18:06:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ Req_Parser::Req_Parser(void){
     return ;
 };
 
-Req_Parser::Req_Parser(char const *buffer, int sock)
-    : _req(buffer), _sock(sock)  {
+Req_Parser::Req_Parser(Receive const & re)
+    : _req(re.bin()), _sock(re.getSock())  {
 
     std::stringstream s_req(_req);
     std::string token;

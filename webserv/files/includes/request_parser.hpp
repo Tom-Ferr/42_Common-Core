@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 16:58:08 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 18:05:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <string>
 # include <sstream>
 # include <sys/socket.h>
+# include <receive.hpp>
 
 class Req_Parser
 {
@@ -32,7 +33,7 @@ private:
     int     _sock;
     Req_Parser(void);
 public:
-    Req_Parser(char const *buffer, int sock);
+    Req_Parser(Receive const & recv);
     ~Req_Parser();
     Req_Parser(Req_Parser const & src);
     Req_Parser & operator=(Req_Parser const & rhs);
