@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 20:42:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 15:58:11 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ Config::Config(std::istream & ifs)
 };
 
 Config::Config(std::istream & block, Config const & mother)
-    :  _dir_indexing(false), _client_max_body_size(ULLONG_MAX), _root(mother.getRoot()), _upload(mother.getUpload()){
+    :  _dir_indexing(false), _client_max_body_size(ULLONG_MAX), _root(mother.getRoot()),
+    _error_page(mother.getErrorPages()), _upload(mother.getUpload()){
         parseConfig(block);
 };
 
@@ -83,6 +84,10 @@ std::string Config::getTag() const{
 
 std::string Config::getRedirection() const{
     return _redirection;
+};
+
+std::string Config::getErrorPages() const{
+    return _error_page;
 };
 
 std::string Config::getUpload() const{

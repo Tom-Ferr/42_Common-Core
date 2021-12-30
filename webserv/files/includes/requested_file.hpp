@@ -23,6 +23,8 @@ private:
     void isGET(Config const & conf, Req_Parser const & parser);
     void isPOST(Config const & conf, Req_Parser const & parser);
     void isDELETE(Config const & conf, Req_Parser const & parser);
+    void readFile(std::ifstream & ifs);
+    int setErrorPage(std::string const & path);
 public:
     Req_File(Config const & conf, Req_Parser const & parser);
     ~Req_File();

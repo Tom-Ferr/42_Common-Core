@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 10:51:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 14:53:34 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 15:44:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ public:
     std::string getTag() const;
     std::string getRedirection() const;
     std::string getUpload() const;
+    std::string getErrorPages() const;
     size_t getMaxBody() const;
     std::vector<std::string> getCgiList() const;
     std::vector<std::string> getAllowedMethods() const;
