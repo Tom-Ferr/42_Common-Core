@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 18:50:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 18:54:10 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
             Receive recv(a.getSock());
             switch (recv.getStatus()){
                 case 0:
-                        std::cout << "\n* Connection was closed by the Client *\n" << std::endl;
+                    std::cout << "\n* Connection was closed by the Client *\n" << std::endl;
                 case -1:
                     close(a.getSock());
                     continue ;
