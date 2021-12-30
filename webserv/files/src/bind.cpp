@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:23:14 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 20:12:59 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 22:51:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ Bind::Bind(Bind const & src){
 
 Bind & Bind::operator=(Bind const & rhs){
     if (this != &rhs){
-        return *this;
+        this->_address = rhs._address;
+        this->_addrlen = rhs._addrlen;
     }
     return *this;
 };

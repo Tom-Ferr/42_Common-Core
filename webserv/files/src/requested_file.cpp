@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 17:26:19 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 22:48:33 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ Req_File & Req_File::operator=(Req_File const & rhs){
         this->_content= rhs._content;
         this->_size = rhs._size;
         this->_status = rhs._status;
+        this->_req_file = rhs._req_file;
     }
     return *this;
 };

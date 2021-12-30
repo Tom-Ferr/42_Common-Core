@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 22:34:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 22:50:06 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ Server & Server::operator=(Server const & rhs){
 
     if (this != &rhs){
         this->_servers = rhs._servers;
+        this->_sockets = rhs._sockets;
+        this->_binds = rhs._binds;
     }
     
     return *this;

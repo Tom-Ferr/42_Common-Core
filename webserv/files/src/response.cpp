@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/16 14:37:55 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/29 22:49:18 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ Response::Response(Response const & src){
 Response & Response::operator=(Response const & rhs){
     if (this != &rhs){
         this->_res = rhs._res;
+        this->_len = rhs._len;
+        this->_type = rhs._type;
     }
     return *this;
 };
