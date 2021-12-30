@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 20:33:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 16:56:49 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,19 @@ int main(int argc, char* argv[])
             Poll poll(serv, pfds);
             size_t i = poll.getSelected();
             Accept  a(serv.getSock(i), serv.getBind(i));
-            char buffer[30000] = {0};
-            recv(a.getSock() , buffer, 30000, 0);
-            Req_Parser req(buffer);
+            char buffer[3] = {0};
+            std::string bin;
+            while (recv(a.getSock() , buffer, 1, 0)){
+                bin += buffer;
+                if (bin.rfind("\r\n\r\n") < std::string::npos)
+                    break ;
+            }
+            Req_Parser req(bin.c_str(), a.getSock());
             size_t j = serv.select(i, req.getHost());
             Config conf_l = serv[i].at(j).select(req.getFile());
             Req_File file(conf_l, req);
             Response res(file, req);
-            std::cout << buffer << std::endl;
+            std::cout << bin.c_str() << std::endl;
             send(a.getSock() , res.getResponse().data() , res.getSize(), 0);
             while (file.getSize() > 0) {
                 size_t bytes = send(a.getSock(), file.getContent().data(), file.getSize(), 0);

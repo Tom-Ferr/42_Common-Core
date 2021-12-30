@@ -6,19 +6,18 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 22:46:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 17:09:11 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <request_parser.hpp>
-#include <iostream>
 
 Req_Parser::Req_Parser(void){
     return ;
 };
 
-Req_Parser::Req_Parser(char const *buffer)
-    : _req(buffer)  {
+Req_Parser::Req_Parser(char const *buffer, int sock)
+    : _req(buffer), _sock(sock)  {
 
     std::stringstream s_req(_req);
     std::string token;
@@ -63,8 +62,9 @@ Req_Parser::Req_Parser(char const *buffer)
     }
     
     if(!_method.compare("POST")){
-        while(std::getline(s_req, token, '\b'))
-            _body += token;
+        char buffer[_body_len];
+        recv(_sock, buffer, _body_len, 0);
+        _body.assign(buffer, _body_len);
     }
 };
 

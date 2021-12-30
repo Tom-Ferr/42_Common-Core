@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 16:09:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 17:28:29 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
 void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
     std::ofstream ofs;
     // std::string path = conf.getRoot() + parser.getFile();
-    ofs.open(conf.getUpload() + "/test.txt", std::ios::binary);
+    ofs.open(conf.getUpload() + "/test.jpg", std::ios::binary);
     if(!ofs.is_open()){
         _status = "404 Not Found";
         _content = "{\"success\":\"false\"}";
