@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:04:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 20:43:55 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/31 13:46:32 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ Cgi::Cgi(std::string const & target){
     env[2] = NULL;
     
     std::string cgi;
-    if (target.rfind(".php") < std::string::npos)
+    size_t pos = target.rfind(".");
+    if (!target.compare(pos, std::string::npos, ".php"))
         cgi = "/usr/bin/php";
-    else if (target.rfind(".py") < std::string::npos)
+    else if (!target.compare(pos, std::string::npos, ".py"))
         cgi = "/usr/local/bin/python3";
     else
         cgi = target;

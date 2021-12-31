@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 21:01:39 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/31 13:39:05 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,9 +227,9 @@ const Config & Config::select(std::string const & dir) const{
 };
 
 bool Config::checkCgi(std::string const & target) const{
-    size_t dot = target.length() - 3;
+    size_t dot = target.rfind(".");
     for (size_t i = 0; i < _cgi_list.size(); ++i){
-        if(target.rfind(_cgi_list[i], dot) < std::string::npos)
+        if(!target.compare(dot, std::string::npos, _cgi_list[i]))
             return true;
     }
     return false;

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/31 10:24:30 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/31 10:33:59 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,11 +124,11 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
             }
             closedir(dir_tar);
             _content = "<html><head><title>Index of " + parser.getFile() + "</title></head><body><h1>Index of " + parser.getFile() + "</h1><hr><pre>";
-            for (size_t i = 0; i < dir_list.size(); i++){
+            for (size_t i = 0; i < dir_list.size(); ++i){
                 _content += "<a href=\"" + parser.getFile() + "/" + dir_list[i] + "\">" + dir_list[i] + "</a><br>";
             }
-            _status = "200 OK";
             _content +=  "</pre><hr></body></html>";
+            _status = "200 OK";
         }
         else{
             _status = "403 Forbidden";
