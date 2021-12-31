@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 22:09:20 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 22:22:50 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ Req_Parser::Req_Parser(Receive const & re)
     }
     
     if(!_method.compare("POST")){
+        
         size_t not_read = _body_len;
-        size_t pos = 0;
+
         while(not_read > 0){
             char buffer[not_read];
             size_t bytes = recv(_sock, buffer, not_read, 0);
-            _body.insert(pos, buffer, bytes);
-            pos = bytes;
+            _body.append(buffer, bytes);
             not_read -= bytes;
         }
     }
