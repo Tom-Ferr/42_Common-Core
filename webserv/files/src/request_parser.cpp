@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 22:22:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/31 10:22:21 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Req_Parser::Req_Parser(void){
 };
 
 Req_Parser::Req_Parser(Receive const & re)
-    : _req(re.bin()), _sock(re.getSock())  {
+    : _req(re.bin()), _sock(re.getSock()), _body_len(0)  {
 
     std::stringstream s_req(_req);
     std::string token;
@@ -62,15 +62,10 @@ Req_Parser::Req_Parser(Receive const & re)
     }
     
     if(!_method.compare("POST")){
-        
-        size_t not_read = _body_len;
-
-        while(not_read > 0){
-            char buffer[not_read];
-            size_t bytes = recv(_sock, buffer, not_read, 0);
-            _body.append(buffer, bytes);
-            not_read -= bytes;
-        }
+        if(!_trans_enc.compare("chunked"))
+            unchunk();
+        else
+            readBody(_body_len);
     }
 };
 
@@ -124,3 +119,38 @@ std::string Req_Parser::getHost() const{
 size_t Req_Parser::getBodyLen() const{
     return _body_len;
 };
+
+void Req_Parser::readBody(size_t const & len){
+    
+    size_t not_read = len;      
+    while(not_read > 0){
+        char buffer[not_read];
+        size_t bytes = recv(_sock, buffer, not_read, 0);
+        _body.append(buffer, bytes);
+        not_read -= bytes;
+    }
+};
+
+void Req_Parser::readChunk(std::string & bin){
+    char buffer[3] = {0};
+    while (recv(_sock , buffer, 1, 0)){
+        bin += buffer;
+        if (bin.rfind("\r\n") < std::string::npos)
+            break ;
+    }
+};
+
+void Req_Parser::unchunk(){
+    size_t chunk_size = true;
+    while (chunk_size){
+        std::string bin;
+        readChunk(bin);
+        bin.resize(bin.rfind("\r\n"));
+        std::stringstream conv(bin);
+        conv >> std::hex >> chunk_size;
+        _body_len += chunk_size;
+        if (chunk_size)
+            readBody(chunk_size);
+        readChunk(bin);
+    }
+}

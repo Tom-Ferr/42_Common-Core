@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 18:05:37 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/31 10:22:38 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,12 @@ private:
     std::string _body;
     std::string _host;
     std::string _trans_enc;
-    size_t _body_len;
-    int     _sock;
+    int         _sock;
+    size_t      _body_len;
     Req_Parser(void);
+    void readBody(size_t const & len);
+    void readChunk(std::string & bin);
+    void unchunk();
 public:
     Req_Parser(Receive const & recv);
     ~Req_Parser();
