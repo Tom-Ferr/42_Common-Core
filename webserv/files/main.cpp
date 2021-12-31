@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 20:38:44 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 22:10:49 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int main(int argc, char* argv[])
     try
     {
         Server serv(config_path);
-        // struct pollfd pfds[serv.getSize()];
 
         while (1)
         {
