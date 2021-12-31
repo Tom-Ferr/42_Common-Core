@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 18:54:10 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 20:38:44 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ int main(int argc, char* argv[])
     try
     {
         Server serv(config_path);
-        struct pollfd pfds[serv.getSize()];
+        // struct pollfd pfds[serv.getSize()];
 
         while (1)
         {
             std::cout << "\n+++ Waiting for new connection +++\n" << std::endl;
-            Poll poll(serv, pfds);
+            Poll poll(serv);
             size_t i = poll.getSelected();
             Accept  a(serv.getSock(i), serv.getBind(i));
             Receive recv(a.getSock());

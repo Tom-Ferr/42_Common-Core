@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:04:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/23 18:29:30 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 20:43:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ Cgi::Cgi(std::string const & target){
     env[2] = NULL;
     
     std::string cgi;
-    if (target.find(".php") < std::string::npos)
+    if (target.rfind(".php") < std::string::npos)
         cgi = "/usr/bin/php";
-    else if (target.find(".py") < std::string::npos)
+    else if (target.rfind(".py") < std::string::npos)
         cgi = "/usr/local/bin/python3";
     else
         cgi = target;
@@ -49,7 +49,7 @@ Cgi::Cgi(std::string const & target){
         rewind (pFile);
         char buffer[_size];
         fread (buffer,1,_size,pFile);
-        _content = buffer;
+        _content.assign(buffer, _size);
         fclose(pFile);
     }
     else{

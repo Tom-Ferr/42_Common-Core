@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 22:50:06 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 20:47:24 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,42 @@
 
 Server::Server(std::string const & path){
     std::ifstream	ifs(path.c_str());
-    if (!ifs){
+    if (!ifs)
         throw Server::FdFailedException();
-    }
-    else{
-        std::string line;
 
-        size_t option ;
-        
-        while (std::getline(ifs, line, '{')){
-        	if ((option = line.rfind("server")) < std::string::npos){
-                if ((option + 5) == line.find_last_not_of(" \n")){
-                    Config conf(ifs);
-                    
-                    size_t i = 0;
-                    for(; i < _servers.size(); ++i){
-                        if( conf.getHost() == _servers[i].at(0).getHost()
-                        && conf.getPort() == _servers[i].at(0).getPort() ){
-                            _servers[i].push_back(conf);
-                            break ;
-                        }
+    std::string line;
+    size_t option ;
+    
+    while (std::getline(ifs, line, '{')){
+    	if ((option = line.rfind("server")) < std::string::npos){
+            if ((option + 5) == line.find_last_not_of(" \n")){
+                Config conf(ifs);
+                
+                size_t i = 0;
+                for(; i < _servers.size(); ++i){
+                    if( conf.getHost() == _servers[i].at(0).getHost()
+                    && conf.getPort() == _servers[i].at(0).getPort() ){
+                        _servers[i].push_back(conf);
+                        break ;
                     }
-                    if(i == _servers.size()){
-                        Socket  s;
-                        Bind    b(s.getSock(), conf);
-                        Listen  l(s.getSock());
-                        std::vector<Config> vC;
-                        vC.push_back(conf);
-                        _servers.push_back(vC);
-                        _sockets.push_back(s);
-                        _binds.push_back(b);
-                    }
-
                 }
-                else 
-                    throw Server::SyntaxErrorException();
+                if(i == _servers.size()){
+                    Socket  s;
+                    Bind    b(s.getSock(), conf);
+                    Listen  l(s.getSock());
+                    std::vector<Config> vC;
+                    vC.push_back(conf);
+                    _servers.push_back(vC);
+                    _sockets.push_back(s);
+                    _binds.push_back(b);
+                }
             }
+            else 
+                throw Server::SyntaxErrorException();
         }
-        ifs.close();
     }
+    ifs.close();
+
 };
 
 Server::~Server(void){

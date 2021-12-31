@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 15:58:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 21:01:39 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ void Config::parseConfig(std::istream & ifs){
 const Config & Config::select(std::string const & dir) const{
     size_t index = 0;
     if(_locations.size()){
-        for (size_t i = 0; i < _locations.size(); i++){
+        for (size_t i = 0; i < _locations.size(); ++i){
             if (_locations.at(i).getTag() == dir || _locations.at(i).getTag() + "/" == dir){
                 index = i;
                 break ;
@@ -228,8 +228,8 @@ const Config & Config::select(std::string const & dir) const{
 
 bool Config::checkCgi(std::string const & target) const{
     size_t dot = target.length() - 3;
-    for (size_t i = 0; i < _cgi_list.size(); i++){
-        if(target.find(_cgi_list[i], dot) < std::string::npos)
+    for (size_t i = 0; i < _cgi_list.size(); ++i){
+        if(target.rfind(_cgi_list[i], dot) < std::string::npos)
             return true;
     }
     return false;

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 17:21:31 by tde-cama         ###   ########.fr       */
+/*   Updated: 2021/12/30 20:57:44 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ Response::Response(Req_File const & file, Req_Parser const & req){
         _type = "image/gif";
     else if(file.getReqFile().rfind(".png") < std::string::npos)
         _type = "image/png";
+    else if(file.getReqFile().rfind(".mp3") < std::string::npos)
+        _type = "audio/mpeg";
     else
         _type = "text/html";
     _res = req.getVersion() + " " + file.getStatus();
     _res += "\r\nContent-Type: " + _type;
-    if (_res.find("text/") < std::string::npos)
+    if (_res.rfind("text/") < std::string::npos)
         _res += ";charset=UTF-8";
     _res += "\r\nContent-Length: ";
     conv << file.getSize();
