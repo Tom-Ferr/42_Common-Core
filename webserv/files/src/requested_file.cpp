@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/31 10:33:59 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/02 12:23:52 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,12 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
 void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
     std::ofstream ofs;
     // std::string path = conf.getRoot() + parser.getFile();
-    ofs.open(conf.getUpload() + "/test.jpg", std::ios::binary);
+    time_t now = time(NULL);
+    struct tm* hu = localtime(&now);
+    std::string req_time(asctime(hu));
+    req_time += suffix(parser.getType());
+
+    ofs.open(conf.getUpload() + "/" + req_time , std::ios::binary);
     if(!ofs.is_open()){
         _status = "404 Not Found";
         _content = "{\"success\":\"false\"}";
@@ -231,3 +236,20 @@ void Req_File::readFile(std::ifstream & ifs){
     ifs.read(buffer, _size);
     _content.assign(buffer, _size);
 };
+
+std::string Req_File::suffix(std::string type) const{
+    if(type.rfind("jpeg") < std::string::npos)
+        return (".jpg");
+    else if(type.rfind("php") < std::string::npos)
+        return (".php");
+    else if(type.rfind("mpeg") < std::string::npos)
+        return (".mp3");
+    else if(type.rfind("gif") < std::string::npos)
+        return (".gif");
+    else if(type.rfind("png") < std::string::npos)
+        return (".png");
+    else if(type.rfind("html") < std::string::npos)
+        return (".html");
+    else
+        return ("");
+}

@@ -25,6 +25,7 @@ private:
     void isDELETE(Config const & conf, Req_Parser const & parser);
     void readFile(std::ifstream & ifs);
     int setErrorPage(std::string const & path);
+    std::string suffix(std::string type) const;
 public:
     Req_File(Config const & conf, Req_Parser const & parser);
     ~Req_File();
