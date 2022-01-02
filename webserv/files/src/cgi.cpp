@@ -6,23 +6,20 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:04:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/31 13:46:32 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:20:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cgi.hpp>
 
-Cgi::Cgi(std::string const & target){
+Cgi::Cgi(std::string const & target, std::string const & extra){
     FILE* pFile = tmpfile();
     int tmpFd = fileno(pFile);
     
-    std::string first("FIRST");
-    std::string s1 = "VAR1=" + first;
-    std::string s2("VAR2=SECOND");
-    char* env[3];
+    std::string s1 = "PATH_INFO=" + extra;
+    char* env[2];
     env[0] = const_cast<char*>(s1.c_str());
-    env[1] = const_cast<char*>(s2.c_str());
-    env[2] = NULL;
+    env[1] = NULL;
     
     std::string cgi;
     size_t pos = target.rfind(".");

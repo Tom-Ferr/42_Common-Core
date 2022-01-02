@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:02:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/21 11:57:48 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:04:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ private:
 
     Cgi(void);
 public:
-    Cgi(std::string const & target);
+    Cgi(std::string const & target, std::string const & extra);
     ~Cgi();
     Cgi(Cgi const & src);
     Cgi & operator=(Cgi const & rhs);

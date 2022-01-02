@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/31 10:22:21 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:01:12 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,14 @@ Req_Parser::Req_Parser(Receive const & re)
         else
             readBody(_body_len);
     }
+
+    size_t pos = _file.find(".");
+    size_t extra = _file.find("/", pos);
+    if(extra < std::string::npos){
+        _extra = _file;
+        _extra.erase(0, extra);
+        _file.erase(extra);
+    }
 };
 
 Req_Parser::~Req_Parser(void){
@@ -94,6 +102,10 @@ Req_Parser & Req_Parser::operator=(Req_Parser const & rhs){
 
 std::string Req_Parser::getFile() const{
     return _file;
+};
+
+std::string Req_Parser::getExtra() const{
+    return _extra;
 };
 
 std::string Req_Parser::getVersion() const{

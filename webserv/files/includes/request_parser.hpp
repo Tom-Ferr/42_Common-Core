@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/31 10:22:38 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:00:48 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ private:
     std::string _req;
     std::string _method;
     std::string _file;
+    std::string _extra;
     std::string _version;
     std::string _type;
     std::string _body;
@@ -42,6 +43,7 @@ public:
     Req_Parser & operator=(Req_Parser const & rhs);
 
     std::string getFile() const;
+    std::string getExtra() const;
     std::string getVersion() const;
     std::string getType() const;
     std::string getMethod() const;
