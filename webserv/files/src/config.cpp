@@ -6,12 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/31 13:39:05 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 14:25:26 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <config.hpp>
-#include <iostream>
 
 Config::Config(void){
     return ;
@@ -227,10 +226,14 @@ const Config & Config::select(std::string const & dir) const{
 };
 
 bool Config::checkCgi(std::string const & target) const{
+
     size_t dot = target.rfind(".");
-    for (size_t i = 0; i < _cgi_list.size(); ++i){
-        if(!target.compare(dot, std::string::npos, _cgi_list[i]))
-            return true;
+    if(dot < std::string::npos){
+        for (size_t i = 0; i < _cgi_list.size(); ++i){
+            if(!target.compare(dot, std::string::npos, _cgi_list[i]))
+                return true;
+        }
+
     }
     return false;
 }

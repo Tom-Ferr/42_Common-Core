@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/02 15:01:12 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 14:11:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ Req_Parser::Req_Parser(Receive const & re)
         else
             readBody(_body_len);
     }
+
 
     size_t pos = _file.find(".");
     size_t extra = _file.find("/", pos);

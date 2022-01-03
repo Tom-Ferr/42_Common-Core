@@ -6,12 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/02 15:06:30 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 14:25:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <requested_file.hpp>
-#include <iostream>
 
 Req_File::Req_File(void){
     return ;
