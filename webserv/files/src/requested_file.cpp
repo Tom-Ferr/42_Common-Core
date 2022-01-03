@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 14:25:37 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 14:51:39 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
         _status = "404 Not Found";
         _content = "{\"success\":\"false\"}";
         _size = _content.length();
-        std::cout << conf.getUpload() << std::endl;
     }
     else if(parser.getBodyLen() > conf.getMaxBody()){
         _status = "431 Request Header Fields Too Large";
