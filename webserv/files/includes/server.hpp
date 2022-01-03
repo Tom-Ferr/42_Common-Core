@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:40 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/29 19:53:45 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 17:33:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ private:
 	public:
 		virtual const char* what() const throw();
 	};
+    void checkSyntax(std::ifstream & ifs) const;
 public:
     Server(std::string const & path);
     ~Server();

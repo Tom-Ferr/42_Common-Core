@@ -6,23 +6,26 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 20:47:24 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 18:05:58 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <server.hpp>
+#include <iostream>
 
 Server::Server(std::string const & path){
     std::ifstream	ifs(path.c_str());
     if (!ifs)
         throw Server::FdFailedException();
+    checkSyntax(ifs);
 
     std::string line;
     size_t option ;
     
     while (std::getline(ifs, line, '{')){
     	if ((option = line.rfind("server")) < std::string::npos){
-            if ((option + 5) == line.find_last_not_of(" \n")){
+            if ( (option + 5) == line.find_last_not_of(" \t\n")
+            && option == line.find_first_not_of(" \t\n") ){
                 Config conf(ifs);
                 
                 size_t i = 0;
@@ -105,4 +108,34 @@ size_t Server::select(size_t const & i, std::string const & host) const{
             break ;
     }
     return j % _servers[i].size();
+};
+
+void Server::checkSyntax(std::ifstream  & ifs) const{
+    std::string line;
+    ssize_t bras = 0;
+    while (std::getline(ifs, line)){
+        size_t pos = 0;
+        while( (pos = line.find("{", pos) ) < std::string::npos ){
+            ++bras;
+            ++pos;
+        }
+        pos = 0;
+        while( (pos = line.find("}", pos) ) < std::string::npos ){
+            --bras;
+            ++pos;
+            if (bras < 0)
+                throw Server::SyntaxErrorException();
+        }
+        if( (bras == 0 && line.find("}") < std::string::npos)
+        && line.find(";") == std::string::npos)
+            throw Server::SyntaxErrorException();
+        if(line.find_first_not_of(" \n\t") < std::string::npos
+        && line.find_last_of("{};") == std::string::npos)
+            throw Server::SyntaxErrorException();
+    }
+    if (bras > 0)
+        throw Server::SyntaxErrorException();
+    ifs.clear();
+    ifs.seekg(std::ios_base::beg);
+    
 };
