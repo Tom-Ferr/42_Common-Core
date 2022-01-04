@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 14:11:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:26:15 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Req_Parser::Req_Parser(void){
 };
 
 Req_Parser::Req_Parser(Receive const & re)
-    : _req(re.bin()), _sock(re.getSock()), _body_len(0)  {
+    : _req(re.bin()), _sock(re.getSock()), _body_len(0), _bad(false)  {
 
     std::stringstream s_req(_req);
     std::string token;
@@ -56,13 +56,18 @@ Req_Parser::Req_Parser(Receive const & re)
             std::stringstream doi(token);
             std::getline(doi, data, ' ');
             std::getline(doi, data, ' ');
+            _s_blen = data;
             std::stringstream conv(data);
             conv >> _body_len;
         }
     }
+    if(_method.empty() || _file.empty() || _version.empty() || _host.empty())
+        _bad = true;
     
     if(!_method.compare("POST")){
-        if(!_trans_enc.compare("chunked"))
+        if(_s_blen.empty() && _trans_enc.empty())
+            _bad = true;
+        else if(!_trans_enc.compare("chunked"))
             unchunk();
         else
             readBody(_body_len);
@@ -131,6 +136,10 @@ std::string Req_Parser::getHost() const{
 
 size_t Req_Parser::getBodyLen() const{
     return _body_len;
+};
+
+bool Req_Parser::isBad() const{
+    return _bad;
 };
 
 void Req_Parser::readBody(size_t const & len){

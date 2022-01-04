@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 14:51:39 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:16:13 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,19 @@ Req_File::Req_File(void){
 Req_File::Req_File(Config const & conf, Req_Parser const & parser){
 
     bool is_allowed = false;
+
+    if(parser.isBad()){
+         _status = "400 Bad Request";
+        switch (!conf.getErrorPages().empty()){
+            case 1:
+                if (setErrorPage(conf.getErrorPages() + "/" + _status))
+                    break;
+            default:
+                _content = "<html><head><title>400 Bad Request</title></head><body><h1>Bad Request</h1><p>The request is not well formatted</p></body></html>";
+        }
+        _size = _content.length();
+        return ;
+    }
 
     if (conf.getAllowedMethods().size()){
         for (size_t i = 0; i < conf.getAllowedMethods().size(); i++){

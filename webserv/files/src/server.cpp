@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 18:05:58 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:57:03 by TomasFerraz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,28 +112,28 @@ size_t Server::select(size_t const & i, std::string const & host) const{
 
 void Server::checkSyntax(std::ifstream  & ifs) const{
     std::string line;
-    ssize_t bras = 0;
+    ssize_t bra = 0;
     while (std::getline(ifs, line)){
         size_t pos = 0;
         while( (pos = line.find("{", pos) ) < std::string::npos ){
-            ++bras;
+            ++bra;
             ++pos;
         }
         pos = 0;
         while( (pos = line.find("}", pos) ) < std::string::npos ){
-            --bras;
+            --bra;
             ++pos;
-            if (bras < 0)
+            if (bra < 0)
                 throw Server::SyntaxErrorException();
         }
-        if( (bras == 0 && line.find("}") < std::string::npos)
+        if( (bra == 0 && line.find("}") < std::string::npos)
         && line.find(";") == std::string::npos)
             throw Server::SyntaxErrorException();
         if(line.find_first_not_of(" \n\t") < std::string::npos
         && line.find_last_of("{};") == std::string::npos)
             throw Server::SyntaxErrorException();
     }
-    if (bras > 0)
+    if (bra > 0)
         throw Server::SyntaxErrorException();
     ifs.clear();
     ifs.seekg(std::ios_base::beg);
