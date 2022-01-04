@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 20:16:13 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/04 20:46:09 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,13 +182,18 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
 
 void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
     std::ofstream ofs;
-    // std::string path = conf.getRoot() + parser.getFile();
-    time_t now = time(NULL);
-    struct tm* hu = localtime(&now);
-    std::string req_time(asctime(hu));
-    req_time += suffix(parser.getType());
+    std::string path;
+    if(parser.getUpFname().empty()){
+        time_t now = time(NULL);
+        struct tm* hu = localtime(&now);
+        std::string req_time(asctime(hu));
+        req_time += suffix(parser.getType());
+        path = conf.getUpload() + "/" + req_time;
+    }
+    else
+        path = conf.getUpload() + "/" + parser.getUpFname();
 
-    ofs.open(conf.getUpload() + "/" + req_time , std::ios::binary);
+    ofs.open(path , std::ios::binary);
     if(!ofs.is_open()){
         _status = "404 Not Found";
         _content = "{\"success\":\"false\"}";
@@ -202,7 +207,7 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
     }
     else{
         ofs.write(parser.getBody().data(), parser.getBodyLen());
-        // _content = "{\"success\":\"true\"}";
+         _content = "{\"success\":\"true\"}";
         if(parser.getBodyLen())
             _status = "201 Created";
         else

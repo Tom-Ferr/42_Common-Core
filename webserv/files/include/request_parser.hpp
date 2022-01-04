@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 20:22:58 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/04 20:35:25 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ private:
     std::string _s_blen;
     std::string _host;
     std::string _trans_enc;
+    std::string _boundary;
+    std::string _up_fname;
     int         _sock;
     size_t      _body_len;
     bool      _bad;
@@ -51,6 +53,7 @@ public:
     std::string getMethod() const;
     std::string getBody() const;
     std::string getHost() const;
+    std::string getUpFname() const;
     size_t getBodyLen() const;
     bool isBad() const;
 };

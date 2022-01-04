@@ -6,11 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 20:26:15 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/04 20:35:29 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <request_parser.hpp>
+#include <iostream>
 
 Req_Parser::Req_Parser(void){
     return ;
@@ -45,6 +46,12 @@ Req_Parser::Req_Parser(Receive const & re)
             std::getline(doi, data, ' ');
             std::getline(doi, data, ' ');
             _type = data;
+            if (_type == "multipart/form-data;"){
+                // _type.erase(_type.rfind(";"), 1);
+                std::getline(doi, data, '=');
+                std::getline(doi, data, '\r');
+                _boundary = data;
+            }
         }
         else if(token.find("Transfer-Encoding") < std::string::npos){
             std::stringstream doi(token);
@@ -71,6 +78,36 @@ Req_Parser::Req_Parser(Receive const & re)
             unchunk();
         else
             readBody(_body_len);
+
+        if(_type ==  "multipart/form-data;" && !_bad){
+            _body.erase(_body.rfind(_boundary));
+            std::stringstream body_stream(_body);
+            std::string line;
+            while(std::getline(body_stream, line, '\r')){
+                if(line.find("Content-Type") < std::string::npos){
+                    std::stringstream doi(line);
+                    std::getline(doi, line, ' ');
+                    std::getline(doi, line, ' ');
+                    _type = line;
+                }
+                else if(line.find("Content-Disposition") < std::string::npos){
+                    std::stringstream doi(line);
+                    std::getline(doi, line, ' ');
+                    std::getline(doi, line, ' ');
+                    std::getline(doi, line, ' ');
+                    std::getline(doi, line, '"');
+                    std::getline(doi, line, '"');
+                    _up_fname = line;
+                }
+                else if(line == "\n")
+                    break ;
+            }
+            _body.erase(0, _body.find("\r\n\r\n")+4);
+            std::stringstream count(_body);
+            count.seekg(0, std::ios_base::end);
+            _body_len = count.tellg();
+            std::cout << _body_len << std::endl;
+        }
     }
 
 
@@ -132,6 +169,10 @@ std::string Req_Parser::getBody() const{
 
 std::string Req_Parser::getHost() const{
     return _host;
+};
+
+std::string Req_Parser::getUpFname() const{
+    return _up_fname;
 };
 
 size_t Req_Parser::getBodyLen() const{
