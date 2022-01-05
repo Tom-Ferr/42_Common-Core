@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/04 20:35:25 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/04 23:40:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ public:
     std::string getUpFname() const;
     size_t getBodyLen() const;
     bool isBad() const;
+    void parseBody();
 };
 
 #endif
