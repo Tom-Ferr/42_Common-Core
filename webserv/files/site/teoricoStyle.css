@@ -1,0 +1,37 @@
+body{
+  margin: 0px;
+  background-image: url(./img/atwork.png);
+  background-repeat: no-repeat;
+  background-size: 25%;
+  background-position: 50% -70%;
+  background-color: #f9ed6a;
+}
+
+nav{
+background-color: grey;
+opacity: 1;
+padding: 30px;
+}
+
+ul{position: relative;
+  list-style-type: none;
+  text-align: center;
+  color: pink;
+}
+
+li {
+    display: inline;
+    padding:  50px;
+}
+
+a:link , a:visited {
+  color: pink;
+  text-decoration: none;
+}
+
+a:hover{
+  color: white;
+}
+
+
+

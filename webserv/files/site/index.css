@@ -1,0 +1,99 @@
+body{
+  margin: 0;
+}
+
+.parallaxBackground{
+  background-image: url(./img/title_pic_low.jpg);
+  /* Set a specific height */
+  height: 1000px;
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  text-align: center;
+
+}
+
+.parallaxMusic {
+    /* The image used */
+    background-image: url(./img/score.jpg);
+
+    /* Set a specific height */
+    height: 830px;
+    width: 100%;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.parallaxVisual {
+    /* The image used */
+    background-image: url(./img/brush.jpg);
+
+    /* Set a specific height */
+    height: 830px;
+    width: 100%;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.parallaxTeorico {
+    /* The image used */
+    background-image: url(./img/books.jpg);
+
+    /* Set a specific height */
+    height: 830px;
+    width: 100%;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.titleTagg{
+  margin: 0px;
+  position: relative;
+  top: 200px;
+  font-size: 7vw;
+  animation:  fadeIn 7s;
+  color: white;
+
+}
+
+.tagg{
+  background: grey;
+  text-align: center;
+  padding: 50px;
+
+}
+
+a:link , a:visited {
+  color: white;
+  text-decoration: none;
+  font-size: 300%;
+  animation:  fadeIn 7s;
+  position: relative;
+
+}
+
+a:hover{
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from{opacity: 0;}
+
+  to{opacity: 1}
+}

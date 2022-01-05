@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/05 15:41:58 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/05 19:11:36 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,31 @@
 
 int main(int argc, char* argv[])
 {
-
-    if(argc > 2){
-        std::cout << "Too many arguments" << std::endl;
+    std::string config_dir("./configs/");
+    struct stat file_stat;
+    
+    stat(config_dir.c_str(), &file_stat);
+    if(!S_ISDIR(file_stat.st_mode)){
+        std::cout << "The configs dir is missing :(" << std::endl;
         return 1;
     }
+    
+    if(argc > 2){
+        std::cout << "Too many arguments" << std::endl;
+        return 2;
+    }
+    
     std::string config_path;
     if(argc > 1){
         config_path = argv[1];
+        std::string suff(".conf");
+        if(config_path.find("/") == std::string::npos)
+            config_path.insert(0, config_dir);
+        if(config_path.find(suff) == std::string::npos)
+            config_path.append(suff);
     }
     else
-        config_path = "default.conf";
+        config_path = "./configs/default.conf";
     
     try
     {
