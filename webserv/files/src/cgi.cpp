@@ -6,11 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:04:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/02 15:20:55 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/05 13:08:57 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cgi.hpp>
+#include <iostream>
 
 Cgi::Cgi(std::string const & target, std::string const & extra){
     FILE* pFile = tmpfile();
@@ -41,19 +42,35 @@ Cgi::Cgi(std::string const & target, std::string const & extra){
     int id = fork();
 
     if (id){
-        wait(NULL);
-        fseek (pFile , 0 , SEEK_END);
-        _size = ftell (pFile);
-        rewind (pFile);
-        char buffer[_size];
-        fread (buffer,1,_size,pFile);
-        _content.assign(buffer, _size);
-        fclose(pFile);
+        wait(&_status);
+        _status = WEXITSTATUS(_status);
+        std::cout << _status << std::endl;
+        switch (_status)
+        {
+        case 44:
+            break;
+        
+        case 52:
+            break;
+        
+        default:
+            fseek (pFile , 0 , SEEK_END);
+            _size = ftell (pFile);
+            rewind (pFile);
+            char buffer[_size];
+            fread (buffer,1,_size,pFile);
+            _content.assign(buffer, _size);
+            fclose(pFile);
+        }
     }
     else{
         dup2(tmpFd, 1);
+        std::ifstream ifs(cmd[1]);
+        if(!ifs)
+            exit(44);
+        ifs.close();
         execve(cmd[0], cmd, env);
-        exit(1);
+        exit(52);
     }
 };
 
@@ -79,4 +96,8 @@ size_t Cgi::getSize() const{
 
 std::string Cgi::getContent() const{
     return _content;
+};
+
+int Cgi::getStatus() const{
+    return _status;
 };

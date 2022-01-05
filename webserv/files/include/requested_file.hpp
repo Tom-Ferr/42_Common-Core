@@ -26,6 +26,7 @@ private:
     void readFile(std::ifstream & ifs);
     int setErrorPage(std::string const & path);
     std::string suffix(std::string type) const;
+    void loadErrorPage(std::string const & status, std::string const & msn, Config const & conf);
 public:
     Req_File(Config const & conf, Req_Parser const & parser);
     ~Req_File();

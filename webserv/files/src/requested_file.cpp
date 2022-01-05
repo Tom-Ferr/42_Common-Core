@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/04 20:46:09 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/05 13:24:59 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,7 @@ Req_File::Req_File(Config const & conf, Req_Parser const & parser){
     bool is_allowed = false;
 
     if(parser.isBad()){
-         _status = "400 Bad Request";
-        switch (!conf.getErrorPages().empty()){
-            case 1:
-                if (setErrorPage(conf.getErrorPages() + "/" + _status))
-                    break;
-            default:
-                _content = "<html><head><title>400 Bad Request</title></head><body><h1>Bad Request</h1><p>The request is not well formatted</p></body></html>";
-        }
-        _size = _content.length();
+        loadErrorPage("400 Bad Request", "The request is not well formatted", conf);
         return ;
     }
 
@@ -52,17 +44,8 @@ Req_File::Req_File(Config const & conf, Req_Parser const & parser){
         else if(!parser.getMethod().compare("DELETE"))
             isDELETE(conf, parser);
     }
-    else{
-        _status = "405 Not Allowed";
-        switch (!conf.getErrorPages().empty()){
-            case 1:
-                if (setErrorPage(conf.getErrorPages() + "/" + _status))
-                    break;
-            default:
-                _content = "<html><head><title>405 Not Allowed</title></head><body><h1>Not Allowed</h1><p>The request is not allowed</p></body></html>";
-        }
-        _size = _content.length();
-    }
+    else
+        loadErrorPage("405 Not Allowed", "The request is not allowed", conf);
 };
 
 Req_File::~Req_File(void){
@@ -110,6 +93,7 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
     if (!conf.getRedirection().empty()){
         target = conf.getRoot() + "/" + conf.getRedirection();
         _req_file = conf.getRedirection();
+        _status = "301 Moved Permanently";
     }
 
     else{
@@ -142,38 +126,33 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
             _content +=  "</pre><hr></body></html>";
             _status = "200 OK";
         }
-        else{
-            _status = "403 Forbidden";
-            switch (!conf.getErrorPages().empty()){
-                case 1:
-                    if (setErrorPage(conf.getErrorPages() + "/" + _status))
-                        break;
-                default:
-                    _content = "<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>You do not have permission to access the requested URL. " + parser.getFile() + " is forbidden for you!</p></body></html>";
-            }
-        }
-        _size = _content.length();
+        else
+            loadErrorPage("403 Forbidden", "You do not have permission to access the requested URL. " + parser.getFile() + " is forbidden for you!", conf);
     }
     else if(conf.checkCgi(parser.getFile())){
         Cgi cgi(target, parser.getExtra());
-        this->_content = cgi.getContent();
-        this->_size = cgi.getSize();
+        switch (cgi.getStatus()){
+        
+            case 44:
+                loadErrorPage("404 Not Found", "The requested URL " + parser.getFile() + " was not found on this server.", conf);
+                break;
+            case 52:
+                loadErrorPage("502 Bad Gateway", "The request was not completed. The server received an invalid response from the upstream server.", conf);
+                break;
+        
+            default:
+                _status = "200 OK";
+                this->_content = cgi.getContent();
+                this->_size = cgi.getSize();
+        }
     }
     else{
         ifs.open(target.c_str(), std::ifstream::binary);
-        if (!ifs.is_open()){
-            _status = "404 Not Found";
-            switch (!conf.getErrorPages().empty()){
-                case 1:
-                    if (setErrorPage(conf.getErrorPages() + "/" + _status))
-                     break;
-                default:
-                    _content = "<html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL " + parser.getFile() + " was not found on this server.</p></body></html>";
-            }
-            _size = _content.length();
-        }
+        if (!ifs.is_open())
+            loadErrorPage("404 Not Found", "The requested URL " + parser.getFile() + " was not found on this server.", conf);
         else{
-            _status = "200 OK";
+            if(_status.empty())
+                _status = "200 OK";
             readFile(ifs);
             ifs.close();
         }
@@ -192,29 +171,34 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
     }
     else
         path = conf.getUpload() + "/" + parser.getUpFname();
+    
+    std::ifstream ifs(path);
+    
+    if(ifs){
+        loadErrorPage("409 Conflict", "The request could not be completed because of a conflict.", conf);
+        ifs.close();
+    }
 
-    ofs.open(path , std::ios::binary);
-    if(!ofs.is_open()){
-        _status = "404 Not Found";
-        _content = "{\"success\":\"false\"}";
-        _size = _content.length();
-    }
-    else if(parser.getBodyLen() > conf.getMaxBody()){
-        _status = "431 Request Header Fields Too Large";
-        _content = "{\"success\":\"false\"}";
-        _size = _content.length();
-        ofs.close();
-    }
     else{
-        ofs.write(parser.getBody().data(), parser.getBodyLen());
-         _content = "{\"success\":\"true\"}";
-        if(parser.getBodyLen())
-            _status = "201 Created";
-        else
-            _status = "204 No Content";
-        _size = _content.length();
-        ofs.close();
+        ofs.open(path , std::ios::binary);
+        if(!ofs.is_open())
+            loadErrorPage("500 Internal Server Error", "Internal Server Error</h1><p>The request was not completed. The server met an unexpected condition.", conf);
+        else if(parser.getBodyLen() > conf.getMaxBody()){
+            loadErrorPage("431 Request Header Fields Too Large", "The server will not accept the request, because the request entity is too large.", conf);
+            ofs.close();
+        }
+        else{
+            ofs.write(parser.getBody().data(), parser.getBodyLen());
+             _content = "{\"success\":\"true\"}";
+            // if(parser.getBodyLen())
+                _status = "201 Created";
+            // else
+            //     _status = "204 No Content";
+            _size = _content.length();
+            ofs.close();
+        }
     }
+
 };
 
 void Req_File::isDELETE(Config const & conf, Req_Parser const & parser){
@@ -268,4 +252,19 @@ std::string Req_File::suffix(std::string type) const{
         return (".html");
     else
         return ("");
-}
+};
+
+void Req_File::loadErrorPage(std::string const & status, std::string const & msn, Config const & conf){
+    _status = status;
+    std::string status_name(status);
+    status_name.erase(0, 4);
+
+    switch (!conf.getErrorPages().empty()){
+        case 1:
+            if (setErrorPage(conf.getErrorPages() + "/" + status))
+             break;
+        default:
+            _content = "<html><head><title>" + status + "</title></head><body><h1>"+ status_name + "</h1><p>" + msn + "</p></body></html>";
+    }
+     _size = _content.length();
+};
