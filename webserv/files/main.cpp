@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/04 00:27:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/05 15:41:58 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,14 @@ int main(int argc, char* argv[])
         {
             std::cout << "\n+++ Waiting for new connection +++\n" << std::endl;
             Poll poll(serv);
+            switch (poll.status()){
+                case 0:
+                    std::cout << "\n* Poll Timed Out *\n" << std::endl;
+                case -1:
+                    continue ;
+                default:
+                    break;
+            }
             size_t i = poll.getSelected();
             Accept  a(serv.getSock(i), serv.getBind(i));
             Receive recv(a.getSock());

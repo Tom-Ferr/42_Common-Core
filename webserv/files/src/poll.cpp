@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 20:51:05 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 20:40:38 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/05 13:52:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ Poll::Poll(Server const & serv){
         pfds[i].fd = serv.getSock(i);
         pfds[i].events = POLLIN;
     }
-    poll(pfds, serv.getSize(), 50000);
-    for (size_t i = 0; i < serv.getSize(); ++i){
-        if (pfds[i].revents == POLLIN){
-            _selected = i;
-            break ;
+    if ((_status = poll(pfds, serv.getSize(), 50000)) > 0){
+        for (size_t i = 0; i < serv.getSize(); ++i){
+            if (pfds[i].revents == POLLIN){
+                _selected = i;
+                break ;
+            }
         }
     }
 };
@@ -45,4 +46,8 @@ Poll & Poll::operator=(Poll const & rhs){
 
 size_t Poll::getSelected() const{
     return _selected;
+};
+
+int Poll::status() const{
+    return _status;
 };

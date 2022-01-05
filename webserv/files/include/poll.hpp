@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 20:42:11 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/30 20:38:16 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/05 13:52:58 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ class Poll
 {
 private:
     size_t  _selected;
+    int  _status;
     Poll(void);
 public:
     Poll(Server const & serv);
@@ -30,6 +31,7 @@ public:
     Poll & operator=(Poll const & rhs);
 
     size_t getSelected() const;
+    int status() const;
 };
 
 #endif

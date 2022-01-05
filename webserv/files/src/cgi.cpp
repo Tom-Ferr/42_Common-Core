@@ -6,12 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:04:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/05 13:08:57 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/05 15:39:16 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cgi.hpp>
-#include <iostream>
 
 Cgi::Cgi(std::string const & target, std::string const & extra){
     FILE* pFile = tmpfile();
@@ -25,7 +24,7 @@ Cgi::Cgi(std::string const & target, std::string const & extra){
     std::string cgi;
     size_t pos = target.rfind(".");
     if (!target.compare(pos, std::string::npos, ".php"))
-        cgi = "/usr/bin/php";
+        cgi = "/usr/bin/php-cgi";
     else if (!target.compare(pos, std::string::npos, ".py"))
         cgi = "/usr/local/bin/python3";
     else
@@ -44,7 +43,6 @@ Cgi::Cgi(std::string const & target, std::string const & extra){
     if (id){
         wait(&_status);
         _status = WEXITSTATUS(_status);
-        std::cout << _status << std::endl;
         switch (_status)
         {
         case 44:

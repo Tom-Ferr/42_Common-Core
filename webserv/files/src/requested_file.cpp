@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/05 13:24:59 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/05 15:38:50 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
             }
             _content +=  "</pre><hr></body></html>";
             _status = "200 OK";
+            _size = _content.length();
         }
         else
             loadErrorPage("403 Forbidden", "You do not have permission to access the requested URL. " + parser.getFile() + " is forbidden for you!", conf);
