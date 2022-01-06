@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 14:25:26 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/06 11:10:31 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,11 +212,31 @@ void Config::parseConfig(std::istream & ifs){
 
 const Config & Config::select(std::string const & dir) const{
     size_t index = 0;
+    size_t max = 0;
     if(_locations.size()){
         for (size_t i = 0; i < _locations.size(); ++i){
-            if (_locations.at(i).getTag() == dir || _locations.at(i).getTag() + "/" == dir){
+            std::string name = _locations.at(i).getTag();
+            if (name == dir || name + "/" == dir){
                 index = i;
                 break ;
+            }
+            if (name.find("*", 0, 1) == 0){
+                    name.erase(0, 1);
+                if(dir.rfind(name.c_str(), dir.length() - 1, name.length()) < std::string::npos){
+                    if(name.length() > max){
+                        index = i;
+                        max = name.length();
+                    }
+                }
+            }
+            else if (name.rfind("*", name.length() - 1, 1) ==  name.length() - 1){
+                name.erase(name.length() - 1, 1);
+                if(dir.rfind(name.c_str(), 0, name.length()) < std::string::npos){
+                    if(name.length() > max){
+                        index = i;
+                        max = name.length();
+                    }
+                }
             }
         }
         return _locations[index] ;
