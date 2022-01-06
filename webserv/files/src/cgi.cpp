@@ -6,27 +6,29 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:04:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/05 15:39:16 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/06 19:24:39 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cgi.hpp>
 
-Cgi::Cgi(std::string const & target, std::string const & extra){
+Cgi::Cgi(std::string const & target, Req_Parser const & parser){
     FILE* pFile = tmpfile();
     int tmpFd = fileno(pFile);
     
-    std::string s1 = "PATH_INFO=" + extra;
-    char* env[2];
+    std::string s1 = "PATH_INFO=" + parser.getExtra();
+    std::string s2 = "QUERY_STRING=" + parser.getQuery();
+    char* env[3];
     env[0] = const_cast<char*>(s1.c_str());
-    env[1] = NULL;
+    env[1] = const_cast<char*>(s2.c_str());
+    env[2] = NULL;
     
     std::string cgi;
     size_t pos = target.rfind(".");
     if (!target.compare(pos, std::string::npos, ".php"))
         cgi = "/usr/bin/php-cgi";
     else if (!target.compare(pos, std::string::npos, ".py"))
-        cgi = "/usr/local/bin/python3";
+        cgi = "/usr/bin/python";
     else
         cgi = target;
 
@@ -55,10 +57,11 @@ Cgi::Cgi(std::string const & target, std::string const & extra){
             fseek (pFile , 0 , SEEK_END);
             _size = ftell (pFile);
             rewind (pFile);
-            char buffer[_size];
+            char* buffer = new char[_size];
             fread (buffer,1,_size,pFile);
             _content.assign(buffer, _size);
             fclose(pFile);
+            delete [] buffer;
         }
     }
     else{

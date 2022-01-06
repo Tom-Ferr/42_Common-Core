@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:32:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/04 23:40:53 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/06 19:05:06 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ private:
     std::string _method;
     std::string _file;
     std::string _extra;
+    std::string _query;
     std::string _version;
     std::string _type;
     std::string _body;
@@ -54,6 +55,7 @@ public:
     std::string getBody() const;
     std::string getHost() const;
     std::string getUpFname() const;
+    std::string getQuery() const;
     size_t getBodyLen() const;
     bool isBad() const;
     void parseBody();

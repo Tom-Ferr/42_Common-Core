@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/05 15:38:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/06 19:08:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void Req_File::isGET(Config const & conf, Req_Parser const & parser){
             loadErrorPage("403 Forbidden", "You do not have permission to access the requested URL. " + parser.getFile() + " is forbidden for you!", conf);
     }
     else if(conf.checkCgi(parser.getFile())){
-        Cgi cgi(target, parser.getExtra());
+        Cgi cgi(target, parser);
         switch (cgi.getStatus()){
         
             case 44:
@@ -233,9 +233,10 @@ void Req_File::readFile(std::ifstream & ifs){
     ifs.seekg(0, ifs.end);
     _size = ifs.tellg();
     ifs.seekg(0, ifs.beg);
-    char buffer[_size];
+    char* buffer = new char[_size];
     ifs.read(buffer, _size);
     _content.assign(buffer, _size);
+    delete [] buffer;
 };
 
 std::string Req_File::suffix(std::string type) const{

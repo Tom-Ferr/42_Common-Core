@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/05 00:38:51 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/06 19:04:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,13 @@ Req_Parser::Req_Parser(Receive const & re)
     }
 
 
-    size_t pos = _file.find(".");
+    size_t pos = _file.find("?");
+    if(pos < std::string::npos){
+        _query = _file;
+        _query.erase(0, pos);
+        _file.erase(pos);
+    }
+    pos = _file.find(".");
     size_t extra = _file.find("/", pos);
     if(extra < std::string::npos){
         _extra = _file;
@@ -105,12 +111,18 @@ Req_Parser & Req_Parser::operator=(Req_Parser const & rhs){
         this->_req = rhs._req;
         this->_method = rhs._method;
         this->_file = rhs._file;
+        this->_extra = rhs._extra;
+        this->_query = rhs._query;
         this->_version = rhs._version;
         this->_type = rhs._type;
         this->_body = rhs._body;
         this->_host = rhs._host;
         this->_trans_enc = rhs._trans_enc;
+        this->_boundary = rhs._boundary;
+        this->_up_fname = rhs._up_fname;
+        this->_sock = rhs._sock;
         this->_body_len = rhs._body_len;
+        this->_bad = rhs._bad;
     }
     return *this;
 };
@@ -121,6 +133,10 @@ std::string Req_Parser::getFile() const{
 
 std::string Req_Parser::getExtra() const{
     return _extra;
+};
+
+std::string Req_Parser::getQuery() const{
+    return _query;
 };
 
 std::string Req_Parser::getVersion() const{
@@ -159,10 +175,11 @@ void Req_Parser::readBody(size_t const & len){
     
     size_t not_read = len;      
     while(not_read > 0){
-        char buffer[not_read];
+        char* buffer = new char[not_read];
         size_t bytes = recv(_sock, buffer, not_read, 0);
         _body.append(buffer, bytes);
         not_read -= bytes;
+        delete [] buffer;
     }
 };
 

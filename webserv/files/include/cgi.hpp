@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:02:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/05 12:57:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/06 19:06:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <cstdio>
 # include <string>
 # include <fstream>
+# include <request_parser.hpp>
 
 class Cgi
 {
@@ -28,7 +29,7 @@ private:
 
     Cgi(void);
 public:
-    Cgi(std::string const & target, std::string const & extra);
+    Cgi(std::string const & target, Req_Parser const & parser);
     ~Cgi();
     Cgi(Cgi const & src);
     Cgi & operator=(Cgi const & rhs);
