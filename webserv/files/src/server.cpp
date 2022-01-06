@@ -6,12 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 20:57:03 by TomasFerraz      ###   ########.fr       */
+/*   Updated: 2022/01/06 10:15:29 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <server.hpp>
-#include <iostream>
 
 Server::Server(std::string const & path){
     std::ifstream	ifs(path.c_str());
@@ -103,11 +102,32 @@ Bind Server::getBind(size_t const & i) const{
 size_t Server::select(size_t const & i, std::string const & host) const{
 
     size_t j = 0;
+    size_t selected = 0;
+    size_t max = 0;
     for(; j < _servers[i].size(); ++j){
-        if (_servers[i].at(j).getServerName() == host)
-            break ;
+        std::string name = _servers[i].at(j).getServerName();
+        if (name == host)
+            return j % _servers[i].size();
+        if (name.find("*", 0, 1) == 0){
+            name.erase(0, 1);
+            if(host.rfind(name.c_str(), host.length() - 1, name.length()) < std::string::npos){
+                if(name.length() > max){
+                    selected = j;
+                    max = name.length();
+                }
+            }
+        }
+        else if (name.rfind("*", name.length() - 1, 1) ==  name.length() - 1){
+            name.erase(name.length() - 1, 1);
+            if(host.rfind(name.c_str(), 0, name.length()) < std::string::npos){
+                if(name.length() > max){
+                    selected = j;
+                    max = name.length();
+                }
+            }
+        }
     }
-    return j % _servers[i].size();
+    return selected % _servers[i].size();
 };
 
 void Server::checkSyntax(std::ifstream  & ifs) const{
