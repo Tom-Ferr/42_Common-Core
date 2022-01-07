@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:02:18 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/06 19:06:47 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/07 09:15:57 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <sys/wait.h>
 # include <unistd.h>
+# include <stdlib.h>
 # include <cstdio>
 # include <string>
 # include <fstream>

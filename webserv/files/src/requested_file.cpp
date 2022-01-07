@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/06 19:08:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/07 09:15:41 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
     else
         path = conf.getUpload() + "/" + parser.getUpFname();
     
-    std::ifstream ifs(path);
+    std::ifstream ifs(path.c_str());
     
     if(ifs){
         loadErrorPage("409 Conflict", "The request could not be completed because of a conflict.", conf);
@@ -181,7 +181,7 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
     }
 
     else{
-        ofs.open(path , std::ios::binary);
+        ofs.open(path.c_str() , std::ios::binary);
         if(!ofs.is_open())
             loadErrorPage("500 Internal Server Error", "Internal Server Error</h1><p>The request was not completed. The server met an unexpected condition.", conf);
         else if(parser.getBodyLen() > conf.getMaxBody()){
