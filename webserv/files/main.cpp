@@ -6,19 +6,26 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:55:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/05 19:11:36 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/08 11:40:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
+#include <server.hpp>
+#include <poll.hpp>
 #include <accept.hpp>
+#include <receive.hpp>
 #include <requested_file.hpp>
 #include <response.hpp>
-#include <server.hpp>
-#include <receive.hpp>
-#include <poll.hpp>
-#include <iostream>
-#include <unistd.h>
+#include <send.hpp>
+
+Server serv;
+
+void	sig_handle(int signus){
+    for(size_t i = 0; i < serv.getSize(); ++i)
+        close(serv.getSock(i));
+    exit(signus);
+};
 
 int main(int argc, char* argv[])
 {
@@ -50,10 +57,11 @@ int main(int argc, char* argv[])
     
     try
     {
-        Server serv(config_path);
+        serv.start(config_path);
 
         while (1)
         {
+            signal(SIGINT, &sig_handle);
             std::cout << "\n+++ Waiting for new connection +++\n" << std::endl;
             Poll poll(serv);
             switch (poll.status()){
@@ -82,14 +90,9 @@ int main(int argc, char* argv[])
             Req_File file(conf_l, req);
             Response res(file, req);
             std::cout << recv.bin() << std::endl;
-            send(a.getSock() , res.getResponse().data() , res.getSize(), 0);
-            while (file.getSize() > 0) {
-                size_t bytes = send(a.getSock(), file.getContent().data(), file.getSize(), 0);
-                file.resize(bytes);
-            }
-            std::cout << "------Response sent------" << std::endl;
-            close(a.getSock());
+            Send send(a, res, file);
         }
+        
     }
     catch(std::exception & e)
     {
@@ -97,4 +100,4 @@ int main(int argc, char* argv[])
         return 2;
     }
     return 0;
-}
+};

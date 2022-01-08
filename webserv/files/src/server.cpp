@@ -6,13 +6,17 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:15 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/06 10:15:29 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/08 11:44:12 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <server.hpp>
 
-Server::Server(std::string const & path){
+Server::Server(void){
+    return ;
+};
+
+void Server::start(std::string const & path){
     std::ifstream	ifs(path.c_str());
     if (!ifs)
         throw Server::FdFailedException();

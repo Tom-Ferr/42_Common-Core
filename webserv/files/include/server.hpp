@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 14:32:40 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/03 17:33:53 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/08 11:26:11 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ private:
     std::vector<Socket>                         _sockets;
     std::vector<Bind>                           _binds;
     
-    Server(void);
     class FdFailedException : public std::exception
 	{
 	public:
@@ -41,13 +40,14 @@ private:
 	};
     void checkSyntax(std::ifstream & ifs) const;
 public:
-    Server(std::string const & path);
+    Server(void);
     ~Server();
     Server(Server const & src);
     Server & operator=(Server const & rhs);
 
      std::vector<Config> & operator[](size_t const & i);
 
+    void start(std::string const & path);
     size_t getSize() const;
     int getSock(size_t const & i) const;
     Bind getBind(size_t const & i) const;

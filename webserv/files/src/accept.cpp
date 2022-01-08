@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/28 11:23:14 by tde-cama          #+#    #+#             */
-/*   Updated: 2021/12/28 23:30:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/07 21:35:16 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ Accept::Accept(int const & sock, Bind const & bind){
     if ((_fd = accept(sock, bind.getSockAddress(), bind.getSockLen())) < 0){
         throw Accept::FdFailedException();
     }
-    // fcntl(_fd, F_SETFL, O_NONBLOCK);
+    fcntl(_fd, F_SETFL, O_NONBLOCK);
+    #ifndef  _LINUX_
+        int set = 1;
+        setsockopt(_fd, SOL_SOCKET, SO_NOSIGPIPE, (void *)&set, sizeof(int));
+    #endif
 };
 
 Accept::~Accept(void){
