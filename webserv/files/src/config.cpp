@@ -6,11 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/06 11:10:31 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/09 01:26:31 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <config.hpp>
+#include <iostream>
 
 Config::Config(void){
     return ;
@@ -21,9 +22,18 @@ Config::Config(std::istream & ifs)
         parseConfig(ifs);
 };
 
-Config::Config(std::istream & block, Config const & mother)
-    :  _dir_indexing(false), _client_max_body_size(ULLONG_MAX), _root(mother.getRoot()),
-    _error_page(mother.getErrorPages()), _upload(mother.getUpload()){
+Config::Config(std::istream & block, Config const & mother){
+        this->_dir_indexing = mother._dir_indexing;
+        this->_host = mother._host;
+        this->_root = mother._root;
+        this->_index = mother._index;
+        this->_error_page = mother._error_page;
+        this->_client_max_body_size = mother._client_max_body_size;
+        this->_port = mother._port;
+        this->_redirection = mother._redirection;
+        this->_allowed_methods  = mother._allowed_methods;
+        this->_cgi_list  = mother._cgi_list;
+        this->_upload  = mother._upload;
         parseConfig(block);
 };
 
@@ -119,7 +129,9 @@ void Config::parseConfig(std::istream & ifs){
     while (std::getline(ifs, line, ';')){
         std::stringstream token;
         token << line;
-        if(line.find("#") < std::string::npos){
+        size_t sharp;
+        if((sharp = line.find_first_not_of(" \n\0\t")) < std::string::npos
+        && line.at(sharp) == '#'){
             std::getline(ifs, line, '\n');
             continue ;
         }
@@ -161,9 +173,12 @@ void Config::parseConfig(std::istream & ifs){
                 _server_name = line;
             }
             else if (!line.compare("location")){
-                std::getline(token, line, ' ');
-                std::string loc = line;
                 std::getline(token, line, '{');
+                size_t pos;
+                if((pos = line.find_last_not_of(" \t")) < std::string::npos
+                && pos != line.length()-1)
+                    line.erase(pos + 1);
+                std::string loc = line;
                 std::getline(ifs, line, '}');
                 token << ";";
                 token << line;
@@ -216,7 +231,7 @@ const Config & Config::select(std::string const & dir) const{
     if(_locations.size()){
         for (size_t i = 0; i < _locations.size(); ++i){
             std::string name = _locations.at(i).getTag();
-            if (name == dir || name + "/" == dir){
+            if (name == dir || (name + "/") == dir){
                 index = i;
                 break ;
             }

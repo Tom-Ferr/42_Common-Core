@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/07 09:15:41 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/08 23:45:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,7 @@ void Req_File::loadErrorPage(std::string const & status, std::string const & msn
     _status = status;
     std::string status_name(status);
     status_name.erase(0, 4);
+    _req_file = "";
 
     switch (!conf.getErrorPages().empty()){
         case 1:

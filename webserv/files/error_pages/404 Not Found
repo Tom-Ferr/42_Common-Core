@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>
+            This is a non default page
+        </title>
+    </head>
+    <body>
+        <h1>
+            404 Not Found
+        </h1>
+        <p>
+            Congrats, you've loaded a custom page!
+        </p>
+    </body>
+</html>
