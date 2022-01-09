@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:04:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/06 19:24:39 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/09 12:20:06 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@ Cgi::Cgi(std::string const & target, Req_Parser const & parser){
     
     std::string s1 = "PATH_INFO=" + parser.getExtra();
     std::string s2 = "QUERY_STRING=" + parser.getQuery();
-    char* env[3];
+    std::string s3 = "HTTP_HOST=" + parser.getHost();
+    char* env[4];
     env[0] = const_cast<char*>(s1.c_str());
     env[1] = const_cast<char*>(s2.c_str());
-    env[2] = NULL;
+    env[2] = const_cast<char*>(s3.c_str());
+    env[3] = NULL;
     
     std::string cgi;
     size_t pos = target.rfind(".");
@@ -33,11 +35,16 @@ Cgi::Cgi(std::string const & target, Req_Parser const & parser){
         cgi = target;
 
     char* cmd[3];
+    int i;
     cmd[0] = const_cast<char*>(cgi.c_str());
-    if (cgi != target)
+    if (cgi != target){
         cmd[1] = const_cast<char*>(target.c_str());
-    else
+        i = 1;
+    }
+    else{
         cmd[1] = NULL;
+        i = 0;
+    }
     cmd[2] = NULL;
 
     int id = fork();
@@ -66,7 +73,7 @@ Cgi::Cgi(std::string const & target, Req_Parser const & parser){
     }
     else{
         dup2(tmpFd, 1);
-        std::ifstream ifs(cmd[1]);
+        std::ifstream ifs(cmd[i], std::ios::binary);
         if(!ifs)
             exit(44);
         ifs.close();

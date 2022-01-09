@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/09 01:26:31 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/09 10:03:44 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,7 @@ const Config & Config::select(std::string const & dir) const{
     if(_locations.size()){
         for (size_t i = 0; i < _locations.size(); ++i){
             std::string name = _locations.at(i).getTag();
-            if (name == dir || (name + "/") == dir){
+            if (name == dir || name + "/" == dir){
                 index = i;
                 break ;
             }

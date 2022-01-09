@@ -6,11 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/08 23:45:37 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/09 10:58:13 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <requested_file.hpp>
+#include <iostream>
 
 Req_File::Req_File(void){
     return ;
@@ -26,7 +27,7 @@ Req_File::Req_File(Config const & conf, Req_Parser const & parser){
     }
 
     if (conf.getAllowedMethods().size()){
-        for (size_t i = 0; i < conf.getAllowedMethods().size(); i++){
+        for (size_t i = 0; i < conf.getAllowedMethods().size(); ++i){
             if (parser.getMethod() == conf.getAllowedMethods().at(i)){
                 is_allowed = true;
                 break ;
@@ -174,20 +175,18 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
         path = conf.getUpload() + "/" + parser.getUpFname();
     
     std::ifstream ifs(path.c_str());
-    
-    if(ifs){
+    std::cout << parser.getBodyLen() << " / " << conf.getMaxBody() << std::endl;
+    if(parser.getBodyLen() > conf.getMaxBody()){
+        loadErrorPage("431 Request Header Fields Too Large", "The server will not accept the request, because the request entity is too large.", conf);
+    }
+    else if(ifs){
         loadErrorPage("409 Conflict", "The request could not be completed because of a conflict.", conf);
         ifs.close();
     }
-
     else{
         ofs.open(path.c_str() , std::ios::binary);
         if(!ofs.is_open())
             loadErrorPage("500 Internal Server Error", "Internal Server Error</h1><p>The request was not completed. The server met an unexpected condition.", conf);
-        else if(parser.getBodyLen() > conf.getMaxBody()){
-            loadErrorPage("431 Request Header Fields Too Large", "The server will not accept the request, because the request entity is too large.", conf);
-            ofs.close();
-        }
         else{
             ofs.write(parser.getBody().data(), parser.getBodyLen());
              _content = "{\"success\":\"true\"}";
