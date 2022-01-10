@@ -6,12 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:39:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/09 10:58:13 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/09 13:45:17 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <requested_file.hpp>
-#include <iostream>
 
 Req_File::Req_File(void){
     return ;
@@ -175,7 +174,6 @@ void Req_File::isPOST(Config const & conf, Req_Parser const & parser){
         path = conf.getUpload() + "/" + parser.getUpFname();
     
     std::ifstream ifs(path.c_str());
-    std::cout << parser.getBodyLen() << " / " << conf.getMaxBody() << std::endl;
     if(parser.getBodyLen() > conf.getMaxBody()){
         loadErrorPage("431 Request Header Fields Too Large", "The server will not accept the request, because the request entity is too large.", conf);
     }
