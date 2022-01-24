@@ -1,0 +1,19 @@
+{
+  "name": "files",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/p5": "^1.3.3",
+    "parcel": "^2.2.1"
+  },
+  "dependencies": {
+    "p5": "^1.4.0"
+  }
+}
