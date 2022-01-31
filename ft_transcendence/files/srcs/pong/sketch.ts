@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:30 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/24 18:25:52 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/31 11:41:16 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,19 @@ const sketch = (p5: P5) => {
     p5.background(0)
     displayLine(p5)
     displayScore(p5)
-    player1.update(p5)
-    player2.update(p5)
-    ball.update(p5, player1, player2)
+    if(player1.score < 10 && player2.score < 10){
+      player1.update(p5)
+      player2.update(p5)
+      ball.update(p5, player1, player2)
+    }
+    else{
+      p5.textSize(p5.windowWidth * p5.windowHeight * 0.5/10000)
+      p5.fill(255)
+      if(player1.score >= 10)
+        p5.text("Player 1 Wins", p5.windowWidth * 20/100, p5.windowHeight * 50/100) 
+      else
+        p5.text("Player 2 Wins", p5.windowWidth * 60/100, p5.windowHeight * 50/100) 
+    }
   } 
 
   p5.keyPressed = () => {
@@ -60,4 +70,6 @@ const sketch = (p5: P5) => {
   }
 
 };
-const myp5 = new P5(sketch)
+// const myp5 = new P5(sketch)
+
+export default sketch

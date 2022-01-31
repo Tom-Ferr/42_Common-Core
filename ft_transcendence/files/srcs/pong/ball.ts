@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:26 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/24 23:30:19 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/01/26 12:41:48 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ export class Ball{
     x: number
     y: number
     width: number
-    private height: number
     xSpeed: number
     ySpeed: number
     radius: number
@@ -29,7 +28,6 @@ export class Ball{
         this.x = p5.windowWidth / 2
         this.y = p5.windowHeight / 2
         this.width = player1.height * 15/100
-        this.height = this.width
         this.radius = this.width / 2
         this.winHeight = p5.windowHeight
         this.start(p5)
@@ -51,20 +49,10 @@ export class Ball{
            this.move()
         else
             this.reset(p5, player1, player2)
-        if(this.x >= player1.x){
-            if(this.x - this.radius <= player1.x + player1.width && this.y >= player1.y && this.y <= player1.y + player1.height ){
-               this.reflect(p5) 
-            }
-
-        }
-        if(this.x <= player2.x + player2.width){
-            if(this.x + this.radius >= player2.x && this.y >= player2.y && this.y <= player2.y + player2.height ){
-               this.reflect(p5) 
-            }
-        }
-        // if (this.y + this.radius >= player2.y && this.x + this.radius >= player2.x)
-        //     this.ySpeed *= -1
-
+        if(this.hitPlayer1(player1))
+            this.reflect(p5, player1)
+        else if(this.hitPlayer2(player2))
+            this.reflect(p5, player2) 
         this.display(p5)
     }
 
@@ -80,16 +68,20 @@ export class Ball{
 
     start = (p5: P5) => {
         const m: number[] = [-1, 1]
-        this.xSpeed = p5.random(p5.windowWidth * 0.5/100, p5.windowWidth * 1.5/100)
-        this.ySpeed = p5.random(p5.windowHeight * 0.25/100, p5.windowHeight * 1.5/100)
+        this.xSpeed = p5.random(p5.windowWidth * 0.5/100, p5.windowWidth * 1/100)
+        this.ySpeed = p5.random(p5.windowHeight * 0.15/100, p5.windowHeight * 1/100)
         this.xSpeed *= p5.random(m) 
         this.ySpeed *= p5.random(m) 
     }
 
-    reflect = (p5: P5) => {
+    reflect = (p5: P5, player: Paddle) => {
+        if(this.y <= (player.y + player.height) * 30 / 100 && this.ySpeed > 0)
+            this.ySpeed *= -1
+        else if(this.y >= (player.y + player.height) * 70 / 100 && this.ySpeed <  0)
+            this.ySpeed *= -1
         this.xSpeed *= -1 
-        this.xSpeed += p5.random(-1, 2)
-        this.ySpeed += p5.random(-1, 2)
+        this.xSpeed += p5.random(5, 15) / 100 * this.xSpeed
+        this.ySpeed += p5.random(5, 15) / 100 * this.ySpeed
     }
 
     reset = (p5: P5, player1: Paddle, player2: Paddle) => {
@@ -100,6 +92,26 @@ export class Ball{
         this.x = p5.windowWidth / 2
         this.y = p5.windowHeight / 2 
         this.start(p5)
+    }
+
+    hitPlayer1 = (player1: Paddle): boolean => {
+        if(this.x >= player1.x){
+            if(this.x - this.radius <= player1.x + player1.width && this.onPaddle(player1))
+               return true 
+        }
+        return false
+    }
+    hitPlayer2 = (player2: Paddle): boolean => {
+        if(this.x <= player2.x + player2.width){
+            if(this.x + this.radius >= player2.x && this.y >= player2.y && this.onPaddle(player2))
+               return true 
+        }
+        return false
+    }
+    onPaddle = (player: Paddle): boolean => {
+        if(this.y >= player.y && this.y <= player.y + player.height) 
+            return true
+        return false
     }
     
 };
