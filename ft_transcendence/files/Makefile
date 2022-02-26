@@ -6,17 +6,17 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/24 18:12:12 by tde-cama          #+#    #+#              #
-#    Updated: 2022/01/24 18:15:08 by tde-cama         ###   ########.fr        #
+#    Updated: 2022/02/13 17:45:18 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 
 all:
-	docker-compose -f ./srcs/docker-compose.yml up -d --build
+	docker-compose -f ./server/src/docker-compose.yml up -d --build
 
 stop:
-		docker-compose -f ./srcs/docker-compose.yml down
+		docker-compose -f ./server/src/docker-compose.yml down
 
 clean:	stop
 		docker system prune -a --force
