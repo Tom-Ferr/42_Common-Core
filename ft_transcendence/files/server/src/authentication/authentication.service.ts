@@ -7,6 +7,7 @@ import { TokenPayload } from "./tokenPayload.interface";
 import { RegisterDto } from "./dto/register.dto";
 import PostgresErrorCode from '../database/postgresErrorCode.enum';
 
+@Injectable()
 export class AuthenticationService {
     constructor(
       private readonly usersService: UsersService,
