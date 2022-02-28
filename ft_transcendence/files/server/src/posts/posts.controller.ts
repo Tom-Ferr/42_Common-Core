@@ -4,6 +4,7 @@ import {CreatePostDto} from './dto/createPost.dto';
 import {UpdatePostDto} from './dto/updatePost.dto';
 import { JwtAuthenticationGuard } from '../authentication/jwt-authentication.guard';
 import FindOneParams from 'src/utils/findOneParams';
+import JwtTwoFactorGuard from 'src/authentication/jwt-two-factor.guard';
 
 @Controller('posts')
 export default class PostsController {
@@ -22,10 +23,11 @@ export default class PostsController {
   }
  
   @Post()
-  @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(JwtTwoFactorGuard)
   async createPost(@Body() post: CreatePostDto) {
     return this.postsService.createPost(post);
   }
+  
  
   @Put(':id')
   async replacePost(@Param('id') id: string, @Body() post: UpdatePostDto) {

@@ -9,11 +9,29 @@ import PostgresErrorCode from '../database/postgresErrorCode.enum';
 
 @Injectable()
 export class AuthenticationService {
-    constructor(
-      private readonly usersService: UsersService,
-      private readonly jwtService: JwtService,
-      private readonly configService: ConfigService
-    ) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
+  ) {}
+  
+  public async getUserFromAuthenticationToken(token: string) {
+    const payload: TokenPayload = this.jwtService.verify(token, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET')
+    });
+    if (payload.userId) {
+      return this.usersService.getById(payload.userId);
+    }
+  }
+
+  public getCookieWithJwtAccessToken(userId: number, isSecondFactorAuthenticated = false) {
+    const payload: TokenPayload = { userId, isSecondFactorAuthenticated };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`
+    });
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}`;
+  }
 
     public async register(registrationData: RegisterDto) {
       const hashedPassword = await bcrypt.hash(registrationData.password, 10);

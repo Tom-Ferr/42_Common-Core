@@ -5,17 +5,20 @@ import { RequestWithUser } from './requestWithUser.interface';
 import { LocalAuthenticationGuard } from './localAuthentication.guard';
 import { Response } from 'express';
 import { JwtAuthenticationGuard } from './jwt-authentication.guard';
+import { UsersService } from 'src/users/users.service';
  
 @Controller('authentication')
 export class AuthenticationController {
   constructor(
-    private readonly authenticationService: AuthenticationService
+    private readonly authenticationService: AuthenticationService,
+    private readonly usersService: UsersService,
   ) {}
  
   @Post('register')
   async register(@Body() registrationData: RegisterDto) {
     return this.authenticationService.register(registrationData);
   }
+  
   
   
   @HttpCode(200)
@@ -26,8 +29,13 @@ export class AuthenticationController {
     const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
     response.setHeader('Set-Cookie', cookie);
     user.password = undefined;
+    if (user.isTwoFactorAuthenticationEnabled) {
+      return response.send();
+    }
+
     return response.send(user); 
   }
+  
   @UseGuards(JwtAuthenticationGuard)
   @Post('log-out')
   async logOut(@Req() request: RequestWithUser, @Res() response: Response) {

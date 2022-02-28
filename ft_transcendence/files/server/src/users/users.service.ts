@@ -10,6 +10,23 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>
   ) {}
+
+  async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
+    return this.usersRepository.update(userId, {
+      twoFactorAuthenticationSecret: secret
+    });
+  }
+
+  async turnOnTwoFactorAuthentication(userId: number) {
+    return this.usersRepository.update(userId, {
+      isTwoFactorAuthenticationEnabled: true
+    });
+  }
+  async turnOffTwoFactorAuthentication(userId: number) {
+    return this.usersRepository.update(userId, {
+      isTwoFactorAuthenticationEnabled: false
+    });
+  }
  
   async getById(id: number) {
     const user = await this.usersRepository.findOne({ id });
