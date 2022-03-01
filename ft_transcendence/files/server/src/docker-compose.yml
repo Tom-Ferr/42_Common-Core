@@ -18,7 +18,7 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     ports:
-    - "8080:80"
+    - "1234:80"
     volumes:
     - ./data/pgadmin:/root/.pgadmin
     env_file:

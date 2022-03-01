@@ -1,7 +1,22 @@
 import React from 'react';
 import './SignIn.css';
+import Button from '../logginButton/logginButton';
 
 const SignIn = () =>{
+
+  let email: string = ""
+  let password: string = ""
+  let form
+
+  const handleChange = async (event) => {
+    if (event.target.name == 'e-mail')
+      email = event.target.value
+    else
+      password = event.target.value
+
+    form = {email, password}
+  }
+  
   return(
     <div className='Forms' >
 
@@ -9,6 +24,7 @@ const SignIn = () =>{
       <input
         name= 'e-mail'
         type='email'
+        onChange={handleChange}
       />
 
       <br></br>
@@ -18,8 +34,11 @@ const SignIn = () =>{
       <input
         name= 'password'
         type='password'
+        onChange={handleChange}
 
       />
+      <br></br>
+    <Button inputs={form} />
     </div>
   )
 };
