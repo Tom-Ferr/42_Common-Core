@@ -1,20 +1,24 @@
-import React from 'react';
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   SignIn.tsx                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/02 14:52:51 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/03/02 14:52:52 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import './SignIn.css';
-import Button from '../logginButton/logginButton';
 
-const SignIn = () =>{
-
-  let email: string = ""
-  let password: string = ""
-  let form
+const SignIn = ({setInputs}) =>{
 
   const handleChange = async (event) => {
-    if (event.target.name == 'e-mail')
-      email = event.target.value
-    else
-      password = event.target.value
+    const name = event.target.name
+    const value = event.target.value
 
-    form = {email, password}
+    setInputs(values => ({...values, [name]: value}))
   }
   
   return(
@@ -22,7 +26,7 @@ const SignIn = () =>{
 
       <div style={{display: 'flex' , justifyContent: 'flex-start'}}>e-mail:</div>
       <input
-        name= 'e-mail'
+        name= 'email'
         type='email'
         onChange={handleChange}
       />
@@ -37,8 +41,6 @@ const SignIn = () =>{
         onChange={handleChange}
 
       />
-      <br></br>
-    <Button inputs={form} />
     </div>
   )
 };

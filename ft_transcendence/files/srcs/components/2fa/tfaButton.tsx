@@ -1,17 +1,19 @@
-import './logginButton.css';
+import '../Home/Header/logginButton/logginButton.css';
+
 import axios from 'axios';
 import {useNavigate} from "react-router-dom"
 
 const Button = (props) =>{
   const navigate = useNavigate()
+
   const handleClick = async (event) => {
     event.preventDefault();
-    await axios.post("http://localhost:3000/authentication/log-in", props.inputs, {withCredentials: true})
+    await axios.post("http://localhost:3000/2fa/authenticate", props.code, {withCredentials: true})
     .then(response => {
-      if(response.data.name)
-        navigate('/logged')
-      else
-        navigate('/2fa')
+      if(response.data.name){
+        if(response.data.isTwoFactorAuthenticationEnabled == true)
+          navigate('/logged')
+      }
     })
     .catch(error => {
      alert(error.response.data.message)
@@ -20,7 +22,7 @@ const Button = (props) =>{
   return(
     <div 
       onClick={handleClick}
-      className='button'>Go!
+      className='button'>Confirm!
     </div>
   )
 }
