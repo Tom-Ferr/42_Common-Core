@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/02 21:26:54 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/03 18:40:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,45 @@ const Logged = () => {
         setInput(event.target.value)    
     }
 
+    const switchTfa = async (direction: string, status: boolean) => {
+        await axios.post(`http://localhost:3000/2fa/${direction}`,{twoFactorAuthenticationCode: input}, {withCredentials: true})
+        .then(response => {
+            setUser(values => ({...values, isTwoFactorAuthenticationEnabled: status}))
+        })
+        .catch(error => {
+            alert(error.message)
+        })
+    }
+
     const handleClick = async () => {
         if (user.twoFactorAuthenticationSecret)
             if(checked)
-                await axios.post('http://localhost:3000/2fa/turn-on',{twoFactorAuthenticationCode: input}, {withCredentials: true})
-                .then(response => {
-                    setUser(values => ({...values, isTwoFactorAuthenticationEnabled: true}))
-                })
-                .catch(error => {
-                    alert(error.message)
-                })
+                switchTfa('turn-on', true)
             else
-                await axios.post('http://localhost:3000/2fa/turn-off',{twoFactorAuthenticationCode: input}, {withCredentials: true})
-                .then(response => {
-                    setUser(values => ({...values, isTwoFactorAuthenticationEnabled: false}))
-                })
-                .catch(error => {
-                    alert(error.message)
-                })
+                switchTfa('turn-off', false)
                 
         else
             await axios.get('http://localhost:3000/2fa/generate', {withCredentials: true})
+    }
+
+    const logOut =  () => {
+         axios.post('http://localhost:3000/authentication/log-out', {withCredentials: true})
+        .then(response=> {
+            navigate('/')
+        })
+        .catch(error => {
+            alert(error.message)
+        })
+    }
+
+    const createGame = async () => {
+        await axios.post('http://localhost:3000/game',{p1: user.name} , {withCredentials: true})
+        .then(response => {
+            navigate('/pong')
+        })
+        .catch(error => {
+            alert(error.message)
+        })
     }
 
 
@@ -80,7 +98,6 @@ const Logged = () => {
         <label>
             <input
                 type="checkbox"
-                checked={checked}
                 onChange={handleCheck}
             />
             Two Factor Authentication
@@ -95,6 +112,18 @@ const Logged = () => {
             type="button"
             onClick={handleClick}
             value="set"
+        /> 
+         <br></br>
+        <input
+            type="button"
+            onClick={logOut}
+            value="logout"
+        />    
+         <br></br>
+        <input
+            type="button"
+            onClick={createGame}
+            value="create Game"
         />    
         </>
     )

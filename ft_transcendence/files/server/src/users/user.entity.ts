@@ -14,7 +14,7 @@ class User {
   @Column({ unique: true })
   public email: string;
  
-  @Column()
+  @Column({ unique: true })
   public name: string;
  
   @Column()
