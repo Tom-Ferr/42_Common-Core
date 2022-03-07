@@ -12,7 +12,10 @@ class Game {
   public p2Position: number;
   
   @Column({nullable: true})
-  public ballPosition: number;
+  public ballXPosition: number;
+
+  @Column({nullable: true})
+  public ballYPosition: number;
  
   @Column({unique: true})
   public p1: string;

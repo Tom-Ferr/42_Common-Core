@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:26 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/01/26 12:41:48 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/06 17:21:37 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ export class Ball{
         this.start(p5)
     }
 
-    update = (p5: P5, player1: Paddle, player2: Paddle) => {
+    update = (p5: P5, player1: Paddle, player2: Paddle, dbX: number, dbY: number) => {
+        this.x = dbX * p5.windowWidth
+        this.y = dbY * p5.windowHeight
         if(this.winHeight != p5.windowHeight){
             this.x = this.xPosition * p5.windowWidth
             this.y = this.yPosition * p5.windowHeight

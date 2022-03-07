@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   paddle.ts                                          :+:      :+:    :+:   */
+/*   puppet.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/06 11:03:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/05 22:04:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 import P5 from 'p5'
-export class Paddle {
+import { Paddle } from './paddle'
+export class Puppet implements Paddle {
 
    x: number
    y: number
@@ -35,6 +36,7 @@ export class Paddle {
 	}
 
 	update(p5: P5, playerData: number) {
+		this.y = playerData
 		if(p5.windowHeight != this.winHeight){
 			this.y = this.yPosition * p5.windowHeight
 			this.winHeight = p5.windowHeight
@@ -43,14 +45,7 @@ export class Paddle {
 		this.x = p5.windowWidth * this.position
 		this.height = p5.windowHeight * 25/100
 		this.width = this.height * 10/100
-		if (this.isOnMove == true) {
-			if(this.y + this.height <= p5.windowHeight && p5.keyCode == p5.DOWN_ARROW){
-				this.y += p5.windowHeight * 2/100 
-			}
-			else if(this.y >= 0 && p5.keyCode == p5.UP_ARROW){
-				this.y -= p5.windowHeight * 2/100
-			}
-		}
+
 		this.display(p5)
 	}
 
