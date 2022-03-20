@@ -68,17 +68,20 @@ import {
 
           const gameID = Number(data.room_id)
           
-          if(socket.id === this.player1[gameID].id){
+          if(socket.id === this.player1[gameID]){
             this.gameLogic[gameID].player1.isOnMove = data.isPressed
             this.gameLogic[gameID].player1.eventKey = data.key
           }
-          else if(socket.id === this.player2[gameID].id){
+          else if(socket.id === this.player2[gameID]){
             this.gameLogic[gameID].player2.isOnMove = data.isPressed
             this.gameLogic[gameID].player2.eventKey = data.key
           }
 
         }
-     async endGame(room_id){
+     async endGame(gameID, room_id){
+        this.gameLogic[gameID] = undefined
+        this.player1[gameID] = undefined
+        this.player2[gameID] = undefined
        await this.sleep(5000)
        this.server.to(room_id).emit('end-game')
      }   
@@ -89,7 +92,7 @@ import {
         await this.sleep(30)
         this.server.to(room_id).emit('game-refresh', {p1: this.gameLogic[gameID].player1, p2: this.gameLogic[gameID].player2, ball: this.gameLogic[gameID].ball})
       }
-      this.endGame(room_id)
+      this.endGame(gameID, room_id)
     }
 
     private sleep(ms: number){
