@@ -12,12 +12,18 @@ export const Chat = () =>{
 
     const [searchParams] = useSearchParams();
     const name = searchParams.get('name')
+    const room = searchParams.get('room_id')
     const [messages, setMessages] = useState<Messages[]>([])
 
-    const socket: Socket = useMemo( () => io('http://localhost:3000'), [])
+    const socket: Socket = useMemo( () => io('http://localhost:3000/chat'), [])
 
     useEffect( () => {
-        socket.on('connect', () => console.log("conectado"))
+        socket.on('connect', () => {
+            socket.emit('join', {room_id: room})
+        })
+    }, [])
+
+    useEffect( () => {
         socket.on('receive_message', (content: any) => setMessages(prevState => [...prevState, content]))
     }, [socket])
 
@@ -27,7 +33,7 @@ export const Chat = () =>{
     }
 
     const handleClick = async () => {
-        socket.emit('send_message', {name: name, message: input})
+        socket.emit('send_message', {name: name, room_id: room, message: input})
         setInput('')
     }
 

@@ -1,6 +1,6 @@
 import {Canvas} from 'p5-react-renderer';
 import {useState, useMemo, useEffect} from 'react'
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import io, {Socket} from 'socket.io-client'
 const Pong = () => {
 
@@ -15,15 +15,19 @@ const Pong = () => {
     const [windowSize, setWindowSize] = useState(getSize())
     const [searchParams] = useSearchParams();
     const name = searchParams.get('name')
+    const room = searchParams.get('room_id')
+    const navigate = useNavigate()
 
     const [p1, setP1] = useState(undefined)
     const [p2, setP2] = useState(undefined)
     const [ball, setBall] = useState(undefined)
 
-    const socket: Socket = useMemo( () => io('http://localhost:3000', {query: [name]}), [])
+    const socket: Socket = useMemo( () => io('http://localhost:3000/pong', {query: {name: name}}), [])
 
     useEffect( () => {
-        socket.on('connect', () => console.log("conectado"))
+        socket.on('connect', () => {
+            socket.emit('join', {room_id: room})
+        })
         const handleResize = () => setWindowSize(getSize());
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -36,19 +40,22 @@ const Pong = () => {
             setP1(data.p1);
             setP2(data.p2);
         })
+        socket.on('end-game', () => {
+            navigate('/logged')
+        })
     }, [socket])
     
     const handleKeyPress = (event) => {
         if(keyBlocker === false && (event.key === "ArrowUp" || event.key === "ArrowDown") ){
             setKeyBlocker(true)
-            socket.emit('player-event', {isPressed: true, key: event.key})
+            socket.emit('player-event', {room_id: room, isPressed: true, key: event.key})
         }
     }
 
     const handleKeyRelease = (event) => {
         if((event.key === "ArrowUp" || event.key === "ArrowDown") ){
             setKeyBlocker(false)
-            socket.emit('player-event', {isPressed: false, key: event.key})
+            socket.emit('player-event', {room_id: room, isPressed: false, key: event.key})
         }
     }
 
@@ -84,7 +91,7 @@ const Pong = () => {
         return(
             <text args={[
                 player_name,
-                windowSize.width * pos/100, //pos = 30 | 60
+                windowSize.width * pos/100,
                 windowSize.height * 5/100]}
                 fill={255}
                 stroke={255}
@@ -125,6 +132,7 @@ const Pong = () => {
             />)
         }
         else if(p1.score < 10 && p2.score < 10){
+
             return(
                 <>
                 {Line()}

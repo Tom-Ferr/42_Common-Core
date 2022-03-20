@@ -12,67 +12,84 @@ import {
   @WebSocketGateway({
     cors: {
       origin: 'http://localhost:8080',
-      namespace: '/pong'
     },
+    namespace: '/pong'
   })
   export class GameGateway implements OnGatewayConnection {
 
     @WebSocketServer()
     server: Server
 
-    private gameLogic: GameLogic
+    private gameLogic = {}
 
-    private player1 = { id: null }
-    private player2 = { id: null }
+    private player1 = {}
+    private player2 = {}
 
     constructor (
       private  gameService: GameService){}
 
    
-    async handleConnection(socket: Socket) {
-        if(this.player1.id === null){
-          console.log("p1 connected")
-          this.player1.id = socket.id
-          this.gameLogic = new GameLogic()
-          const name = socket.handshake.query[0]
-          this.gameLogic.init()
-          this.gameLogic.player1.name = name.toString()
-          
-        }
-        else if(this.player2.id === null){
-          console.log("p2 connected")
-          this.player2.id = socket.id
-          const name = socket.handshake.query[0]
-          this.gameLogic.player2.name = name.toString()
-          this.gameRun()
-        }
-      }
+    async handleConnection(socket: Socket) {}
    
+    @SubscribeMessage('join')
+    async joinRoom(
+        @MessageBody() data: any,
+        @ConnectedSocket() socket: Socket,
+    ) 
+        {
+          socket.join(data.room_id)
+
+          const gameID = Number(data.room_id)
+
+          if(this.player1[gameID] == undefined){
+            console.log("p1 connected")
+            this.player1[gameID] = socket.id
+            this.gameLogic[gameID] = new GameLogic()
+            const {name} = socket.handshake.query
+            this.gameLogic[gameID].init()
+            this.gameLogic[gameID].player1.name = name.toString()
+            
+          }
+          else if(this.player2[gameID] == undefined){
+            console.log("p2 connected")
+            this.player2[gameID] = socket.id
+            const {name} = socket.handshake.query
+            this.gameLogic[gameID].player2.name = name.toString()
+            this.gameRun(gameID, data.room_id)
+          }
+
+        }
     @SubscribeMessage('player-event')
     async movePlayer(
         @MessageBody() data: any,
         @ConnectedSocket() socket: Socket,
     ) 
         {
+
+          const gameID = Number(data.room_id)
           
-          if(socket.id === this.player1.id){
-            this.gameLogic.player1.isOnMove = data.isPressed
-            this.gameLogic.player1.eventKey = data.key
+          if(socket.id === this.player1[gameID].id){
+            this.gameLogic[gameID].player1.isOnMove = data.isPressed
+            this.gameLogic[gameID].player1.eventKey = data.key
           }
-          else if(socket.id === this.player2.id){
-            this.gameLogic.player2.isOnMove = data.isPressed
-            this.gameLogic.player2.eventKey = data.key
+          else if(socket.id === this.player2[gameID].id){
+            this.gameLogic[gameID].player2.isOnMove = data.isPressed
+            this.gameLogic[gameID].player2.eventKey = data.key
           }
 
         }
-    async gameRun(){
+     async endGame(room_id){
+       await this.sleep(5000)
+       this.server.to(room_id).emit('end-game')
+     }   
+    async gameRun(gameID, room_id){
 
-      while(this.gameLogic.player1.score < 10 && this.gameLogic.player2.score < 10){
-        this.gameLogic.calculation()
+      while(this.gameLogic[gameID].player1.score < 10 && this.gameLogic[gameID].player2.score < 10){
+        this.gameLogic[gameID].calculation()
         await this.sleep(30)
-        this.server.emit('game-refresh', {p1: this.gameLogic.player1, p2: this.gameLogic.player2, ball: this.gameLogic.ball})
+        this.server.to(room_id).emit('game-refresh', {p1: this.gameLogic[gameID].player1, p2: this.gameLogic[gameID].player2, ball: this.gameLogic[gameID].ball})
       }
-      console.log('end')
+      this.endGame(room_id)
     }
 
     private sleep(ms: number){
