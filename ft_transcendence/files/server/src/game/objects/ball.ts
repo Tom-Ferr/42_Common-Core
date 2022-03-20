@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:26 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/19 16:19:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/20 08:12:04 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,6 @@ export class Ball{
     }
 
     update = (p5, player1: Paddle, player2: Paddle,) => {
-        // if(this.winHeight != p5.windowHeight){
-        //     this.x = this.xPosition * p5.windowWidth
-        //     this.y = this.yPosition * p5.windowHeight
-        //     this.winHeight = p5.windowHeight 
-        // }
         this.width = player1.height * 15/100
         if(this.y + this.radius >= p5.windowHeight || this.y - this.radius <= 0){
             this.ySpeed *= -1
@@ -53,13 +48,7 @@ export class Ball{
         this.reflect(p5, player2) 
         this.xPosition = this.x / p5.windowWidth
         this.yPosition = this.y / p5.windowHeight
-        // this.display(p5)
     }
-
-    // display = (p5: P5) => {
-    //     p5.stroke(255)
-    //     p5.ellipse(this.x, this.y, this.width)
-    // }
 
     move = () => {
         this.x += this.xSpeed

@@ -34,12 +34,16 @@ import {
           console.log("p1 connected")
           this.player1.id = socket.id
           this.gameLogic = new GameLogic()
+          const name = socket.handshake.query[0]
           this.gameLogic.init()
+          this.gameLogic.player1.name = name.toString()
           
-        // }
-        // else if(this.player2.id === null){
-        //   console.log("p2 connected")
-        //   this.player2.id = socket.id
+        }
+        else if(this.player2.id === null){
+          console.log("p2 connected")
+          this.player2.id = socket.id
+          const name = socket.handshake.query[0]
+          this.gameLogic.player2.name = name.toString()
           this.gameRun()
         }
       }
@@ -56,8 +60,8 @@ import {
             this.gameLogic.player1.eventKey = data.key
           }
           else if(socket.id === this.player2.id){
-            this.gameLogic.player1.isOnMove = data.isPressed
-            this.gameLogic.player1.eventKey = data.key
+            this.gameLogic.player2.isOnMove = data.isPressed
+            this.gameLogic.player2.eventKey = data.key
           }
 
         }

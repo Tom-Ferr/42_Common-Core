@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/20 06:13:23 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/20 10:06:40 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ export class Paddle {
    score: number
    yPosition: number
    winHeight: number
+   name: string
    public eventKey: string
 	constructor(p5, position: number) {
 		this.height = p5.windowHeight * 25/100
@@ -33,6 +34,7 @@ export class Paddle {
 		this.isOnMove = false
 		this.score = 0
 		this.winHeight = p5.windowHeight
+		this.name = ""
 	}
 
 	update(p5) {
