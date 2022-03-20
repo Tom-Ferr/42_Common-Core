@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
+import { LessThan, Repository } from "typeorm";
 import { InjectRepository } from '@nestjs/typeorm';
 import CreateGameDto from "./dto/creategame.dto"
 import UpdateGameDto from "./dto/updategame.dto";
@@ -36,7 +36,9 @@ export class GameService{
     }
 
     async getGameByPlayer(p1: string){
-        const game = await this.gameRepository.findOne({p1});
+        let game = await this.gameRepository.findOne({p1});
+        if (!game)
+        game = await this.gameRepository.findOne({p2: p1});
         return game;
     }
 

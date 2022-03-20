@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtStrategy } from './jwt.strategy'
+import { JwtStrategy, JwtTwoFactorStrategy } from './jwt.strategy'
 import { TwoFactorAuthenticationController } from './tfa/tfa.controller';
 import { TwoFactorAuthenticationService } from './tfa/tfa.service';
 @Module({
@@ -25,7 +25,8 @@ import { TwoFactorAuthenticationService } from './tfa/tfa.service';
       }),
     }),
   ],
-  providers: [AuthenticationService, LocalStrategy, JwtStrategy, TwoFactorAuthenticationService],
-  controllers: [AuthenticationController, TwoFactorAuthenticationController]
+  providers: [AuthenticationService, LocalStrategy, JwtStrategy,TwoFactorAuthenticationService],
+  controllers: [AuthenticationController, TwoFactorAuthenticationController, ],
+  exports: [AuthenticationService]
 })
 export class AuthenticationModule {}

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/06 21:24:49 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/18 09:20:56 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ const Logged = () => {
     const [loadCount, setLoadCount ] = useState(0)
     const navigate = useNavigate()
 
-    const loadInfo = () => {
+    const loadInfo = async () => {
 
-        axios.get("http://localhost:3000/authentication", {withCredentials: true})
+        await axios.get("http://localhost:3000/authentication", {withCredentials: true})
         .then(response => {
             if(response.data.name)
                 setUser(response.data)
@@ -70,8 +70,8 @@ const Logged = () => {
             await axios.get('http://localhost:3000/2fa/generate', {withCredentials: true})
     }
 
-    const logOut =  () => {
-         axios.post('http://localhost:3000/authentication/log-out', {withCredentials: true})
+    const logOut = async () => {
+        await axios.post('http://localhost:3000/authentication/log-out', {withCredentials: true})
         .then(response=> {
             navigate('/')
         })
@@ -90,6 +90,19 @@ const Logged = () => {
         })
     }
 
+    const joinGame = async () => {
+        await axios.put('http://localhost:3000/game',{id: 20, p2: user.name} , {withCredentials: true})
+        .then(response => {
+            navigate('/pong')
+        })
+        .catch(error => {
+            alert(error.message)
+        })
+    }
+
+    const joinChat =async () => {
+        navigate(`/chat?name=${user.name}`)
+    }
 
     return (
         <>
@@ -103,7 +116,7 @@ const Logged = () => {
             Two Factor Authentication
         </label>
         <br></br>
-        <input 
+        <input
             type="text"
             onChange={handleChange}
         />
@@ -124,6 +137,18 @@ const Logged = () => {
             type="button"
             onClick={createGame}
             value="create Game"
+        />
+         <br></br>
+        <input
+            type="button"
+            onClick={joinGame}
+            value="join"
+        />    
+         <br></br>
+        <input
+            type="button"
+            onClick={joinChat}
+            value="chat"
         />    
         </>
     )

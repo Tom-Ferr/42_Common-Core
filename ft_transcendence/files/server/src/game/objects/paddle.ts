@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puppet.ts                                          :+:      :+:    :+:   */
+/*   paddle.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/05 22:04:53 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/20 06:13:23 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 import P5 from 'p5'
-import { Paddle } from './paddle'
-export class Puppet implements Paddle {
+export class Paddle {
 
    x: number
    y: number
    height: number
    width: number
    position: number
-   isOnMove: boolean
+   public isOnMove: boolean
    score: number
    yPosition: number
    winHeight: number
-	constructor(p5: P5, position: number) {
+   public eventKey: string
+	constructor(p5, position: number) {
 		this.height = p5.windowHeight * 25/100
 		this.width = this.height * 10/100
 		this.x = p5.windowWidth * position
@@ -35,23 +35,19 @@ export class Puppet implements Paddle {
 		this.winHeight = p5.windowHeight
 	}
 
-	update(p5: P5, playerData: number) {
-		this.y = playerData
-		if(p5.windowHeight != this.winHeight){
-			this.y = this.yPosition * p5.windowHeight
-			this.winHeight = p5.windowHeight
-		}
-		this.yPosition = this.y / p5.windowHeight
+	update(p5) {
 		this.x = p5.windowWidth * this.position
 		this.height = p5.windowHeight * 25/100
 		this.width = this.height * 10/100
-
-		this.display(p5)
-	}
-
-	display(p5: P5){
-		p5.stroke(255)
-		p5.rect(this.x, this.y, this.width, this.height)
+		if (this.isOnMove == true) {
+			if(this.y + this.height <= p5.windowHeight && "ArrowDown" == this.eventKey){
+				this.y += p5.windowHeight * 2/100 
+			}
+			else if(this.y >= 0 && "ArrowUp" == this.eventKey){
+				this.y -= p5.windowHeight * 2/100
+			}
+		}
+		this.yPosition = this.y / p5.windowHeight
 	}
 
 };

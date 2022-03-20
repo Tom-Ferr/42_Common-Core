@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/07 18:33:51 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/20 06:48:49 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ import sketch from './pong/sketch'
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import TwoFactorAuthentication from './components/2fa/TwoFactorAuthentication';
+import { Chat } from './components/chat/Chat';
+import Pong from './components/Pong/Pong';
 
 const App = () => {
     return (
@@ -25,8 +27,9 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/logged" element={<Logged/>}/>
-                    <Route path="/pong" element={<ReactP5Wrapper sketch={sketch} />}/>
+                    <Route path="/pong" element={<Pong/>}/>
                     <Route path="/2fa" element={<TwoFactorAuthentication />}/>
+                    <Route path="/chat" element={<Chat />}/>
                 </Routes>
             </BrowserRouter>
         </div>

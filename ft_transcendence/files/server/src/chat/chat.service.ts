@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import Message from './message.entity';
 import User from '../users/user.entity';
 import { Repository } from 'typeorm';
- 
+
 @Injectable()
 export class ChatService {
   constructor(
@@ -16,7 +16,7 @@ export class ChatService {
     private messagesRepository: Repository<Message>,
   ) {
   }
- 
+
   async saveMessage(content: string, author: User) {
     const newMessage = await this.messagesRepository.create({
       content,
@@ -25,15 +25,15 @@ export class ChatService {
     await this.messagesRepository.save(newMessage);
     return newMessage;
   }
- 
+
   async getAllMessages() {
     return this.messagesRepository.find({
       relations: ['author']
     });
   }
- 
+
   async getUserFromSocket(socket: Socket) {
-    const cookie = socket.handshake.headers.cookie;
+    const cookie: string = socket.handshake.headers.cookie;
     const { Authentication: authenticationToken } = parse(cookie);
     const user = await this.authenticationService.getUserFromAuthenticationToken(authenticationToken);
     if (!user) {
