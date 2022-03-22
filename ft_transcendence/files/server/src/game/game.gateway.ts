@@ -82,6 +82,7 @@ import {
         this.gameLogic[gameID] = undefined
         this.player1[gameID] = undefined
         this.player2[gameID] = undefined
+        this.gameService.delete(room_id)
        await this.sleep(5000)
        this.server.to(room_id).emit('end-game')
      }   

@@ -4,41 +4,37 @@ import { Socket } from 'socket.io';
 import { parse } from 'cookie';
 import { WsException } from '@nestjs/websockets';
 import { InjectRepository } from '@nestjs/typeorm';
-import Message from './message.entity';
+import Chat from './chat.entity';
 import User from '../users/user.entity';
 import { Repository } from 'typeorm';
+import CreateChatDto from './dto/createchat.dto';
+import UpdateChatDto from './dto/updatechat.dto';
 
 @Injectable()
 export class ChatService {
+
   constructor(
-    private readonly authenticationService: AuthenticationService,
-    @InjectRepository(Message)
-    private messagesRepository: Repository<Message>,
-  ) {
+    @InjectRepository(Chat)
+    private chatRepository: Repository<Chat>
+  ){}
+
+  async create(chatData: CreateChatDto){
+      const newChat = await this.chatRepository.create(chatData);
+      await this.chatRepository.save(newChat);
+      return newChat;
   }
 
-  async saveMessage(content: string, author: User) {
-    const newMessage = await this.messagesRepository.create({
-      content,
-      author
-    });
-    await this.messagesRepository.save(newMessage);
-    return newMessage;
+  async update(chatUpdate: UpdateChatDto){
+      await this.chatRepository.update(chatUpdate.id, chatUpdate);
+      const updatedChat = await this.chatRepository.findOne(chatUpdate.id);
+      return updatedChat
   }
 
-  async getAllMessages() {
-    return this.messagesRepository.find({
-      relations: ['author']
-    });
+  async delete(id: number) {
+      await this.chatRepository.delete(id);
   }
 
-  async getUserFromSocket(socket: Socket) {
-    const cookie: string = socket.handshake.headers.cookie;
-    const { Authentication: authenticationToken } = parse(cookie);
-    const user = await this.authenticationService.getUserFromAuthenticationToken(authenticationToken);
-    if (!user) {
-      throw new WsException('Invalid credentials.');
-    }
-    return user;
-  }
+  async getActiveChats() {
+    return this.chatRepository.find();
+}
 }

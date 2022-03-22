@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/18 09:20:56 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/22 19:34:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom"
 
 const Logged = () => {
     const [user, setUser ] = useState("")
+    const [activeGames, setActiveGames ] = useState([])
+    const [activeChats, setActiveChats ] = useState([])
     const [loadCount, setLoadCount ] = useState(0)
     const navigate = useNavigate()
 
@@ -32,9 +34,31 @@ const Logged = () => {
         setLoadCount(1)
     }
 
+    const getActiveChats = async () => {
+
+        await axios.get("http://localhost:3000/chat", {withCredentials: true})
+        .then(response => {
+                setActiveChats(response.data)
+        })
+        setLoadCount(1)
+    }
+
+    const getActiveGames = async () => {
+
+        await axios.get("http://localhost:3000/game", {withCredentials: true})
+        .then(response => {
+                setActiveGames(response.data)
+        })
+        setLoadCount(1)
+    }
+
+    const displayActiveChats = () => {
+        return (activeChats.map( (chats, key) => (<label key={key}><li key={key}>{chats.owner}</li> <input type="button" onClick={() => {joinChat(chats.id)}} value="join"/> </label>) ))
+    }
+
     useEffect(() => {
-        if (loadCount == 0) { loadInfo() }
-    })
+        if (loadCount == 0) { loadInfo(); getActiveGames(); getActiveChats() }
+    }, [])
 
 
     const [checked, setChecked ] = useState(user.isTwoFactorAuthenticationEnabled)
@@ -80,10 +104,20 @@ const Logged = () => {
         })
     }
 
+    const createChat = async () => {
+        await axios.post('http://localhost:3000/chat',{owner: user.name} , {withCredentials: true})
+        .then(response => {
+            navigate(`/chat?name=${user.name}&room_id=${response.data.id}`)
+        })
+        .catch(error => {
+            alert(error.message)
+        })
+    }
+
     const createGame = async () => {
         await axios.post('http://localhost:3000/game',{p1: user.name} , {withCredentials: true})
         .then(response => {
-            navigate('/pong')
+            navigate(`/pong?name=${user.name}&room_id=${response.data.id}`)
         })
         .catch(error => {
             alert(error.message)
@@ -91,17 +125,29 @@ const Logged = () => {
     }
 
     const joinGame = async () => {
-        await axios.put('http://localhost:3000/game',{id: 20, p2: user.name} , {withCredentials: true})
-        .then(response => {
-            navigate('/pong')
-        })
-        .catch(error => {
-            alert(error.message)
-        })
+        let i
+        console.log(activeGames.length)
+        for(i = activeGames.length - 1; i >= 0; --i){
+            if (activeGames[i].p2 == null)
+                break 
+        }
+        if(i < 0 ){
+            createGame()
+        }
+        else{
+            const gameID = activeGames[i].id
+            await axios.put('http://localhost:3000/game',{id: gameID, p2: user.name} , {withCredentials: true})
+            .then(response => {
+                navigate(`/pong?name=${user.name}&room_id=${gameID}`)
+            })
+            .catch(error => {
+                alert(error.message)
+            })
+        }
     }
 
-    const joinChat =async () => {
-        navigate(`/chat?name=${user.name}`)
+    const joinChat =async (id) => {
+        navigate(`/chat?name=${user.name}&room_id=${id}`)
     }
 
     return (
@@ -135,20 +181,21 @@ const Logged = () => {
          <br></br>
         <input
             type="button"
-            onClick={createGame}
-            value="create Game"
+            onClick={createChat}
+            value="create Chat"
         />
+         <br></br>
+
+         Chat List:
+         <ul>
+           { displayActiveChats()}
+         </ul>
+           
          <br></br>
         <input
             type="button"
             onClick={joinGame}
-            value="join"
-        />    
-         <br></br>
-        <input
-            type="button"
-            onClick={joinChat}
-            value="chat"
+            value="Play Game!"
         />    
         </>
     )

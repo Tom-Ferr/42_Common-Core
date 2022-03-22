@@ -9,7 +9,7 @@ const Button = (props) =>{
     await axios.post("http://localhost:3000/authentication/log-in", props.inputs, {withCredentials: true})
     .then(response => {
       if(response.data.name)
-        navigate('/logged')
+        navigate(`/logged?name=${response.data.name}`)
       else
         navigate('/2fa')
     })

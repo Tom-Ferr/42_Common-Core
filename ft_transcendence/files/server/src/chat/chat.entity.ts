@@ -2,15 +2,15 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import User from '../users/user.entity';
  
 @Entity()
-class Message {
+class Chat {
   @PrimaryGeneratedColumn()
   public id: number;
  
   @Column()
-  public content: string;
+  public owner: string;
  
-  @ManyToOne(() => User)
-  public author: User;
+  @Column({nullable: true})
+  public password: string;
 }
  
-export default Message;
+export default Chat;

@@ -12,21 +12,25 @@ import {
     cors: {
       origin: 'http://localhost:8080',
     },
-    namespace: '/chat'
+    namespace: '/chatroom'
   })
   export class ChatGateway implements OnGatewayConnection {
     @WebSocketServer()
     server: Server;
+
+    map: Map<string | string[], string>
 
     
    
     constructor(
       private readonly chatService: ChatService
     ) {
+      this.map = new Map<string, string>()
     }
    
     async handleConnection(socket: Socket) {
-      console.log(socket.handshake.query)
+      const {name} = socket.handshake.query
+      this.map.set(name, socket.id)
     }
    
     @SubscribeMessage('join')
@@ -45,6 +49,31 @@ import {
     ) {
    
       this.server.to(content.room_id).emit('receive_message', content);
+    }
+
+    @SubscribeMessage('send_invitation')
+    async sendInvitation(
+      @MessageBody() content: any,
+      @ConnectedSocket() socket: Socket,
+    ) {
+      if(this.map.has(content.guest))
+        this.server.to(this.map.get(content.guest)).emit('receive_invitation', content);
+        
+    }
+    @SubscribeMessage('invitation_accepted')
+    async acceptInvitation(
+      @MessageBody() content: any,
+      @ConnectedSocket() socket: Socket,
+    ) {
+        this.server.to(this.map.get(content.host)).emit('invitation_was_accepted', content);
+        
+    }
+    @SubscribeMessage('invitation_declined')
+    async declineInvitation(
+      @MessageBody() content: any,
+      @ConnectedSocket() socket: Socket,
+      ) {
+        this.server.to(this.map.get(content.host)).emit('invitation_was_declined', content);
     }
 
   }
