@@ -6,12 +6,13 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/22 19:34:46 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/26 12:25:22 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import axios from "axios"
-import { useState, useEffect } from 'react'
+import io, { Socket } from 'socket.io-client'
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom"
 
 const Logged = () => {
@@ -33,6 +34,8 @@ const Logged = () => {
         })
         setLoadCount(1)
     }
+
+    const socket: Socket = useMemo( () => io('http://localhost:3000/chatroom', { autoConnect: false }), [])
 
     const getActiveChats = async () => {
 
@@ -56,9 +59,14 @@ const Logged = () => {
         return (activeChats.map( (chats, key) => (<label key={key}><li key={key}>{chats.owner}</li> <input type="button" onClick={() => {joinChat(chats.id)}} value="join"/> </label>) ))
     }
 
-    useEffect(() => {
-        if (loadCount == 0) { loadInfo(); getActiveGames(); getActiveChats() }
+    useEffect( () => {
+        if (loadCount == 0) { loadInfo(); getActiveGames(); getActiveChats(); setLoadCount(1) }
+        if(loadCount == 1){
+            socket.auth = {user: user.name} ;
+            socket.connect();
+        }
     }, [])
+
 
 
     const [checked, setChecked ] = useState(user.isTwoFactorAuthenticationEnabled)
