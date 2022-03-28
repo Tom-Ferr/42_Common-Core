@@ -1,6 +1,6 @@
 class UpdateChatDto {
 
-  id: number;
+  id: string;
   owner: string;
   password: string;
 }

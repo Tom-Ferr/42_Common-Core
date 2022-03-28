@@ -19,6 +19,18 @@ class User {
  
   @Column()
   public password: string;
+
+  @Column({ nullable: true })
+  public sessionID: string;
+
+  @Column({ type: "jsonb"})
+  public mail: {
+    from: string;
+    message: string;
+  }[]
+
+  @Column('simple-array')
+  public block_list: string[]
 }
  
 export default User;

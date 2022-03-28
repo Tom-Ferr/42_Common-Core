@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/26 12:25:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/27 20:06:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ const Logged = () => {
     const [activeGames, setActiveGames ] = useState([])
     const [activeChats, setActiveChats ] = useState([])
     const [loadCount, setLoadCount ] = useState(0)
+    const [failed, setFailed ] = useState(false)
     const navigate = useNavigate()
 
     const loadInfo = async () => {
@@ -32,7 +33,6 @@ const Logged = () => {
         .catch(error => {
             navigate('/')
         })
-        setLoadCount(1)
     }
 
     const socket: Socket = useMemo( () => io('http://localhost:3000/chatroom', { autoConnect: false }), [])
@@ -43,7 +43,6 @@ const Logged = () => {
         .then(response => {
                 setActiveChats(response.data)
         })
-        setLoadCount(1)
     }
 
     const getActiveGames = async () => {
@@ -52,7 +51,6 @@ const Logged = () => {
         .then(response => {
                 setActiveGames(response.data)
         })
-        setLoadCount(1)
     }
 
     const displayActiveChats = () => {
@@ -60,12 +58,24 @@ const Logged = () => {
     }
 
     useEffect( () => {
-        if (loadCount == 0) { loadInfo(); getActiveGames(); getActiveChats(); setLoadCount(1) }
-        if(loadCount == 1){
-            socket.auth = {user: user.name} ;
+        if (loadCount == 0){
+            loadInfo();
+            getActiveGames();
+            getActiveChats();
+            setLoadCount(1)
+        }
+        else{
+            socket.auth = {username: user.name, userID: user.id, sessionID: localStorage.getItem("sessionID")} ;
             socket.connect();
         }
-    }, [])
+    }, [user])
+
+    useEffect( () => {
+        socket.on("session", ({ sessionID, userID }) => {
+            localStorage.setItem("sessionID", sessionID);
+          });
+        socket.on('receive_private-message', (content) => { console.log(content)})
+    }, [socket])
 
 
 
@@ -158,6 +168,10 @@ const Logged = () => {
         navigate(`/chat?name=${user.name}&room_id=${id}`)
     }
 
+    const sendPrivateMessage = () => {
+        socket.emit('private-message', {from: user.name, to: 'second', message: 'ola, fulano'})
+    }
+
     return (
         <>
         Hey, {user.name} Your're Logged!
@@ -204,6 +218,12 @@ const Logged = () => {
             type="button"
             onClick={joinGame}
             value="Play Game!"
+        />    
+         <br></br>
+        <input
+            type="button"
+            onClick={sendPrivateMessage}
+            value="Private Message!"
         />    
         </>
     )
