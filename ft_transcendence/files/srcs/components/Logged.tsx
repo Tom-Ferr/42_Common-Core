@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/27 20:06:46 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/30 16:04:59 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@ import axios from "axios"
 import io, { Socket } from 'socket.io-client'
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom"
+import CreateChatForm from "./chat/CreateChatForm";
+import ChatList from "./chat/ChatList";
 
 const Logged = () => {
     const [user, setUser ] = useState("")
     const [activeGames, setActiveGames ] = useState([])
     const [activeChats, setActiveChats ] = useState([])
     const [loadCount, setLoadCount ] = useState(0)
-    const [failed, setFailed ] = useState(false)
+    const [chatPassword, setChatPassword ] = useState("")
+    const [chatOptions, setChatOptions ] = useState(false)
     const navigate = useNavigate()
 
     const loadInfo = async () => {
@@ -54,7 +57,7 @@ const Logged = () => {
     }
 
     const displayActiveChats = () => {
-        return (activeChats.map( (chats, key) => (<label key={key}><li key={key}>{chats.owner}</li> <input type="button" onClick={() => {joinChat(chats.id)}} value="join"/> </label>) ))
+        return (activeChats.map( (chats, key) => <ChatList chats={chats} id={key} join={joinChat}/> ))
     }
 
     useEffect( () => {
@@ -75,6 +78,13 @@ const Logged = () => {
             localStorage.setItem("sessionID", sessionID);
           });
         socket.on('receive_private-message', (content) => { console.log(content)})
+        socket.on('update-chatlist', (content) => { console.log(content)})
+        socket.on('password_checked', (content) => {
+            if(content.permission)
+                navigate(`/chat?name=${content.username}&room_id=${content.room_id}`)
+            else
+                alert('Wrong Password')
+        })
     }, [socket])
 
 
@@ -122,14 +132,25 @@ const Logged = () => {
         })
     }
 
+    const changeChatPassword = (event) => {
+        setChatPassword(event.target.value)
+    }
+
     const createChat = async () => {
-        await axios.post('http://localhost:3000/chat',{owner: user.name} , {withCredentials: true})
-        .then(response => {
-            navigate(`/chat?name=${user.name}&room_id=${response.data.id}`)
-        })
-        .catch(error => {
-            alert(error.message)
-        })
+        if(chatOptions == false){
+            setChatOptions(true)
+        }
+        else{
+            await axios.post('http://localhost:3000/chat',{owner: user.name, password: chatPassword} , {withCredentials: true})
+            .then(response => {
+                navigate(`/chat?name=${user.name}&room_id=${response.data.id}`)
+            })
+            .catch(error => {
+                alert(error.message)
+            })
+            setChatOptions(false)
+
+        }
     }
 
     const createGame = async () => {
@@ -144,7 +165,6 @@ const Logged = () => {
 
     const joinGame = async () => {
         let i
-        console.log(activeGames.length)
         for(i = activeGames.length - 1; i >= 0; --i){
             if (activeGames[i].p2 == null)
                 break 
@@ -164,12 +184,8 @@ const Logged = () => {
         }
     }
 
-    const joinChat =async (id) => {
-        navigate(`/chat?name=${user.name}&room_id=${id}`)
-    }
-
-    const sendPrivateMessage = () => {
-        socket.emit('private-message', {from: user.name, to: 'second', message: 'ola, fulano'})
+    const joinChat =async (id, password?) => {
+        socket.emit('check-chat-password', {room_id: id, password: password, username: user.name})
     }
 
     return (
@@ -201,11 +217,16 @@ const Logged = () => {
             value="logout"
         />    
          <br></br>
+        
+         <ul>
+
+        {chatOptions && <CreateChatForm handleChange={changeChatPassword}/>}
         <input
             type="button"
             onClick={createChat}
             value="create Chat"
-        />
+            />
+        </ul>
          <br></br>
 
          Chat List:
@@ -222,8 +243,8 @@ const Logged = () => {
          <br></br>
         <input
             type="button"
-            onClick={sendPrivateMessage}
-            value="Private Message!"
+            onClick={() => navigate('/mail')}
+            value="Mail"
         />    
         </>
     )

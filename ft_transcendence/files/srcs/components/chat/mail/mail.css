@@ -1,0 +1,47 @@
+/* Split the screen in half */
+.messages {
+    height: 100%;
+    width: 80%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    right: 0;
+    background-color: #ffffff;
+  }
+
+  .users {
+    height: 100%;
+    width: 20%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    left: 0;
+    background-color: rgb(214, 210, 210);
+  }
+
+  .chatBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+  }
+
+  .send{
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .title{
+    position: absolute;
+    top: 0%;
+    left: 5%;
+    /* transform: translate(-50%, -50%); */
+  }

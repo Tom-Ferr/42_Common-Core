@@ -31,7 +31,7 @@ import {
     }
    
     async handleConnection(socket: Socket) {
-      if(socket.handshake.query){
+      if(socket.handshake.query.name){
 
         const {name} = socket.handshake.query
         this.map.set(name, socket.id)
@@ -71,8 +71,10 @@ import {
       @ConnectedSocket() socket: Socket,
     ) {
       const target = await this.userService.getByName(content.to)
+      if(target)
+        this.userService.saveMail({from: content.from, to: content.to, message: content.message}, content.sender_id)
       if(target.block_list.includes(content.from) === false){
-        const mail = await this.userService.saveMail({from: content.from, message: content.message}, target.id)
+        const mail = await this.userService.saveMail({from: content.from, to: content.to, message: content.message}, target.id)
         this.server.to(target.id.toString()).emit('receive_private-message', mail);
       }
     }
@@ -119,6 +121,23 @@ import {
     ) {
    
       socket.join(content.room_id)
+    }
+
+    @SubscribeMessage('check-chat-password')
+    async checkPassword(
+      @MessageBody() content: any,
+      @ConnectedSocket() socket: Socket,
+    ) {
+      let permission: boolean = false
+      if(content.password){
+        permission = await this.chatService.checkPassword(content.password, content.room_id)
+
+      }
+      else if(content.password == undefined){
+        permission = true
+      }
+   
+      this.server.to(socket.id).emit('password_checked', {...content, permission: permission});
     }
 
     @SubscribeMessage('send_message')

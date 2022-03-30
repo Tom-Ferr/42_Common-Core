@@ -8,6 +8,9 @@ class Chat {
  
   @Column()
   public owner: string;
+
+  @Column({nullable: true})
+  public status: string;
  
   @Column({nullable: true})
   public password: string;
@@ -17,6 +20,9 @@ class Chat {
 
   @Column('simple-array')
   public mute_list: string[];
+  
+  @Column('simple-array')
+  public adms: string[];
 }
  
 export default Chat;

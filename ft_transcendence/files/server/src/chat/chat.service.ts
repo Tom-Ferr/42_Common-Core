@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import CreateChatDto from './dto/createchat.dto';
 import UpdateChatDto from './dto/updatechat.dto';
 import * as randomId from 'random-id';
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class ChatService {
@@ -20,14 +21,23 @@ export class ChatService {
   ){}
 
   async create(chatData: CreateChatDto){
-      const newChat = await this.chatRepository.create({
-        ...chatData,
-        id: randomId(),
-        ban_list: [],
-        mute_list: [],
-      });
-      await this.chatRepository.save(newChat);
-      return newChat;
+    let status = 'public'
+    if(chatData.password){
+      const hashedPassword = await bcrypt.hash(chatData.password, 10);
+      chatData = { ...chatData, password: hashedPassword }
+      status = 'protected'
+    }
+    const newChat = await this.chatRepository.create({
+      ...chatData,
+      id: randomId(),
+      ban_list: [],
+      mute_list: [],
+      adms: [],
+      status: status
+    });
+    await this.chatRepository.save(newChat);
+    newChat.password = undefined;
+    return newChat;
   }
 
   async update(chatUpdate: UpdateChatDto){
@@ -41,7 +51,11 @@ export class ChatService {
   }
 
   async getActiveChats() {
-    return this.chatRepository.find();
+    let chatList = await this.chatRepository.find();
+    chatList.forEach( (value, index, array) => {
+      array[index] = {...value, password: undefined}
+    });
+    return chatList;
   }
 
   async muteUser(username: string, id: string) {
@@ -79,5 +93,10 @@ export class ChatService {
     }
     this.chatRepository.update(id, { ban_list: [...ban_list] });
     return [...ban_list]
+  }
+
+  async checkPassword(plainTextPassword: string, id: string) {
+    const {password} = await this.chatRepository.findOne({id})
+    return await bcrypt.compare(plainTextPassword, password);
   }
 }
