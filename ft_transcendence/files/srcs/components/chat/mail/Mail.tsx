@@ -10,7 +10,6 @@ const Mail = () => {
     const[user, setUser] = useState('')
     const[mailBox, setMailBox] = useState([])
     const[contacts, setContacts] = useState([])
-    const[messages, setMessages] = useState([])
     const[selectedUser, setSelectedUser] = useState([])
     const[input, setInput] = useState('')
     const[isNewContact, setIsNewContact] = useState(false)
@@ -20,6 +19,7 @@ const Mail = () => {
     const socket: Socket = useMemo( () => io('http://localhost:3000/chatroom', { autoConnect: false }), [])
 
     const loadMail = async () => {
+        let array = []
         if(user.mail.length){
             setIsNewContact(false)
             setContacts([])
@@ -28,9 +28,12 @@ const Mail = () => {
             else
                 setSelectedUser(user.mail[0].to)
             user.mail.forEach(element => {
-                if(element.from != user.name)
-                    setContacts([...contacts, element.from])
+                if(element.from != user.name && !array.includes(element.from))
+                    array = [...array, element.from]
+                else if(element.to != user.name && !array.includes(element.to))
+                    array = [...array, element.to]
             });
+            setContacts(array)
             setMailBox(user.mail)
         }
         else{
@@ -72,25 +75,17 @@ const Mail = () => {
        
     }, [socket])
 
-    useEffect( () => {
-        setMessages([])
-        if(mailBox.length){
-            mailBox.forEach(element => {
-                if(element.from === selectedUser || element.to === selectedUser)
-                    setMessages([...messages, element.message])
-            });
-
-        }
-    }, [selectedUser])
-
     const displayContacts = () => {
         return contacts.map( (contact, index) => (<p key={index} onClick={ () => {setSelectedUser(contact); setIsNewContact(false)}}> {contact} </p>) )
     }
 
 
     const displayMessages = () => {
-        if(messages.length)
-            return mailBox.map( (message, index) => (<p key={index} >{message.message}</p>) )
+        if(mailBox.length)
+            return mailBox.map( (message, index) => {
+                if (message.from === selectedUser || message.to === selectedUser)
+                    return (<p key={index} >{message.message}</p>)
+            } )
     }
 
     const sendPrivateMessage = () => {

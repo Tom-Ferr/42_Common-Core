@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/30 16:04:59 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/30 16:55:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ const Logged = () => {
         return (activeChats.map( (chats, key) => <ChatList chats={chats} id={key} join={joinChat}/> ))
     }
 
+    useEffect( async() => {
+        await getActiveGames();
+        await getActiveChats();
+        loadInfo();
+    }, [])
+
     useEffect( () => {
-        if (loadCount == 0){
-            loadInfo();
-            getActiveGames();
-            getActiveChats();
-            setLoadCount(1)
-        }
-        else{
+        if(user){
             socket.auth = {username: user.name, userID: user.id, sessionID: localStorage.getItem("sessionID")} ;
             socket.connect();
         }
