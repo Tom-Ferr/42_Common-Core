@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   posts.service.ts                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 19:25:10 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:25:11 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {CreatePostDto} from './dto/createPost.dto';
 // import {Post} from './post.interface';

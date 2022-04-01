@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   avatar.service.ts                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 19:22:55 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:22:56 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import Avatar from "./avatar.entity";
 import { LessThan, Repository } from "typeorm";

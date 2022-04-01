@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   posts.controller.ts                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 19:25:06 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:25:07 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import PostsService from './posts.service';
 import {CreatePostDto} from './dto/createPost.dto';

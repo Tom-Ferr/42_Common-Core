@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   avatar.controller.ts                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 19:22:43 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:22:44 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Body, Controller, Delete, Get, Res,Param, Req, Post, Put, UseInterceptors, UploadedFile, UseGuards, Response, StreamableFile } from '@nestjs/common';
 import JwtTwoFactorGuard from 'src/authentication/jwt-two-factor.guard';
 import { createReadStream } from 'fs';

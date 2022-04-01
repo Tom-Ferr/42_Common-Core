@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Profile.tsx                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 19:28:21 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:28:22 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { useState, useEffect, useMemo, useLocation } from "react";
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client'
 import axios from "axios";
+import Popup from "./PopUp";
 
 const Profile = () => {
     const [searchParams] = useSearchParams();
@@ -13,6 +26,7 @@ const Profile = () => {
     const [historyButtonValue, setHistoryButtonValue ] = useState('show')
     const [avatar, setAvatar ] = useState(null)
     const [selectedFile, setSelectedFile ] = useState("")
+    const [isOpen, setIsOpen] = useState(false);
 
     const loadInfo = async () => {
 
@@ -87,10 +101,11 @@ const Profile = () => {
 
     const Avatar = () => {
         if(avatar){
-            return <img src={URL.createObjectURL(avatar)} />
+            if(user.name == name)
+                return <img style={{cursor: 'pointer'}} onClick={() => {if(user.name == name)setIsOpen(!isOpen)}} src={URL.createObjectURL(avatar)} />
+            return  <img src={URL.createObjectURL(avatar)} />
         }
-        else
-            return <></>
+        return <></>
     }
 
     const uploadAvatar = () => {
@@ -99,6 +114,7 @@ const Profile = () => {
         axios.put(`http://localhost:3000/avatar/${user.id}`, formData, {withCredentials: true})
         .then( () =>{
            setAvatar(selectedFile)
+           setIsOpen(!isOpen)
         })
     }
 
@@ -124,11 +140,17 @@ const Profile = () => {
             }
 
         </div>
-        <div className={'avatar'} onClick={() => console.log('asso')}>
+        <div className={'avatar'} >
             <Avatar/>
-            <input type='file' onChange={(event) => setSelectedFile(event.target.files[0])}/>
-            <input type='button' value={'Upload'} onClick={uploadAvatar}/>
         </div>
+        {isOpen && <Popup
+            content={<>
+                Please, select a file
+                <input type='file' onChange={(event) => setSelectedFile(event.target.files[0])}/>
+                <input type='button' value={'Upload'} onClick={uploadAvatar}/>
+            </>}
+            handleClose={() => setIsOpen(!isOpen)}
+        />}
         </>
     );
 }

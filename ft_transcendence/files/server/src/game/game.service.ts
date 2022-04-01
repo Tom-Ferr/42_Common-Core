@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game.service.ts                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 19:24:39 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:24:40 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Injectable } from "@nestjs/common";
 import { LessThan, Repository } from "typeorm";
 import { InjectRepository } from '@nestjs/typeorm';

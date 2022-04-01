@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game.logic.ts                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 19:24:30 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:24:31 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Injectable } from "@nestjs/common";
 import { Ball } from "./objects/ball";
 import { Paddle } from "./objects/paddle";

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Pong.tsx                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 19:28:04 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:28:07 by tde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import {Canvas} from 'p5-react-renderer';
 import {useState, useMemo, useEffect} from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom';
