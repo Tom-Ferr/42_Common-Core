@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/30 16:55:47 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/03/30 19:01:50 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ const Logged = () => {
     const [user, setUser ] = useState("")
     const [activeGames, setActiveGames ] = useState([])
     const [activeChats, setActiveChats ] = useState([])
-    const [loadCount, setLoadCount ] = useState(0)
     const [chatPassword, setChatPassword ] = useState("")
     const [chatOptions, setChatOptions ] = useState(false)
+    const [checked, setChecked ] = useState(user.isTwoFactorAuthenticationEnabled)
+    const [input, setInput] = useState("")
     const navigate = useNavigate()
 
     const loadInfo = async () => {
@@ -77,7 +78,6 @@ const Logged = () => {
         socket.on("session", ({ sessionID, userID }) => {
             localStorage.setItem("sessionID", sessionID);
           });
-        socket.on('receive_private-message', (content) => { console.log(content)})
         socket.on('update-chatlist', (content) => { console.log(content)})
         socket.on('password_checked', (content) => {
             if(content.permission)
@@ -87,19 +87,6 @@ const Logged = () => {
         })
     }, [socket])
 
-
-
-    const [checked, setChecked ] = useState(user.isTwoFactorAuthenticationEnabled)
-
-    const handleCheck = async () => {
-        setChecked(!checked)
-        
-    }
-    
-    const [input, setInput] = useState("")
-    const handleChange = (event) => {
-        setInput(event.target.value)    
-    }
 
     const switchTfa = async (direction: string, status: boolean) => {
         await axios.post(`http://localhost:3000/2fa/${direction}`,{twoFactorAuthenticationCode: input}, {withCredentials: true})
@@ -130,10 +117,6 @@ const Logged = () => {
         .catch(error => {
             alert(error.message)
         })
-    }
-
-    const changeChatPassword = (event) => {
-        setChatPassword(event.target.value)
     }
 
     const createChat = async () => {
@@ -195,14 +178,14 @@ const Logged = () => {
         <label>
             <input
                 type="checkbox"
-                onChange={handleCheck}
+                onChange={() => setChecked(!checked)}
             />
             Two Factor Authentication
         </label>
         <br></br>
         <input
             type="text"
-            onChange={handleChange}
+            onChange={(event) => setInput(event.target.value)}
         />
         <br></br>
         <input
@@ -220,7 +203,7 @@ const Logged = () => {
         
          <ul>
 
-        {chatOptions && <CreateChatForm handleChange={changeChatPassword}/>}
+        {chatOptions && <CreateChatForm handleChange={(event) => setChatPassword(event.target.value)}/>}
         <input
             type="button"
             onClick={createChat}

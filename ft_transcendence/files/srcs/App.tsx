@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/30 16:04:46 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/01 15:28:10 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ import TwoFactorAuthentication from './components/2fa/TwoFactorAuthentication';
 import { ChatRoom } from './components/chat/ChatRoom';
 import Mail from './components/chat/mail/Mail';
 import Pong from './components/Pong/Pong';
+import Profile from './components/Profile/Profile';
 
 const App = () => {
     return (
@@ -30,6 +31,7 @@ const App = () => {
                     <Route path="/2fa" element={<TwoFactorAuthentication />}/>
                     <Route path="/chat" element={<ChatRoom />}/>
                     <Route path="/mail" element={<Mail />}/>
+                    <Route path="/profile" element={<Profile />}/>
                 </Routes>
             </BrowserRouter>
         </div>

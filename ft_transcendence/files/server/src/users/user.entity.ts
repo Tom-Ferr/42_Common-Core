@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
  
 @Entity()
 class User {
@@ -29,8 +29,36 @@ class User {
     message: string;
   }[]
 
+  @Column({ type: "jsonb", nullable: true})
+  public matches: {
+    p1: string;
+    p1Score: string;
+    p2: string;
+    p2Score: string;
+  }[]
+
+  @Column({ type: "json", default: {wins: 0, losses: 0, draws: 0}})
+  public stats: {
+    wins: number;
+    losses: number;
+    draws: number;
+  }
+
+  @Column({default: 'online'})
+  public status: string
+
   @Column('simple-array')
   public block_list: string[]
+
+  @Column('simple-array')
+  public friend_list: string[]
+
+  @Column({default: 0})
+  public level: number
+
+  @Column({type: 'bytea', nullable: true})
+  public avatar: Uint8Array;
+
 }
  
 export default User;

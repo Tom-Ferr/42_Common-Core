@@ -10,6 +10,7 @@ import { ExceptionsLoggerFilter } from './utils/exceptionsLogger.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { GameModule } from './game/game.module';
 import { ChatModule } from './chat/chat.module';
+import { AvatarModule } from './avatar/avatar.module'
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { ChatModule } from './chat/chat.module';
     DatabaseModule,
     AuthenticationModule,
     GameModule,
-    ChatModule
+    ChatModule,
+    AvatarModule
   ],
   controllers: [],
   providers: [

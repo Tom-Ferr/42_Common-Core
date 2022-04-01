@@ -84,7 +84,7 @@ export const ChatRoom = () =>{
 
             <ul>
 
-            {messages.map((messages, key) => (<li key={key}>{messages.name} - {messages.message}</li>)) }
+            {messages.map((messages, key) => (<p key={key}>{messages.name} - {messages.message}</p>)) }
 
             </ul>
 

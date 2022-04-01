@@ -83,8 +83,12 @@ const Mail = () => {
     const displayMessages = () => {
         if(mailBox.length)
             return mailBox.map( (message, index) => {
-                if (message.from === selectedUser || message.to === selectedUser)
-                    return (<p key={index} >{message.message}</p>)
+                if (message.from === selectedUser || message.to === selectedUser){
+                    if(message.from === selectedUser)
+                        return ( <p key={index}> {message.from}: {message.message}</p>)
+                    else
+                        return ( <p key={index}> You: {message.message}</p>)
+                }
             } )
     }
 

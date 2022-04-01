@@ -1,14 +1,18 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, StreamableFile } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import User from './user.entity';
 import CreateUserDto from './dto/createUser.dto';
+import { createReadStream } from 'fs';
+import { join } from 'path';
+import AvatarService from 'src/avatar/avatar.service';
  
 @Injectable()
 export class UsersService {
   constructor(
+    private avatarService:  AvatarService,
     @InjectRepository(User)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
   ) {}
 
   async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
@@ -56,9 +60,12 @@ export class UsersService {
     const newUser = await this.usersRepository.create({
       ...userData, 
       mail: [], 
-      block_list: []
+      block_list: [],
+      friend_list: [],
+      matches: [],
     });
     await this.usersRepository.save(newUser);
+    await this.avatarService.createAvatar(newUser.id)
     return newUser;
   }
 
@@ -89,4 +96,6 @@ export class UsersService {
     });
     return [...block_list, username]
   }
+
+
 }

@@ -174,4 +174,18 @@ import {
         this.server.to(this.map.get(content.host)).emit('invitation_was_declined', content);
     }
 
+    @SubscribeMessage('get-profile-data')
+    async getProfile(
+      @MessageBody() username: string,
+      @ConnectedSocket() socket: Socket,
+      ) {
+        try{
+          const user = await this.userService.getByName(username)
+          this.server.to(socket.id).emit('recv-profile-data', user);
+        }
+        catch{
+          this.server.to(socket.id).emit('recv-profile-data', {});
+        }
+    }
+
   }
