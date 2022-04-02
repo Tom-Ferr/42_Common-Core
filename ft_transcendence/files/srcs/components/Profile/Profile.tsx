@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:28:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:28:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/01 19:48:05 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@ import { useState, useEffect, useMemo, useLocation } from "react";
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client'
 import axios from "axios";
-import Popup from "./PopUp";
+import Popup from "../PopUp/PopUp";
+import '../PopUp/popup.css'
 
 const Profile = () => {
     const [searchParams] = useSearchParams();

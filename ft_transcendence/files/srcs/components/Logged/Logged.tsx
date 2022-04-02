@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:28:29 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/01 21:01:38 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@ import axios from "axios"
 import io, { Socket } from 'socket.io-client'
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom"
-import CreateChatForm from "./chat/CreateChatForm";
-import ChatList from "./chat/ChatList";
+import CreateChatForm from "../chat/CreateChatForm";
+import ChatList from "../chat/ChatList";
+import Popup from "../PopUp/PopUp";
+import '../PopUp/popup.css'
 
 const Logged = () => {
     const [user, setUser ] = useState("")
@@ -25,14 +27,18 @@ const Logged = () => {
     const [chatOptions, setChatOptions ] = useState(false)
     const [checked, setChecked ] = useState(user.isTwoFactorAuthenticationEnabled)
     const [input, setInput] = useState("")
+    const [QRCode, setQRCode] = useState(null)
+    const [showQRCode, setShowQRCode] = useState(false)
     const navigate = useNavigate()
 
     const loadInfo = async () => {
 
         await axios.get("http://localhost:3000/authentication", {withCredentials: true})
         .then(response => {
-            if(response.data.name)
+            if(response.data.name){
                 setUser(response.data)
+                setChecked(response.data.isTwoFactorAuthenticationEnabled)
+            }
         })
         .catch(error => {
             navigate('/')
@@ -99,14 +105,19 @@ const Logged = () => {
     }
 
     const handleClick = async () => {
-        if (user.twoFactorAuthenticationSecret)
+        if (user.twoFactorAuthenticationSecret){
             if(checked)
                 switchTfa('turn-on', true)
             else
                 switchTfa('turn-off', false)
-                
-        else
-            await axios.get('http://localhost:3000/2fa/generate', {withCredentials: true})
+        }  
+        else{
+            await axios.post(`http://localhost:3000/2fa/generate`, {user}, {withCredentials: true, responseType: 'blob'})
+            .then(response => {
+                setQRCode(response.data)
+                setShowQRCode(!showQRCode)
+            })
+        }
     }
 
     const logOut = async () => {
@@ -175,13 +186,14 @@ const Logged = () => {
         <>
         Hey, {user.name} Your're Logged!
         <br></br>
-        <label>
+        <div>
             <input
                 type="checkbox"
+                checked={checked}
                 onChange={() => setChecked(!checked)}
             />
             Two Factor Authentication
-        </label>
+        </div>
         <br></br>
         <input
             type="text"
@@ -228,7 +240,11 @@ const Logged = () => {
             type="button"
             onClick={() => navigate('/mail')}
             value="Mail"
-        />    
+        /> 
+        {showQRCode && <Popup
+            content={<img src={URL.createObjectURL(QRCode)} />}
+            handleClose={() => setShowQRCode(!showQRCode)}
+        />}   
         </>
     )
 }

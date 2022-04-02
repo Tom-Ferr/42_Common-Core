@@ -6,12 +6,12 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:28:38 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/01 19:56:14 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import Home from './components/Home/Home'
-import Logged from './components/Logged';
+import Logged from './components/Logged/Logged';
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import TwoFactorAuthentication from './components/2fa/TwoFactorAuthentication';
 import { ChatRoom } from './components/chat/ChatRoom';

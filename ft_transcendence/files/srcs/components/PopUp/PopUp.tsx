@@ -1,16 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   createPost.dto.ts                                  :+:      :+:    :+:   */
+/*   PopUp.tsx                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/01 19:24:46 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:24:47 by tde-cama         ###   ########.fr       */
+/*   Created: 2022/04/01 19:28:16 by tde-cama          #+#    #+#             */
+/*   Updated: 2022/04/01 19:47:14 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-export class CreatePostDto {
-    content: string;
-    title: string;
-  }
+const Popup = props => {
+  return (
+    <div className="popup-box">
+      <div className="box">
+        <span className="close-icon" onClick={props.handleClose}>x</span>
+        {props.content}
+      </div>
+    </div>
+  );
+};
+ 
+export default Popup;
