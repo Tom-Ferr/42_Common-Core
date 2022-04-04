@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:21:42 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:21:43 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/03 15:49:34 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy, JwtTwoFactorStrategy } from './jwt.strategy'
 import { TwoFactorAuthenticationController } from './tfa/tfa.controller';
 import { TwoFactorAuthenticationService } from './tfa/tfa.service';
+import { OAuthController } from './oauth/oauth.controller';
 @Module({
   imports: [
     UsersModule,
@@ -38,7 +39,7 @@ import { TwoFactorAuthenticationService } from './tfa/tfa.service';
     }),
   ],
   providers: [AuthenticationService, LocalStrategy, JwtStrategy,TwoFactorAuthenticationService],
-  controllers: [AuthenticationController, TwoFactorAuthenticationController, ],
+  controllers: [AuthenticationController, TwoFactorAuthenticationController, OAuthController],
   exports: [AuthenticationService]
 })
 export class AuthenticationModule {}

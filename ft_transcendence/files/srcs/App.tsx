@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:19 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:56:14 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/04 12:04:42 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ import { ChatRoom } from './components/chat/ChatRoom';
 import Mail from './components/chat/mail/Mail';
 import Pong from './components/Pong/Pong';
 import Profile from './components/Profile/Profile';
+import Register from './components/Logged/Register';
 
 const App = () => {
     return (
@@ -32,6 +33,7 @@ const App = () => {
                     <Route path="/chat" element={<ChatRoom />}/>
                     <Route path="/mail" element={<Mail />}/>
                     <Route path="/profile" element={<Profile />}/>
+                    <Route path="/register" element={<Register />}/>
                 </Routes>
             </BrowserRouter>
         </div>

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:26:08 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:26:09 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/04 13:32:17 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ async function bootstrap() {
   app.enableCors({
     origin: 'http://localhost:8080',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept',
+    allowedHeaders: 'Content-Type, Accept, Access-Control-Allow-Origin, Access-Control-Allow-Headers',
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe());

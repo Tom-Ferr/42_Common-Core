@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:27:46 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:27:46 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/04 13:40:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,8 @@ const Button = (props) =>{
   const navigate = useNavigate()
   const handleClick = async (event) => {
     event.preventDefault();
-    await axios.post("http://localhost:3000/authentication/log-in", props.inputs, {withCredentials: true})
-    .then(response => {
-      if(response.data.name)
-        navigate(`/logged?name=${response.data.name}`)
-      else
-        navigate('/2fa')
-    })
+    await axios.get("http://localhost:3000/oauth/login")
+    .then(response => window.location.replace(response.data))
     .catch(error => {
      alert(error.response.data.message)
     });
@@ -32,7 +27,7 @@ const Button = (props) =>{
   return(
     <div 
       onClick={handleClick}
-      className='button'>Go!
+      className='button'>LogIn!
     </div>
   )
 }

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:21:47 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:21:50 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/03 22:15:44 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,19 @@ export class AuthenticationService {
       }
     }
 
+    public async registerThroughOAuth(login: string) {
+      try {
+        const createdUser = await this.usersService.create({login: login});
+        return createdUser;
+      }
+      catch (error) {
+        if (error?.code === PostgresErrorCode.UniqueViolation) {
+          throw new HttpException('User with that email already exists', HttpStatus.BAD_REQUEST);
+        }
+        throw new HttpException('Something went wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+
     public async getAuthenticatedUser(email: string, plainTextPassword: string) {
         try {
           const user = await this.usersService.getByEmail(email);
@@ -69,6 +82,16 @@ export class AuthenticationService {
         }
         catch (error) {
           throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public async getIntraUser(login: string) {
+        try {
+          const user = await this.usersService.getByLogin(login);
+          return user;
+        }
+        catch (error) {
+          throw new HttpException('Could not found user with this login', HttpStatus.BAD_REQUEST);
         }
     }
        

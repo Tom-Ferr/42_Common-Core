@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:47 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 20:00:31 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/02 14:24:23 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ import { AvatarModule } from './avatar/avatar.module'
         PORT: Joi.number(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION_TIME: Joi.string().required(),
+        OAUTH_ID: Joi.string().required(),
+        OAUTH_SECRET: Joi.string().required(),
+        OAUTH_REDIRECT: Joi.string().required(),
       })
     }),
     DatabaseModule,

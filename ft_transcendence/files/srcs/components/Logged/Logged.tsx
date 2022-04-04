@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 21:01:38 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/04 12:03:48 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ const Logged = () => {
                 setUser(response.data)
                 setChecked(response.data.isTwoFactorAuthenticationEnabled)
             }
+            else
+                navigate('/register')
         })
         .catch(error => {
             navigate('/')
@@ -247,6 +249,8 @@ const Logged = () => {
         />}   
         </>
     )
+
+    
 }
 
 export default Logged

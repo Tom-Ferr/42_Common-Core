@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:21:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:21:37 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/04 11:36:19 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { Body, Req, Res, Controller, HttpCode, Post, Get, UseGuards } from '@nestjs/common';
+import { Body, Req, Res, Controller, HttpCode, Post, Put, Get, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { RegisterDto } from './dto/register.dto';
 import { RequestWithUser } from './requestWithUser.interface';
@@ -59,6 +59,15 @@ export class AuthenticationController {
   authenticate(@Req() request: RequestWithUser) {
     const user = request.user;
     user.password = undefined;
+    return user;
+  }
+  @UseGuards(JwtAuthenticationGuard)
+  @Put('username')
+  update(@Req() request: RequestWithUser) {
+    const user = request.body;
+    console.log(user.name)
+    this.usersService.addUserName(user.name, user.id)
+    user.password = undefined
     return user;
   }
 }

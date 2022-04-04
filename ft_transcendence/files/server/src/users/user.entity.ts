@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:28 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:25:28 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/04 10:26:39 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,16 @@ class User {
   @Column({ nullable: true })
   public twoFactorAuthenticationSecret?: string;
  
-  @Column({ unique: true })
-  public email: string;
+  @Column({ unique: true, nullable: true })
+  public email?: string;
+
+  @Column({ unique: true, nullable: true })
+  public login?: string;
  
-  @Column({ unique: true })
-  public name: string;
+  @Column({ unique: true, nullable: true })
+  public name?: string;
  
-  @Column()
+  @Column({nullable: true})
   public password: string;
 
   @Column({ nullable: true })

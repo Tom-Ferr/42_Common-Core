@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:25:36 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/04 10:55:56 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,14 @@ export class UsersService {
     }
     throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
   }
+
+  async getByLogin(login: string) {
+    const user = await this.usersRepository.findOne({ login });
+    if (user) {
+      return user;
+    }
+    throw new HttpException('User with this login does not exist', HttpStatus.NOT_FOUND);
+  }
  
   async getByEmail(email: string) {
     const user = await this.usersRepository.findOne({ email });
@@ -69,6 +77,7 @@ export class UsersService {
   }
  
   async create(userData: CreateUserDto) {
+    console.log(userData)
     const newUser = await this.usersRepository.create({
       ...userData, 
       mail: [], 
@@ -107,6 +116,11 @@ export class UsersService {
       block_list: [...block_list, username]
     });
     return [...block_list, username]
+  }
+
+  async addUserName(username: string, id: number) {
+    this.usersRepository.update(id, {name: username});
+    return username
   }
 
 
