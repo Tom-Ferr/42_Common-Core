@@ -53,7 +53,9 @@ export class OAuthController {
         if(user){
             const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
             res.setHeader('Set-Cookie', cookie);
-            if(user.name)
+            if(user.isTwoFactorAuthenticationEnabled)
+                return res.redirect(`http://localhost:8080/2fa`)
+            else if(user.name)
                 return res.redirect(`http://localhost:8080/logged`)
             return res.redirect(`http://localhost:8080/register`)
                 

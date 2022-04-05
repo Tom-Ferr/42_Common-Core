@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:23:10 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:23:11 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/05 20:54:00 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ import {
     }
    
     async handleConnection(socket: Socket) {
-      if(socket.handshake.query.name){
+      if(socket.handshake.query.room_id){
 
-        const {name} = socket.handshake.query
-        this.map.set(name, socket.id)
+        const {username} = socket.handshake.auth
+        const {room_id} = socket.handshake.query
+        this.map.set(username, socket.id)
+        // this.server.to(room_id).emit('receive_chat_info', new_list);
       }
       else{
         let sessionID = socket.handshake.auth.sessionID;
@@ -91,12 +93,13 @@ import {
       }
     }
 
-    @SubscribeMessage('block-user')
-    async blockUser(
+    @SubscribeMessage('set-adm')
+    async setAdm(
       @MessageBody() content: any,
       @ConnectedSocket() socket: Socket,
     ) {
-        this.userService.blockUser(content.name, content.id)
+       this.chatService.updateAdms(content.target, content.room_id)
+       this.server.to(content.room_id).emit('adm-updated', content.target);
       }
 
     @SubscribeMessage('ban-user')
@@ -104,15 +107,8 @@ import {
       @MessageBody() content: any,
       @ConnectedSocket() socket: Socket,
     ) {
-        this.chatService.banUser(content.name, content.id)
-      }
-
-    @SubscribeMessage('unban-user')
-    async unBanUser(
-      @MessageBody() content: any,
-      @ConnectedSocket() socket: Socket,
-    ) {
-        this.chatService.unBanUser(content.name, content.id)
+      this.chatService.updateBanList(content.target, content.room_id)
+      this.server.to(content.room_id).emit('ban-updated', content.target);
       }
 
     @SubscribeMessage('mute-user')
@@ -157,7 +153,9 @@ import {
       @MessageBody() content: any,
       @ConnectedSocket() socket: Socket,
     ) {
-   
+      const {mute_list} = await this.chatService.getRoomtByID(content.room_id)
+      if(mute_list.includes(content.name))
+        return ;
       this.server.to(content.room_id).emit('receive_message', content);
     }
 

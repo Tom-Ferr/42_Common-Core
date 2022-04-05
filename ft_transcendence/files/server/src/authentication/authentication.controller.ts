@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:21:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/04 11:36:19 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/05 20:57:19 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ export class AuthenticationController {
   }
   
   @UseGuards(JwtAuthenticationGuard)
-  @Post('log-out')
+  @Get('log-out')
   async logOut(@Req() request: RequestWithUser, @Res() response: Response) {
     response.setHeader('Set-Cookie', this.authenticationService.getCookieForLogOut());
     return response.sendStatus(200);
@@ -65,8 +65,24 @@ export class AuthenticationController {
   @Put('username')
   update(@Req() request: RequestWithUser) {
     const user = request.body;
-    console.log(user.name)
     this.usersService.addUserName(user.name, user.id)
+    user.password = undefined
+    return user;
+  }
+
+  @UseGuards(JwtAuthenticationGuard)
+  @Put('friend')
+  updateFriend(@Req() request: RequestWithUser) {
+    const user = request.body;
+    this.usersService.updateFriend(user.friend_list, request.user.id)
+    user.password = undefined
+    return user;
+  }
+  @UseGuards(JwtAuthenticationGuard)
+  @Put('block')
+  updateBlock(@Req() request: RequestWithUser) {
+    const user = request.body;
+    this.usersService.updateBlock(user.block_list, request.user.id)
     user.password = undefined
     return user;
   }

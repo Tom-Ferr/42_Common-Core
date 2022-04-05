@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:28:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:48:05 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/05 12:36:01 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ const Profile = () => {
 
     const getDefaultAvatar = async () => {
 
-        await axios.get(`http://localhost:3000/avatar/${user.id}`, {withCredentials: true, responseType: 'blob'})
+        await axios.get(`http://localhost:3000/avatar/${profile.id}`, {withCredentials: true, responseType: 'blob'})
         .then(response => {
             setAvatar(response.data)
         })
@@ -55,12 +55,14 @@ const Profile = () => {
     const socket: Socket = useMemo( () => io('http://localhost:3000/chatroom', { autoConnect: false }), [])
 
     useEffect( async() => loadInfo(), [])
+    useEffect( async() => {
+        if(profile)
+            getDefaultAvatar()}, [profile])
 
     useEffect( () => {
         if(user){
             socket.auth = {username: user.name, userID: user.id, sessionID: localStorage.getItem("sessionID")} ;
             socket.connect();
-            getDefaultAvatar()
             let target = name
             if(!target)
                 target = user.name
@@ -73,8 +75,10 @@ const Profile = () => {
             localStorage.setItem("sessionID", sessionID);
           });
         socket.on('recv-profile-data', (data) => {
-            if(!data.name)
+            if(!data.name){
                 alert('user not found')
+                navigate('/logged')
+            }
             else
                 setProfile(data)
         })
@@ -102,8 +106,8 @@ const Profile = () => {
 
     const Avatar = () => {
         if(avatar){
-            if(user.name == name)
-                return <img style={{cursor: 'pointer'}} onClick={() => {if(user.name == name)setIsOpen(!isOpen)}} src={URL.createObjectURL(avatar)} />
+            if(user.name == profile.name)
+                return <img style={{cursor: 'pointer'}} onClick={() => {if(user.name == profile.name)setIsOpen(!isOpen)}} src={URL.createObjectURL(avatar)} />
             return  <img src={URL.createObjectURL(avatar)} />
         }
         return <></>
@@ -117,6 +121,44 @@ const Profile = () => {
            setAvatar(selectedFile)
            setIsOpen(!isOpen)
         })
+    }
+
+    const addFriend = async () => {
+        let friends: string[] = user.friend_list
+
+        friends.push(profile.name)
+
+        await axios.put(`http://localhost:3000/authentication/friend`, {...user, friend_list: friends}, {withCredentials: true})
+        .then( response => {
+            setUser(response.data)
+        })
+
+    }
+
+    const removeFriend = async () => {
+        let friends: string[] = user.friend_list
+
+        for( let i = 0; i< friends.length; ++i){
+            if(friends[i] === profile.name){
+                friends.splice(i, 1)
+                break ;
+            }
+        }
+        await axios.put(`http://localhost:3000/authentication/friend`, {...user, friend_list: friends}, {withCredentials: true})
+        .then( response => {
+            setUser(response.data)
+        })
+
+    }
+
+    const FriendZone = () =>{
+
+        if(profile.name === user.name)
+            return (<></>)
+        else if(user.friend_list.includes(profile.name))
+            return(<span onClick={removeFriend} style={{cursor: 'pointer'}}>Unfriend</span>)
+        else
+            return(<span onClick={addFriend} style={{cursor: 'pointer'}}>Add to Friends</span>)
     }
 
     return(
@@ -152,6 +194,8 @@ const Profile = () => {
             </>}
             handleClose={() => setIsOpen(!isOpen)}
         />}
+        <FriendZone/>
+        
         </>
     );
 }

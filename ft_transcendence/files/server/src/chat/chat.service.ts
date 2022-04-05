@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:23:20 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:23:21 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/05 20:54:30 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,26 +89,25 @@ export class ChatService {
     return [...mute_list]
   }
 
-  async banUser(username: string, id: string) {
-    const {ban_list} = await this.chatRepository.findOne({id})
-    this.chatRepository.update(id, {
-      ban_list: [...ban_list, username]
-    });
-    return [...ban_list, username]
+  async updateAdms(adms: string[], id: string) {
+    this.chatRepository.update(id, {adms: adms});
+    return adms
   }
 
-  async unBanUser(username: string, id: string) {
-    const {ban_list} = await this.chatRepository.findOne({id})
-    const index = ban_list.indexOf(username, 0);
-    if (index > -1) {
-      ban_list.splice(index, 1);
-    }
-    this.chatRepository.update(id, { ban_list: [...ban_list] });
-    return [...ban_list]
+  async updateBanList(ban: string[], id: string) {
+    this.chatRepository.update(id, {ban_list: ban});
+    return ban
   }
 
   async checkPassword(plainTextPassword: string, id: string) {
     const {password} = await this.chatRepository.findOne({id})
     return await bcrypt.compare(plainTextPassword, password);
+  }
+
+  async getRoomtByID(id: string){
+    const room = await this.chatRepository.findOne({id})
+    if(room)
+      room.password = undefined
+    return room
   }
 }

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:23:02 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:23:02 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:50:34 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ export class ChatController {
     @Get()
     getActivechats() {
     return this.chatService.getActiveChats();
+  }
+
+    @Get(':id')
+    getRoomById(@Param('id')id: string) {
+    return this.chatService.getRoomtByID(id);
   }
 
 }

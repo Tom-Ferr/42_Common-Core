@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:27:07 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:27:08 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/05 14:16:46 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ import axios from 'axios';
 import { useState, useEffect, useMemo } from "react";
 import io, { Socket } from 'socket.io-client'
 import { useNavigate } from "react-router-dom"
+import Popup from '../../PopUp/PopUp';
 
 const Mail = () => {
 
@@ -26,6 +27,7 @@ const Mail = () => {
     const[input, setInput] = useState('')
     const[isNewContact, setIsNewContact] = useState(false)
     const[newContact, setNewContact] = useState('')
+    const[isOpen, setIsOpen] = useState(false)
 
     const navigate = useNavigate()
     const socket: Socket = useMemo( () => io('http://localhost:3000/chatroom', { autoConnect: false }), [])
@@ -88,7 +90,7 @@ const Mail = () => {
     }, [socket])
 
     const displayContacts = () => {
-        return contacts.map( (contact, index) => (<p key={index} onClick={ () => {setSelectedUser(contact); setIsNewContact(false)}}> {contact} </p>) )
+        return contacts.map( (contact, index) => (<p key={index} style={{cursor: 'pointer'}} onClick={ () => {setSelectedUser(contact); setIsNewContact(false)}}> {contact} </p>) )
     }
 
 
@@ -119,17 +121,51 @@ const Mail = () => {
         setSelectedUser(destiny)
     }
 
+    const block = async () => {
+        let block: string[] = user.block_list
+
+        block.push(selectedUser)
+
+        await axios.put(`http://localhost:3000/authentication/block`, {...user, block_list: block}, {withCredentials: true})
+        .then( response => {
+            setUser(response.data)
+        })
+
+    }
+
+    const unblock = async () => {
+        let block: string[] = user.block_list
+
+        for( let i = 0; i< block.length; ++i){
+            if(block[i] === selectedUser){
+                block.splice(i, 1)
+                break ;
+            }
+        }
+        await axios.put(`http://localhost:3000/authentication/block`, {...user, block_list: block}, {withCredentials: true})
+        .then( response => {
+            setUser(response.data)
+        })
+
+    }
+
+    const isBlocked = () => {
+        if(user.block_list.includes(selectedUser))
+            return(<li style={{cursor: 'pointer'}} onClick={unblock}>Unblock {selectedUser} </li>)
+        return(<li style={{cursor: 'pointer'}} onClick={block}>Block {selectedUser} </li>)
+    }
+
     return(
         <>
         <div className='users'>
-            <p onClick={ () => {setSelectedUser('new contact'); setIsNewContact(true)} }> new contact</p>
+            <p onClick={ () => {setSelectedUser('new contact'); setIsNewContact(true)} } style={{cursor: 'pointer'}}> new contact</p>
             {displayContacts()}
             
         </div>
 
         <div className='messages'>
             {!isNewContact && <h1 className='title'>
-                    Your chat with {selectedUser}
+                    Your chat with <span style={{cursor: 'pointer'}} onClick={() => setIsOpen(!isOpen)} >{selectedUser}</span>
             </h1>}
             <div className='chatBox'>
                 {displayMessages()}
@@ -155,6 +191,14 @@ const Mail = () => {
                     value="Send!"
                 />    
             </div>     
+        {isOpen && <Popup
+            content={<>
+                <li style={{cursor: 'pointer'}} onClick={() => navigate(`/profile?name=${selectedUser}`)}>View {selectedUser} Profile</li>
+                <br></br>
+                {isBlocked()}
+            </>}
+            handleClose={() => setIsOpen(!isOpen)}
+        />}
         </div>
         </>
 

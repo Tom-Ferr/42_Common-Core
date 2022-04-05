@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/04 10:55:56 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/05 20:58:39 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ export class UsersService {
   }
  
   async create(userData: CreateUserDto) {
-    console.log(userData)
     const newUser = await this.usersRepository.create({
       ...userData, 
       mail: [], 
@@ -110,17 +109,19 @@ export class UsersService {
     return [...mail, message]
   }
 
-  async blockUser(username: string, id: number) {
-    const {block_list} = await this.usersRepository.findOne({id})
-    this.usersRepository.update(id, {
-      block_list: [...block_list, username]
-    });
-    return [...block_list, username]
-  }
-
   async addUserName(username: string, id: number) {
     this.usersRepository.update(id, {name: username});
     return username
+  }
+
+  async updateFriend(friends: string[], id: number) {
+    this.usersRepository.update(id, {friend_list: friends});
+    return friends
+  }
+
+  async updateBlock(block: string[], id: number) {
+    this.usersRepository.update(id, {block_list: block});
+    return block
   }
 
 

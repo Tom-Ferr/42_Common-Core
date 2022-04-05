@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/04 12:03:48 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:29:30 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ const Logged = () => {
     }
 
     const logOut = async () => {
-        await axios.post('http://localhost:3000/authentication/log-out', {withCredentials: true})
+        await axios.get('http://localhost:3000/authentication/log-out', {withCredentials: true})
         .then(response=> {
             navigate('/')
         })
