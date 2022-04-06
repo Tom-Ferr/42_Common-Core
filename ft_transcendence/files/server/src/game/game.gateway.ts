@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:24:22 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:24:22 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/06 10:11:57 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ import {
   import { Server, Socket } from 'socket.io';
   import { GameService } from './game.service';
   import { GameLogic } from './game.logic'
+import { UsersService } from 'src/users/users.service';
+import { runInThisContext } from 'vm';
    
   @WebSocketGateway({
     cors: {
@@ -38,7 +40,9 @@ import {
     private player2 = {}
 
     constructor (
-      private  gameService: GameService){}
+      private  gameService: GameService,
+      private  userService: UsersService
+    ){}
 
    
     async handleConnection(socket: Socket) {}
@@ -91,6 +95,14 @@ import {
 
         }
      async endGame(gameID, room_id){
+       const gameTable = {
+          p1: this.player1[gameID].name, 
+          p1Score: this.player1[gameID].score,
+          p2: this.player2[gameID].name, 
+          p2Score: this.player2[gameID].score,
+        }
+        await this.userService.addGameMatch(gameTable.p1, gameTable)
+        await this.userService.addGameMatch(gameTable.p2, gameTable)
         this.gameLogic[gameID] = undefined
         this.player1[gameID] = undefined
         this.player2[gameID] = undefined

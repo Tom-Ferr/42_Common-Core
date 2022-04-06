@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:23:10 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/05 20:54:00 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/06 18:58:26 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ import {
     server: Server;
 
     map: Map<string | string[], string>
+    connectedList: {[key: string]: string[]} = {}
 
    
     constructor(
@@ -44,11 +45,15 @@ import {
    
     async handleConnection(socket: Socket) {
       if(socket.handshake.query.room_id){
-
+        
         const {username} = socket.handshake.auth
         const {room_id} = socket.handshake.query
         this.map.set(username, socket.id)
-        // this.server.to(room_id).emit('receive_chat_info', new_list);
+        if(!this.connectedList[room_id.toString()])
+          this.connectedList[room_id.toString()] = []
+        if(!this.connectedList[room_id.toString()].includes(username))
+          this.connectedList[room_id.toString()].push(username)
+        
       }
       else{
         let sessionID = socket.handshake.auth.sessionID;
@@ -76,7 +81,18 @@ import {
     }
 
     handleDisconnect(socket: Socket){
-      console.log(socket.handshake.auth.username, ' has disconnected')
+      if(socket.handshake.query.room_id){
+        const {username} = socket.handshake.auth
+        const {room_id} = socket.handshake.query
+        for (let i = 0; i < this.connectedList[room_id.toString()].length; ++i){
+          if(username === this.connectedList[room_id.toString()][i]){
+            this.connectedList[room_id.toString()].splice(i, 1)
+            break
+          }
+        }
+        this.server.to(room_id).emit('receive_connected', this.connectedList[room_id.toString()]);
+      }
+
     }
    
     @SubscribeMessage('private-message')
@@ -93,22 +109,65 @@ import {
       }
     }
 
+    // @SubscribeMessage('set-adm')
+    // async setAdm(
+    //   @MessageBody() content: any,
+    //   @ConnectedSocket() socket: Socket,
+    // ) {
+    //    await this.chatService.updateAdms(content.target, content.room_id)
+    //    this.server.to(content.room_id).emit('chat-updated', await this.chatService.getRoomtByID(content.room_id));
+    //   }
+
     @SubscribeMessage('set-adm')
     async setAdm(
       @MessageBody() content: any,
       @ConnectedSocket() socket: Socket,
     ) {
-       this.chatService.updateAdms(content.target, content.room_id)
-       this.server.to(content.room_id).emit('adm-updated', content.target);
+
+      const {adms} = await this.chatService.getRoomtByID(content.room_id)
+      adms.push(content.target)
+      this.server.to(content.room_id).emit('adm-updated', await this.chatService.updateAdms(adms, content.room_id));
       }
 
-    @SubscribeMessage('ban-user')
+      @SubscribeMessage('unset-adm')
+    async unSetAdm(
+      @MessageBody() content: any,
+      @ConnectedSocket() socket: Socket,
+    ) {
+      const {adms} = await this.chatService.getRoomtByID(content.room_id)
+        for(let i = 0; i < adms.length; ++i){
+            if(adms[i] === content.target){
+              adms.splice(i, 1)
+                break;
+            }
+      }
+      this.server.to(content.room_id).emit('adm-updated', await this.chatService.updateAdms(adms, content.room_id));
+      }
+
+    @SubscribeMessage('unban-user')
     async banUser(
       @MessageBody() content: any,
       @ConnectedSocket() socket: Socket,
     ) {
-      this.chatService.updateBanList(content.target, content.room_id)
-      this.server.to(content.room_id).emit('ban-updated', content.target);
+      const {ban_list} = await this.chatService.getRoomtByID(content.room_id)
+        for(let i = 0; i < ban_list.length; ++i){
+            if(ban_list[i] === content.target){
+              ban_list.splice(i, 1)
+                break;
+            }
+      }
+      this.server.to(content.room_id).emit('ban-updated', await this.chatService.updateBanList(ban_list, content.room_id));
+      }
+
+    @SubscribeMessage('ban-user')
+    async unbanUser(
+      @MessageBody() content: any,
+      @ConnectedSocket() socket: Socket,
+    ) {
+
+      const {ban_list} = await this.chatService.getRoomtByID(content.room_id)
+      ban_list.push(content.target)
+      this.server.to(content.room_id).emit('ban-updated', await this.chatService.updateBanList(ban_list, content.room_id));
       }
 
     @SubscribeMessage('mute-user')
@@ -116,9 +175,9 @@ import {
       @MessageBody() content: any,
       @ConnectedSocket() socket: Socket,
     ) {
-        this.chatService.muteUser(content.name, content.id)
+        await this.chatService.muteUser(content.target, content.room_id)
         setTimeout(() => {
-          this.chatService.unMuteUser(content.name, content.id)
+          this.chatService.unMuteUser(content.target, content.room_id)
         }, content.time)
       }
 
@@ -129,6 +188,7 @@ import {
     ) {
    
       socket.join(content.room_id)
+      this.server.to(content.room_id).emit('receive_connected', this.connectedList[content.room_id.toString()]);
     }
 
     @SubscribeMessage('check-chat-password')

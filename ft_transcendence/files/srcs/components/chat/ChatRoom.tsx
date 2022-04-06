@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:27:23 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/05 20:54:58 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/06 20:17:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,16 @@ export const ChatRoom = () =>{
     const [messages, setMessages] = useState<Messages[]>([])
     const [isOpen, setIsOpen] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
+    const [isPassWin, setIsPassWin] = useState(false);
     const [input, setInput] = useState("")
     const [host, setHost] = useState("")
     const [user, setUser] = useState("")
-    const [chatInfo, setChatInfo] = useState("")
+    const [owner, setOwner] = useState("")
     const [selectedUser, setSelectedUser] = useState("")
+    const [banlist, setBanList] = useState([])
+    const [admlist, setAdmList] = useState([])
+    const [connectedlist, setConnectedList] = useState([])
+    const [newpassword, setNewPassword] = useState('')
 
     const socket: Socket = useMemo( () => io('http://localhost:3000/chatroom', {query: {room_id: room}, autoConnect: false}), [])
 
@@ -55,8 +60,11 @@ export const ChatRoom = () =>{
 
         await axios.get(`http://localhost:3000/chat/${room}`, {withCredentials: true})
         .then(response => {
-            if(response.data.id)
-                setChatInfo(response.data)
+            if(response.data.id){
+                setBanList(response.data.ban_list)
+                setAdmList(response.data.adms)
+                setOwner(response.data.owner)
+            }
         })
         .catch(error => {
             navigate('/')
@@ -66,31 +74,30 @@ export const ChatRoom = () =>{
     useEffect( async () => {
         await loadChatInfo()
         await loadInfo()
-        socket.auth = {username: user.name} ;
-            socket.connect();
-        socket.on('connect', () => {
-            socket.emit('join', {room_id: room})
-        })
     }, [])
 
-    useEffect( async () => {
+    useEffect( () => {
         if(user){
-            socket.auth = {username: user.name} ;
+            if(!banlist.includes(user.name)){
+                socket.auth = {username: user.name} ;
                 socket.connect();
-            socket.on('connect', () => {
-                socket.emit('join', {room_id: room})
-            })
+                socket.on('connect', () => {
+                    socket.emit('join', {room_id: room})
+                })
+            }
+            else
+                navigate('/logged')
         }
     }, [user])
 
     useEffect( () => {
-        socket.on('receive_chat_info', (content: any) => setChatInfo({...chatInfo, connected_users: content}))
+        socket.on('receive_connected', (content: any) => setConnectedList(content))
         socket.on('receive_message', (content: any) => setMessages(prevState => [...prevState, content]))
         socket.on('receive_invitation', (content: any) => { setHost(content.host) ;  setIsOpen(!isOpen); })
         socket.on('invitation_was_accepted', (content: any) => navigate(`/pong?name=${user.name}&room_id=${content.game_room}`))
         socket.on('invitation_was_declined', (content: any) => alert('Your invitation was declined'))
-        socket.on('adm-updated', (content: any) => setChatInfo({...chatInfo, adms: content}))
-        socket.on('ban-updated', (content: any) => setChatInfo({...chatInfo, adms: content}))
+        socket.on('ban-updated', (content: any) => {setBanList(content); setIsSelected(!setIsSelected)})
+        socket.on('adm-updated', (content: any) => {setAdmList(content); setIsSelected(!setIsSelected)})
     }, [socket])
 
     const handleClick = async () => {
@@ -118,83 +125,91 @@ export const ChatRoom = () =>{
         socket.emit('invitation_declined', { host: host, guest: user.name })
         setIsOpen(!isOpen);
     }
+
+    const updateChat = async () => {
+        let status = 'protected'
+        if(!newpassword)
+            status = 'public'
+        axios.put('http://localhost:3000/chat',{id: room, password: newpassword, status: status}, { withCredentials: true})
+        .catch(error => alert(error.data))
+        setIsPassWin(!isPassWin)
+    }
+
     const clickOnUser = (clickedUser) => {
-        if(user.name != clickedUser)
-        setSelectedUser(clickedUser);setIsSelected(true)
+        if(user.name != clickedUser){
+            setSelectedUser(clickedUser);
+            setIsSelected(true)
+        }
     }
   
     const checkOwner = () => {
-        if (chatInfo.owner === (user.name))
-            return (<><br></br><li style={{cursor: 'pointer'}} onClick={setAdm} >Set {selectedUser} as Administrator</li></>)
+        if (owner === (user.name))
+            return (<><li style={{cursor: 'pointer'}} onClick={() => {setIsSelected(false);setIsPassWin(!isPassWin)}} >Set password </li><br></br></>)
         else
             return(<></>)
     }
 
     const setAdm = ( ) => {
-        const arr: string[] = chatInfo.adms
-        arr.push(selectedUser)
-        socket.emit('set-adm', {target: arr, room_id: room})
+
+        socket.emit('set-adm', {target: selectedUser, room_id: room})
     }
 
     const ban = () => {
-        const arr: string[] = chatInfo.ban_list
-        arr.push(selectedUser)
-        socket.emit('ban-user', {target: arr, room_id: room})
+
+        socket.emit('ban-user', {target: selectedUser, room_id: room})
     }
 
     const unBan = () => {
-        const arr: string[] = chatInfo.ban_list
-        for(let i = 0; i < arr.length; ++i){
-            if(arr[i] === selectedUser){
-                arr.splice(i, 1)
-                break;
-            }
-        }
-        socket.emit('ban-user', {target: arr, room_id: room})
+        
+        socket.emit('unban-user', {target: selectedUser, room_id: room})
     }
 
-    const mute = () => {
-
+    const mute = (minutes) => {
+        minutes *= 60000
+        socket.emit('mute-user', {target: selectedUser, room_id: room, time: minutes})
     }
 
     const banStatus = () => {
-        if(chatInfo.ban_list.includes(selectedUser))
+        if(banlist.includes(selectedUser))
             return(<><br></br><li style={{cursor: 'pointer'}} onClick={unBan} > Unban {selectedUser} from this room</li></>)
         return (<><br></br><li style={{cursor: 'pointer'}} onClick={ban} > Ban {selectedUser} from this room</li></>)
     }
 
+    const admStatus = () => {
+        if(!admlist.includes(selectedUser))
+            return (<><br></br><li style={{cursor: 'pointer'}} onClick={setAdm} >Set {selectedUser} as Administrator</li></>)
+        return(<></>)
+    }
+
+
     const checkAdm = () => {
-        if (chatInfo.adms.includes(user.name))
-            return (
-            <>
-                <br></br>
-                <li style={{cursor: 'pointer'}} onClick={mute} > Mute {selectedUser} for </li>
-                {banStatus()}
-            </>
-            
-            )
-        else
-            return(<></>)
+
+        if (admlist.includes(user.name))
+            return true
+        return false
     }
 
     const displayBannedUsers = () => {
-        if(chatInfo)
-            return chatInfo.ban_list.map( (banned, index) => (<p key={index} style={{cursor: 'pointer'}} onClick={ () => {clickOnUser(banned)}}> {banned} </p>) )
+            return banlist.map( (banned, index) => (<p key={index} style={{cursor: 'pointer'}} onClick={ () => {clickOnUser(banned)}}> {banned} </p>) )
     }
 
-    // const displayConnectedUsers = () => {
-    //     if(chatInfo) 
-    //         return chatInfo.connected_list.map( (connected, index) => (<p key={index} style={{cursor: 'pointer'}} onClick={ () => {clickOnUser(connected)}}> {connected} </p>) )
-    // }
+    const displayConnectedUsers = () => {
+            return connectedlist.map( (connected, index) => (<p key={index} style={{cursor: 'pointer'}} onClick={ () => {clickOnUser(connected)}}> {connected} </p>) )
+    }
 
     return(
         <>
         <div className='list'>
-            {/* Connected Users:
+            {checkOwner()}
+            Connected Users:
             {displayConnectedUsers()}
-            <br></br> */}
-            Banned Users:
-            {displayBannedUsers()}
+            <br></br>
+            {
+                checkAdm() &&
+                <>Banned Users:
+                {displayBannedUsers()}
+                </>
+            }
         </div>
         <div className='chat'>
 
@@ -220,8 +235,16 @@ export const ChatRoom = () =>{
                     <li style={{cursor: 'pointer'}} onClick={() => navigate(`/profile?name=${selectedUser}`)}>View {selectedUser} Profile</li>
                     <br></br>
                     <li style={{cursor: 'pointer'}} onClick={handleInviteClick}>Invite {selectedUser} to a pong match </li>
-                    {checkOwner()}
-                    {checkAdm()}
+                    {checkAdm() && <>
+                        <br></br>
+                        <li> Mute {selectedUser} for: 
+                            <span style={{cursor: 'pointer'}} onClick={() => mute(15)}> 15 Minutes,</span>
+                            <span style={{cursor: 'pointer'}} onClick={() => mute(30)}> 30 Minutes,</span>
+                            <span style={{cursor: 'pointer'}} onClick={() => mute(60)}> 1 Hour</span>
+                        </li>
+                        {admStatus()}
+                        {banStatus()}
+                    </>}
                 </>}
                 handleClose={() => setIsSelected(!isSelected)}
             />}
@@ -234,6 +257,14 @@ export const ChatRoom = () =>{
                     <input type="button" onClick={handleDeclineInvitation} value='Decline'/>
                 </>}
                 handleClose={() => {setIsOpen(!isOpen); handleDeclineInvitation() }}
+            />}
+            {isPassWin && <Popup
+                content={<>
+                    <b>Set a New Password for this chat</b>
+                    <input type="password" onChange={(event) => setNewPassword(event.target.value)} value={newpassword}/>
+                    <input type="button" onClick={updateChat} value='Set'/>
+                </>}
+                handleClose={() => {setIsPassWin(!isPassWin)}}
             />}
         </div>
         </>

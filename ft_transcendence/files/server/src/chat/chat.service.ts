@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:23:20 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/05 20:54:30 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/06 20:16:41 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ export class ChatService {
       id: randomId(),
       ban_list: [],
       mute_list: [],
-      adms: [],
       status: status
     });
     await this.chatRepository.save(newChat);
@@ -53,8 +52,14 @@ export class ChatService {
   }
 
   async update(chatUpdate: UpdateChatDto){
+    console.log(chatUpdate)
+      if(chatUpdate.password){
+        const hashedPassword = await bcrypt.hash(chatUpdate.password, 10);
+        chatUpdate = { ...chatUpdate, password: hashedPassword }
+      }
       await this.chatRepository.update(chatUpdate.id, chatUpdate);
       const updatedChat = await this.chatRepository.findOne(chatUpdate.id);
+      updatedChat.password = undefined
       return updatedChat
   }
 
@@ -72,10 +77,9 @@ export class ChatService {
 
   async muteUser(username: string, id: string) {
     const {mute_list} = await this.chatRepository.findOne({id})
-    this.chatRepository.update(id, {
-      mute_list: [...mute_list, username]
-    });
-    return [...mute_list, username]
+    mute_list.push(username)
+    this.chatRepository.update(id, {mute_list: mute_list});
+    return mute_list
   }
   async unMuteUser(username: string, id: string) {
     const {mute_list} = await this.chatRepository.findOne({id})
@@ -84,9 +88,9 @@ export class ChatService {
       mute_list.splice(index, 1);
     }
     this.chatRepository.update(id, {
-      mute_list: [...mute_list]
+      mute_list: mute_list
     });
-    return [...mute_list]
+    return mute_list
   }
 
   async updateAdms(adms: string[], id: string) {

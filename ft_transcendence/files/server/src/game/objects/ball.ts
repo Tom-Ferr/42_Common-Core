@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:26 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/20 08:12:04 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/06 13:24:43 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ export class Ball{
             this.ySpeed *= -1
         }
         if(this.x - this.radius >= 0 && this.x + this.radius < p5.windowWidth)
-        this.move()
+            this.move()
         else
-        this.reset(p5, player1, player2)
+            this.reset(p5, player1, player2)
         if(this.hitPlayer1(player1))
-        this.reflect(p5, player1)
+            this.reflect(p5, player1)
         else if(this.hitPlayer2(player2))
-        this.reflect(p5, player2) 
+            this.reflect(p5, player2) 
         this.xPosition = this.x / p5.windowWidth
         this.yPosition = this.y / p5.windowHeight
     }

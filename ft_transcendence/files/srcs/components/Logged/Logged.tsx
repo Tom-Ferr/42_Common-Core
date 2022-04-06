@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/05 16:29:30 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/06 19:19:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ const Logged = () => {
             setChatOptions(true)
         }
         else{
-            await axios.post('http://localhost:3000/chat',{owner: user.name, password: chatPassword} , {withCredentials: true})
+            await axios.post('http://localhost:3000/chat',{owner: user.name, password: chatPassword, adms: [user.name]} , {withCredentials: true})
             .then(response => {
                 navigate(`/chat?name=${user.name}&room_id=${response.data.id}`)
             })
