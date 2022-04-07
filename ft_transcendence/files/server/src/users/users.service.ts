@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/06 10:39:35 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/06 21:12:18 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ import CreateUserDto from './dto/createUser.dto';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import AvatarService from 'src/avatar/avatar.service';
+import PostgresErrorCode from 'src/database/postgresErrorCode.enum';
  
 @Injectable()
 export class UsersService {
@@ -110,8 +111,16 @@ export class UsersService {
   }
 
   async addUserName(username: string, id: number) {
-    this.usersRepository.update(id, {name: username});
-    return username
+    try{
+      await this.usersRepository.update(id, {name: username});
+      return username
+    }
+    catch (error) {
+      if (error?.code === PostgresErrorCode.UniqueViolation) {
+        throw new HttpException('User with that name already exists', HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException('Something went wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async updateFriend(friends: string[], id: number) {

@@ -29,7 +29,7 @@ const Register = () =>{
             navigate('/logged')
         })
         .catch(error => {
-            navigate('/')
+            alert(error.response.data.message)
         })
     }
 
