@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/06 19:19:53 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/09 11:58:29 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ import '../PopUp/popup.css'
 
 const Logged = () => {
     const [user, setUser ] = useState("")
-    const [activeGames, setActiveGames ] = useState([])
     const [activeChats, setActiveChats ] = useState([])
     const [chatPassword, setChatPassword ] = useState("")
     const [chatOptions, setChatOptions ] = useState(false)
@@ -57,20 +56,11 @@ const Logged = () => {
         })
     }
 
-    const getActiveGames = async () => {
-
-        await axios.get("http://localhost:3000/game", {withCredentials: true})
-        .then(response => {
-                setActiveGames(response.data)
-        })
-    }
-
     const displayActiveChats = () => {
         return (activeChats.map( (chats, key) => <ChatList chats={chats} id={key} join={joinChat}/> ))
     }
 
     useEffect( async() => {
-        await getActiveGames();
         await getActiveChats();
         loadInfo();
     }, [])
@@ -85,7 +75,7 @@ const Logged = () => {
     useEffect( () => {
         socket.on("session", ({ sessionID, userID }) => {
             localStorage.setItem("sessionID", sessionID);
-          });
+        });
         socket.on('update-chatlist', (content) => { console.log(content)})
         socket.on('password_checked', (content) => {
             if(content.permission)
@@ -160,16 +150,18 @@ const Logged = () => {
     }
 
     const joinGame = async () => {
+        const {data} = await axios.get("http://localhost:3000/game", {withCredentials: true})
         let i
-        for(i = activeGames.length - 1; i >= 0; --i){
-            if (activeGames[i].p2 == null)
+        for(i = data.length - 1; i >= 0; --i){
+            console.log(data[i].p2)
+            if (data[i].p2 == null){}
                 break 
         }
         if(i < 0 ){
             createGame()
         }
         else{
-            const gameID = activeGames[i].id
+            const gameID = data[i].id
             await axios.put('http://localhost:3000/game',{id: gameID, p2: user.name} , {withCredentials: true})
             .then(response => {
                 navigate(`/pong?name=${user.name}&room_id=${gameID}`)

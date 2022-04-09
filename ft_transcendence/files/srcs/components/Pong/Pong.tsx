@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:28:04 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:28:07 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/09 10:15:19 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@ import {Canvas} from 'p5-react-renderer';
 import {useState, useMemo, useEffect} from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import io, {Socket} from 'socket.io-client'
+import axios from 'axios';
 const Pong = () => {
 
     const getSize = () => {
@@ -33,18 +34,39 @@ const Pong = () => {
     const [p1, setP1] = useState(undefined)
     const [p2, setP2] = useState(undefined)
     const [ball, setBall] = useState(undefined)
+    const [user, setUser] = useState('')
 
-    const socket: Socket = useMemo( () => io('http://localhost:3000/pong', {query: {name: name}}), [])
+    const socket: Socket = useMemo( () => io('http://localhost:3000/pong', {query: {name: name},  autoConnect: false}), [])
+
+    const loadInfo = async () => {
+
+        await axios.get("http://localhost:3000/authentication", {withCredentials: true})
+        .then(response => {
+            if(response.data.name)
+                setUser(response.data)
+        })
+        .catch(error => {
+            navigate('/')
+        })
+    }
+
+    useEffect( async () => {
+        await loadInfo()
+    }, [])
 
     useEffect( () => {
-        socket.on('connect', () => {
-            socket.emit('join', {room_id: room})
-        })
-        const handleResize = () => setWindowSize(getSize());
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+        if(user){
+            socket.auth = {username: user.name} ;
+            socket.connect();
+            socket.on('connect', () => {
+                socket.emit('join', {room_id: room})
+            })
+            const handleResize = () => setWindowSize(getSize());
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }
        
-    }, [])
+    }, [user])
 
     useEffect( () => {
         socket.on('game-refresh', (data) => {

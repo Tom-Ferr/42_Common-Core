@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:24:22 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/06 10:11:57 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/09 12:14:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ import {
   import { GameService } from './game.service';
   import { GameLogic } from './game.logic'
 import { UsersService } from 'src/users/users.service';
-import { runInThisContext } from 'vm';
    
   @WebSocketGateway({
     cors: {
@@ -61,16 +60,16 @@ import { runInThisContext } from 'vm';
             console.log("p1 connected")
             this.player1[gameID] = socket.id
             this.gameLogic[gameID] = new GameLogic()
-            const {name} = socket.handshake.query
+            const {username} = socket.handshake.auth
             this.gameLogic[gameID].init()
-            this.gameLogic[gameID].player1.name = name.toString()
+            this.gameLogic[gameID].player1.name = username.toString()
             
           }
           else if(this.player2[gameID] == undefined){
             console.log("p2 connected")
             this.player2[gameID] = socket.id
-            const {name} = socket.handshake.query
-            this.gameLogic[gameID].player2.name = name.toString()
+            const {username} = socket.handshake.auth
+            this.gameLogic[gameID].player2.name = username.toString()
             this.gameRun(gameID, data.room_id)
           }
 
@@ -96,10 +95,10 @@ import { runInThisContext } from 'vm';
         }
      async endGame(gameID, room_id){
        const gameTable = {
-          p1: this.player1[gameID].name, 
-          p1Score: this.player1[gameID].score,
-          p2: this.player2[gameID].name, 
-          p2Score: this.player2[gameID].score,
+          p1: this.gameLogic[gameID].player1.name, 
+          p1Score: this.gameLogic[gameID].player1.score,
+          p2: this.gameLogic[gameID].player2.name, 
+          p2Score: this.gameLogic[gameID].player2.score,
         }
         await this.userService.addGameMatch(gameTable.p1, gameTable)
         await this.userService.addGameMatch(gameTable.p2, gameTable)
