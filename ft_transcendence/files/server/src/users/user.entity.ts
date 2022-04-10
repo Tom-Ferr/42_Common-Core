@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:28 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/04 10:26:39 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/10 12:17:08 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@ class User {
 
   @Column({default: 0})
   public level: number
+
+  @Column({nullable: true})
+  public gameId: number
 
   @Column({type: 'bytea', nullable: true})
   public avatar: Uint8Array;

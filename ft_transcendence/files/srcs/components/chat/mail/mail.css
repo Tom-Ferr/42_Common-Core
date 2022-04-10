@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:27:04 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:27:04 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/10 08:05:31 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@
     position: absolute;
     top: 50%;
     left: 50%;
+    height: 50%;
+    width: 60%;
+    overflow-x: hidden;
+    overflow-y: auto;
     transform: translate(-50%, -50%);
     text-align: center;
 

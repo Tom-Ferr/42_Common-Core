@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/09 11:58:29 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/10 14:43:17 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ const Logged = () => {
     const [activeChats, setActiveChats ] = useState([])
     const [chatPassword, setChatPassword ] = useState("")
     const [chatOptions, setChatOptions ] = useState(false)
-    const [checked, setChecked ] = useState(user.isTwoFactorAuthenticationEnabled)
+    const [checked, setChecked ] = useState(false)
     const [input, setInput] = useState("")
     const [QRCode, setQRCode] = useState(null)
     const [showQRCode, setShowQRCode] = useState(false)
     const navigate = useNavigate()
+
+    const [password, setPassword] = useState('')
 
     const loadInfo = async () => {
 
@@ -57,7 +59,27 @@ const Logged = () => {
     }
 
     const displayActiveChats = () => {
-        return (activeChats.map( (chats, key) => <ChatList chats={chats} id={key} join={joinChat}/> ))
+        // return (activeChats.map( (chats, key) => <ChatList chats={chats} id={key} join={joinChat}/> ))
+        return (activeChats.map( (chats, key) => {
+
+            if(chats.status === 'public'){
+                return (
+                    (<label key={key}>
+                        <li key={key}>{chats.owner}</li> 
+                        <input type="button" onClick={() => {joinChat(chats.id)}} value="join"/> 
+                    </label>)
+                )
+            }
+            else if(chats.status === 'protected'){
+                return (
+                    (<label key={key}>
+                        <li key={key}>{chats.owner}</li>
+                        <input type="password" onChange={ event => setPassword(event.target.value) }/>
+                        <input type="button" onClick={() => {joinChat(chats.id, password)}} value="join"/>
+                    </label>)
+                )
+            }
+        }))
     }
 
     useEffect( async() => {
@@ -150,6 +172,10 @@ const Logged = () => {
     }
 
     const joinGame = async () => {
+        if (user.gameId){
+            navigate(`/pong?name=${user.name}&room_id=${user.gameId}`)
+            return 
+        }
         const {data} = await axios.get("http://localhost:3000/game", {withCredentials: true})
         let i
         for(i = data.length - 1; i >= 0; --i){

@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:24:39 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:24:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/10 12:00:53 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ export class GameService{
         let game = await this.gameRepository.findOne({p1});
         if (!game)
         game = await this.gameRepository.findOne({p2: p1});
+        return game;
+    }
+
+    async getGameById(id: number){
+        const game = await this.gameRepository.findOne({id});
         return game;
     }
 

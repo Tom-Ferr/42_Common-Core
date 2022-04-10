@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/06 21:12:18 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/10 20:22:35 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,17 @@ export class UsersService {
     return block
   }
 
+  async updateGameId(gameID: number, id: number) {
+    this.usersRepository.update(id, {gameId: gameID});
+    return gameID
+  }
+
   async addGameMatch(playerName: string, table) {
     const player = await this.getByName(playerName)
     let stats = player.stats
-    if(table.p1 === playerName){
+    if (table.p1Score == table.p2Score)
+      stats.draws++
+    else if(table.p1 === playerName){
       if (table.p1Score > table.p2Score)
         stats.wins++
       else
@@ -150,7 +157,7 @@ export class UsersService {
     }
     let matches = player.matches
     matches.push(table)
-    this.usersRepository.update(player.id, {matches: matches, stats: stats})
+    this.usersRepository.update(player.id, {matches: matches, stats: stats, gameId: null})
     return table
   }
 

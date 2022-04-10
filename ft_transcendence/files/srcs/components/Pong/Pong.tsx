@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:28:04 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/09 10:15:19 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/10 20:04:14 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import {Canvas} from 'p5-react-renderer';
+import {Canvas, useMousePressed} from 'p5-react-renderer';
 import {useState, useMemo, useEffect} from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import io, {Socket} from 'socket.io-client'
@@ -27,7 +27,6 @@ const Pong = () => {
     const [keyBlocker, setKeyBlocker] = useState(false)
     const [windowSize, setWindowSize] = useState(getSize())
     const [searchParams] = useSearchParams();
-    const name = searchParams.get('name')
     const room = searchParams.get('room_id')
     const navigate = useNavigate()
 
@@ -35,8 +34,9 @@ const Pong = () => {
     const [p2, setP2] = useState(undefined)
     const [ball, setBall] = useState(undefined)
     const [user, setUser] = useState('')
+    const [pause, setPause] = useState(false)
 
-    const socket: Socket = useMemo( () => io('http://localhost:3000/pong', {query: {name: name},  autoConnect: false}), [])
+    const socket: Socket = useMemo( () => io('http://localhost:3000/pong', {autoConnect: false}), [])
 
     const loadInfo = async () => {
 
@@ -44,6 +44,8 @@ const Pong = () => {
         .then(response => {
             if(response.data.name)
                 setUser(response.data)
+            if(response.data.gameId)
+                setPause(true)
         })
         .catch(error => {
             navigate('/')
@@ -56,10 +58,18 @@ const Pong = () => {
 
     useEffect( () => {
         if(user){
-            socket.auth = {username: user.name} ;
+            socket.auth = {
+                username: user.name,
+                room_id: room
+            };
             socket.connect();
             socket.on('connect', () => {
-                socket.emit('join', {room_id: room})
+                if(user.gameId){
+                    socket.emit('resume', {room_id: room})
+                }
+
+                else
+                    socket.emit('join', {room_id: room, user_id: user.id})
             })
             const handleResize = () => setWindowSize(getSize());
             window.addEventListener("resize", handleResize);
@@ -77,6 +87,8 @@ const Pong = () => {
         socket.on('end-game', () => {
             navigate('/logged')
         })
+        socket.on('disconnection', () => setPause(true))
+        socket.on('continue', () => setPause(false))
     }, [socket])
     
     const handleKeyPress = (event) => {
@@ -156,7 +168,37 @@ const Pong = () => {
     }
 
     const Main = () => {
-        if(p2 == undefined){
+        if(pause){
+            
+            useMousePressed( (event) => { 
+                const clickY =  Math.round((event.pageY / windowSize.height) * 100)
+                const clickX =  Math.round((event.pageX / windowSize.width) * 100)
+                
+                if((clickY <= 80 && clickY > 75)
+                && (clickX >= 20 && clickX < 25)){
+                    socket.emit('give-up', {room_id: room})
+                }
+            })
+            return(
+            <>
+                <text args={[
+                    "Waiting for Oponnent to reconnect",
+                    windowSize.width * 25/100, 
+                    windowSize.height * 50/100]}
+                    textSize = {windowSize.width * windowSize.height * 0.5/10000} 
+                    fill={255}
+                />
+                <text args={[
+                    "Give Up",
+                    windowSize.width * 20/100, 
+                    windowSize.height * 80/100]}
+                    textSize = {windowSize.width * windowSize.height * 0.3/10000} 
+                    fill={255}
+                />
+
+            </>)
+        }
+        else if(p2 == undefined){
             return (<text args={[
                 "Waiting for Oponnent",
                 windowSize.width * 35/100, 
