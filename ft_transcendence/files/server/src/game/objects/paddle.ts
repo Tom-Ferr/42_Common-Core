@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/03/20 10:06:40 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/13 21:46:28 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@ export class Paddle {
    height: number
    width: number
    position: number
-   public isOnMove: boolean
+   isOnMove: boolean
    score: number
    yPosition: number
    winHeight: number
    name: string
-   public eventKey: string
+   eventKey: string
+   heightProp: number = 25/100
 	constructor(p5, position: number) {
-		this.height = p5.windowHeight * 25/100
+		this.height = p5.windowHeight * this.heightProp
 		this.width = this.height * 10/100
 		this.x = p5.windowWidth * position
 		this.y = (p5.windowHeight / 2) - (this.height / 2)
@@ -39,7 +40,7 @@ export class Paddle {
 
 	update(p5) {
 		this.x = p5.windowWidth * this.position
-		this.height = p5.windowHeight * 25/100
+		this.height = p5.windowHeight * this.heightProp
 		this.width = this.height * 10/100
 		if (this.isOnMove == true) {
 			if(this.y + this.height <= p5.windowHeight && "ArrowDown" == this.eventKey){

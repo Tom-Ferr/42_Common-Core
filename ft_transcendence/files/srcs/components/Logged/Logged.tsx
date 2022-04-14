@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/10 14:43:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/13 21:57:55 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,18 @@ import '../PopUp/popup.css'
 const Logged = () => {
     const [user, setUser ] = useState("")
     const [activeChats, setActiveChats ] = useState([])
+    const [activeGames, setActiveGames ] = useState([])
     const [chatPassword, setChatPassword ] = useState("")
     const [chatOptions, setChatOptions ] = useState(false)
+    const [gameOptions, setGameOptions ] = useState(false)
     const [checked, setChecked ] = useState(false)
     const [input, setInput] = useState("")
     const [QRCode, setQRCode] = useState(null)
     const [showQRCode, setShowQRCode] = useState(false)
+    const [slit, setSlit] = useState(false)
+    const [pill, setPill] = useState(false)
+    const [showCurrentGames, setShowCurrentGames] = useState(false)
+    const [currentGamesButtonValue, setCurrentGamesButtonValue] = useState('show')
     const navigate = useNavigate()
 
     const [password, setPassword] = useState('')
@@ -58,6 +64,14 @@ const Logged = () => {
         })
     }
 
+    const getActiveGames = async () => {
+
+        await axios.get("http://localhost:3000/game", {withCredentials: true})
+        .then(response => {
+                setActiveGames(response.data)
+        })
+    }
+
     const displayActiveChats = () => {
         // return (activeChats.map( (chats, key) => <ChatList chats={chats} id={key} join={joinChat}/> ))
         return (activeChats.map( (chats, key) => {
@@ -84,6 +98,7 @@ const Logged = () => {
 
     useEffect( async() => {
         await getActiveChats();
+        await getActiveGames();
         loadInfo();
     }, [])
 
@@ -162,7 +177,7 @@ const Logged = () => {
     }
 
     const createGame = async () => {
-        await axios.post('http://localhost:3000/game',{p1: user.name} , {withCredentials: true})
+        await axios.post('http://localhost:3000/game',{p1: user.name, mids: slit, pill: pill} , {withCredentials: true})
         .then(response => {
             navigate(`/pong?name=${user.name}&room_id=${response.data.id}`)
         })
@@ -172,7 +187,7 @@ const Logged = () => {
     }
 
     const joinGame = async () => {
-        if (user.gameId){
+        if (user.gameId){ 
             navigate(`/pong?name=${user.name}&room_id=${user.gameId}`)
             return 
         }
@@ -184,6 +199,10 @@ const Logged = () => {
                 break 
         }
         if(i < 0 ){
+            if(gameOptions == false){
+                setGameOptions(true)
+                return
+            }
             createGame()
         }
         else{
@@ -198,7 +217,22 @@ const Logged = () => {
         }
     }
 
-    const joinChat =async (id, password?) => {
+    const hideOrShow = () => {
+        if (showCurrentGames)
+            setCurrentGamesButtonValue('hide')
+        else
+            setCurrentGamesButtonValue('show')
+    }
+
+    const displayCurrentGames = () => {
+        if(activeGames)
+            return activeGames.map((game , index) => {
+                if(game.p1 && game.p2)
+                    return ( (<li><p>{game.p1} VS. {game.p2}</p> <input type='button' value='watch' onClick={() => navigate(`/pong?name=${user.name}&room_id=${game.id}`)} /> </li>) )
+            })
+    }
+
+    const joinChat = async (id, password?) => {
         socket.emit('check-chat-password', {room_id: id, password: password, username: user.name})
     }
 
@@ -250,11 +284,39 @@ const Logged = () => {
          </ul>
            
          <br></br>
+        {gameOptions &&
+            <div>
+                Slit?
+                <input 
+                    type="checkbox"
+                    checked={slit}
+                    onChange={() => setSlit(!slit)}
+                />
+                Pill?
+                <input 
+                    type="checkbox"
+                    checked={pill}
+                    onChange={() => setPill(!pill)}
+                />
+            </div>
+        }
         <input
             type="button"
             onClick={joinGame}
             value="Play Game!"
-        />    
+        /> 
+        <br></br>
+        <div>
+            Matches History:
+            <br></br>
+            <input type='button' value={currentGamesButtonValue} onClick={() => {setShowCurrentGames(!showCurrentGames); hideOrShow()}} />
+            {showCurrentGames &&
+            <div>
+                {displayCurrentGames()}
+            </div>
+            }
+
+        </div>   
          <br></br>
         <input
             type="button"

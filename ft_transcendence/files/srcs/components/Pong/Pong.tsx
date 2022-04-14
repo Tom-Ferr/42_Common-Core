@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:28:04 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/10 20:04:14 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/13 19:47:47 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ const Pong = () => {
     const [p1, setP1] = useState(undefined)
     const [p2, setP2] = useState(undefined)
     const [ball, setBall] = useState(undefined)
+    const [pill, setPill] = useState(undefined)
+    const [pillIsVisible, setPillIsVisible] = useState(false)
     const [user, setUser] = useState('')
     const [pause, setPause] = useState(false)
+    const [slit, setSlit] = useState(false)
 
     const socket: Socket = useMemo( () => io('http://localhost:3000/pong', {autoConnect: false}), [])
 
@@ -83,6 +86,9 @@ const Pong = () => {
             setBall(data.ball);
             setP1(data.p1);
             setP2(data.p2);
+            setSlit(data.ball.midsIsOn)
+            setPill(data.pill)
+            setPillIsVisible(data.pill.isVisible)
         })
         socket.on('end-game', () => {
             navigate('/logged')
@@ -177,6 +183,7 @@ const Pong = () => {
                 if((clickY <= 80 && clickY > 75)
                 && (clickX >= 20 && clickX < 25)){
                     socket.emit('give-up', {room_id: room})
+                    navigate('/logged')
                 }
             })
             return(
@@ -208,17 +215,21 @@ const Pong = () => {
             />)
         }
         else if(p1.score < 10 && p2.score < 10){
-
+            const midheight = windowSize.height * 30/100
+            const midwidth = midheight * 10/100
             return(
                 <>
                 {Line()}
+                {slit && Paddle((windowSize.width * 50/100) - midwidth/2, windowSize.height - midheight, midwidth,  midheight)}
+                {slit && Paddle((windowSize.width * 50/100) - midwidth/2, 0, midwidth,  midheight)}
                 {Ball(ball.xPosition * windowSize.width, ball.yPosition * windowSize.height, (windowSize.height * 25/100) * 15/100)}
+                {pillIsVisible && Ball(pill.xPosition * windowSize.width, pill.yPosition * windowSize.height, (windowSize.height * 25/100) * 5/100)}
                 {Score(p1, 40)}
                 {Score(p2, 55)}
                 {PlayerName(p1.name, 30)}
                 {PlayerName(p2.name, 60)}
-                {Paddle((p1.position * windowSize.width), p1.yPosition * windowSize.height, (windowSize.height * 25/100) * 10/100, windowSize.height * 25/100)}
-                {Paddle((p2.position * windowSize.width), p2.yPosition * windowSize.height, (windowSize.height * 25/100) * 10/100, windowSize.height * 25/100)}
+                {Paddle((p1.position * windowSize.width), p1.yPosition * windowSize.height, (windowSize.height * p1.heightProp) * 10/100, windowSize.height * p1.heightProp)}
+                {Paddle((p2.position * windowSize.width), p2.yPosition * windowSize.height, (windowSize.height * p2.heightProp) * 10/100, windowSize.height * p2.heightProp)}
                 </>
             )
         }
@@ -234,8 +245,6 @@ const Pong = () => {
                 {EndGame()}
                 </>
             )
-
-            
         }
     }
 

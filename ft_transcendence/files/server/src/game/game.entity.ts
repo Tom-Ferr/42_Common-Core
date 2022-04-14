@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:24:16 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:24:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/13 21:12:41 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,21 @@ class Game {
   @Column({nullable: true, unique: true})
   public p2: string;
 
+  @Column({default: 0})
+  public p1Score: number;
+ 
+  @Column({default: 0})
+  public p2Score: number;
+
   @Column({default: false})
   public p2IsReady: boolean;
+
+  @Column({default: false})
+  public mids: boolean;
+
+  @Column({default: false})
+  public pill: boolean;
+  
 }
  
 export default Game;
