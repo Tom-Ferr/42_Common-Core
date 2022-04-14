@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:24:22 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/13 21:14:51 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/14 00:31:04 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,30 @@ import { UsersService } from 'src/users/users.service';
       const {room_id} = socket.handshake.auth
       const gameID = Number(room_id)
       if(socket.id === this.player1[gameID] || socket.id === this.player2[gameID]){
-        this.pause[gameID] = true
+        if(this.player2[gameID] == undefined){
+          this.gameService.delete(room_id)
+          const {username} = socket.handshake.auth
+          const {id} =  await this.userService.getByName(username)
+          this.userService.updateGameId(null, id)
+        }
+        else{
+          this.gameService.update({
+            id: gameID,
+            p1Position: this.gameLogic[gameID].player1.yPosition,
+            p2Position: this.gameLogic[gameID].player2.yPosition,
+            ballXPosition: this.gameLogic[gameID].ball.xPosition,
+            ballYPosition: this.gameLogic[gameID].ball.yPosition,
+            p1: this.gameLogic[gameID].player1.name,
+            p2: this.gameLogic[gameID].player2.name,
+            p1Score: this.gameLogic[gameID].player1.score,
+            p2Score: this.gameLogic[gameID].player2.score,
+          })
+          this.pause[gameID] = true
+        }
         if(socket.id === this.player1[gameID])
           this.player1[gameID] = undefined
         else if(socket.id === this.player2[gameID])
           this.player2[gameID] = undefined
-        this.gameService.update({
-          id: gameID,
-          p1Position: this.gameLogic[gameID].player1.yPosition,
-          p2Position: this.gameLogic[gameID].player2.yPosition,
-          ballXPosition: this.gameLogic[gameID].ball.xPosition,
-          ballYPosition: this.gameLogic[gameID].ball.yPosition,
-          p1: this.gameLogic[gameID].player1.name,
-          p2: this.gameLogic[gameID].player2.name,
-          p1Score: this.gameLogic[gameID].player1.score,
-          p2Score: this.gameLogic[gameID].player2.score,
-        })
         this.server.to(room_id).emit('disconnection')
       }
     }

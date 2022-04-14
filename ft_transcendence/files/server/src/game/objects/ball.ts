@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:26 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/13 11:38:17 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/14 00:51:06 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,18 +114,6 @@ export class Ball{
         }
         return false
     }
-
-    // hitMid = (mid): boolean => {
-    //     if(this.x <= mid.x){
-    //         if((this.x + this.radius) >= mid.x && this.y >= mid.y && this.onPaddle(mid))
-    //            return true 
-    //     }
-    //     else if(this.x >= mid.x + mid.width){
-    //         if(this.x - this.radius <= mid.x + mid.width && this.y >= mid.y && this.onPaddle(mid))
-    //            return true 
-    //     }
-    //     return false
-    // }
     onPaddle = (player): boolean => {
         if(this.y >= player.y && this.y <= player.y + player.height) 
             return true
