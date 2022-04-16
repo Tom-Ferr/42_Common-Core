@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:12:26 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/14 00:51:06 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/15 23:54:20 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,18 @@ export class Ball{
             this.ySpeed *= -1
         else if(this.y >= (player.y + player.height) * 70 / 100 && this.ySpeed <  0)
             this.ySpeed *= -1
-        this.xSpeed *= -1
-        this.xSpeed += (Math.floor(Math.random() * 15) + 5) / 100 * this.xSpeed
-        this.ySpeed += (Math.floor(Math.random() * 15) + 5) / 100 * this.xSpeed
+        if(this.x > player.x && this.xSpeed < 0)
+            this.xSpeed *= -1
+        else if(this.x < player.x + player.width && this.xSpeed > 0)
+            this.xSpeed *= -1
+        if(this.xSpeed <= p5.windowWidth * 5 /100 && this.xSpeed > 0)
+            this.xSpeed += (Math.floor(Math.random() * 15) + 5) / 100 * this.xSpeed
+        else if(this.xSpeed * -1 <= p5.windowWidth * 5 /100 && this.xSpeed < 0)
+            this.xSpeed += (Math.floor(Math.random() * 15) + 5) / 100 * this.xSpeed
+        if(this.ySpeed <= p5.windowWidth * 5 /100 && this.ySpeed > 0)
+            this.ySpeed += (Math.floor(Math.random() * 15) + 5) / 100 * this.ySpeed
+        else if(this.ySpeed * -1 <= p5.windowWidth * 5 /100 && this.ySpeed < 0)
+            this.ySpeed += (Math.floor(Math.random() * 10) + 5) / 100 * this.ySpeed
 
     }
 
@@ -101,21 +110,22 @@ export class Ball{
     }
 
     hitPlayer1 = (player1): boolean => {
-        if(this.x >= player1.x){
+        if(this.x + this.radius >= player1.x){
             if(this.x - this.radius <= player1.x + player1.width && this.onPaddle(player1))
                return true 
         }
         return false
     }
     hitPlayer2 = (player2): boolean => {
-        if(this.x <= player2.x + player2.width){
-            if(this.x + this.radius >= player2.x && this.y >= player2.y && this.onPaddle(player2))
+        if(this.x - this.radius <= player2.x + player2.width){
+            if(this.x + this.radius >= player2.x && this.onPaddle(player2))
                return true 
         }
         return false
     }
     onPaddle = (player): boolean => {
-        if(this.y >= player.y && this.y <= player.y + player.height) 
+        if( (this.y + this.width >= player.y && this.y + this.width <= player.y + player.height)
+        || this.y - this.width >= player.y && this.y - this.width <= player.y + player.height) 
             return true
         return false
     }
