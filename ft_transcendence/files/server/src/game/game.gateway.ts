@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:24:22 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/14 00:31:04 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/17 15:18:51 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ import {
   import { GameService } from './game.service';
   import { GameLogic } from './game.logic'
 import { UsersService } from 'src/users/users.service';
+import { use } from 'passport';
    
   @WebSocketGateway({
     cors: {
@@ -45,15 +46,19 @@ import { UsersService } from 'src/users/users.service';
     ){}
 
    
-    async handleConnection(socket: Socket) {}
+    async handleConnection(socket: Socket) {
+      const {username} = socket.handshake.auth
+      const {id} = await this.userService.getByName(username)
+      this.userService.updateStatus('on a game', id)
+    }
     async handleDisconnect(socket: Socket){
       const {room_id} = socket.handshake.auth
       const gameID = Number(room_id)
+      const {username} = socket.handshake.auth
+      const {id} =  await this.userService.getByName(username)
       if(socket.id === this.player1[gameID] || socket.id === this.player2[gameID]){
         if(this.player2[gameID] == undefined){
           this.gameService.delete(room_id)
-          const {username} = socket.handshake.auth
-          const {id} =  await this.userService.getByName(username)
           this.userService.updateGameId(null, id)
         }
         else{
@@ -74,6 +79,7 @@ import { UsersService } from 'src/users/users.service';
           this.player1[gameID] = undefined
         else if(socket.id === this.player2[gameID])
           this.player2[gameID] = undefined
+        this.userService.updateStatus('offline', id)
         this.server.to(room_id).emit('disconnection')
       }
     }

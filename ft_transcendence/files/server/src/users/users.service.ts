@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/10 20:22:35 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/17 15:01:56 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,13 @@ export class UsersService {
     matches.push(table)
     this.usersRepository.update(player.id, {matches: matches, stats: stats, gameId: null})
     return table
+  }
+
+  async updateStatus(user_status: string, id: number){
+
+    this.usersRepository.update(id, {status: user_status});
+    return user_status
+
   }
 
 

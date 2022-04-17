@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:23:10 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/06 18:58:26 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/17 15:12:14 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,18 @@ import {
     }
    
     async handleConnection(socket: Socket) {
+      const {username} = socket.handshake.auth
+      const {id} = await this.userService.getByName(username)
       if(socket.handshake.query.room_id){
         
-        const {username} = socket.handshake.auth
         const {room_id} = socket.handshake.query
         this.map.set(username, socket.id)
         if(!this.connectedList[room_id.toString()])
           this.connectedList[room_id.toString()] = []
         if(!this.connectedList[room_id.toString()].includes(username))
           this.connectedList[room_id.toString()].push(username)
+        this.userService.updateStatus('chatting', id)
+        
         
       }
       else{
@@ -72,6 +75,7 @@ import {
           sessionID = randomId();
           this.userService.udpateSessionID(sessionID, userID)
         }
+        this.userService.updateStatus('online', id)
         socket.emit("session", {
           sessionID: sessionID,
           userID: userID,
@@ -80,9 +84,10 @@ import {
       }
     }
 
-    handleDisconnect(socket: Socket){
+    async handleDisconnect(socket: Socket){
+      const {username} = socket.handshake.auth
+      const {id} = await this.userService.getByName(username)
       if(socket.handshake.query.room_id){
-        const {username} = socket.handshake.auth
         const {room_id} = socket.handshake.query
         for (let i = 0; i < this.connectedList[room_id.toString()].length; ++i){
           if(username === this.connectedList[room_id.toString()][i]){
@@ -90,6 +95,7 @@ import {
             break
           }
         }
+        this.userService.updateStatus('offline', id)
         this.server.to(room_id).emit('receive_connected', this.connectedList[room_id.toString()]);
       }
 
@@ -109,14 +115,20 @@ import {
       }
     }
 
-    // @SubscribeMessage('set-adm')
-    // async setAdm(
-    //   @MessageBody() content: any,
-    //   @ConnectedSocket() socket: Socket,
-    // ) {
-    //    await this.chatService.updateAdms(content.target, content.room_id)
-    //    this.server.to(content.room_id).emit('chat-updated', await this.chatService.getRoomtByID(content.room_id));
-    //   }
+    @SubscribeMessage('get-friend-status')
+    async getFriendsStatus(
+      @MessageBody() content: any,
+      @ConnectedSocket() socket: Socket,
+    ) {
+        const friends = content.friends
+        const ret = []
+  
+        for(let i = 0; i < friends.length; ++i){
+          const {status} = await this.userService.getByName(friends[i])
+          ret.push(status)
+        }
+        this.server.to(socket.id).emit('friend-status-updated', ret);
+      }
 
     @SubscribeMessage('set-adm')
     async setAdm(

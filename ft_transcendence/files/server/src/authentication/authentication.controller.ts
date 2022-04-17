@@ -6,11 +6,11 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:21:35 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/06 21:12:47 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/16 16:11:21 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { Body, Req, Res, Controller, HttpCode, Post, Put, Get, UseGuards } from '@nestjs/common';
+import { Body, Req, Res, Controller, HttpCode, Post, Put, Get, UseGuards, Param } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { RegisterDto } from './dto/register.dto';
 import { RequestWithUser } from './requestWithUser.interface';
@@ -83,5 +83,21 @@ export class AuthenticationController {
     this.usersService.updateBlock(user.block_list, request.user.id)
     user.password = undefined
     return user;
+  }
+  @UseGuards(JwtAuthenticationGuard)
+  @Put('status')
+  async getUserStatus(@Req() request){
+    const friends = request.body
+    const ret = []
+
+    for(let i = 0; i < friends.length; ++i){
+      const {status} = await this.usersService.getByName(friends[i])
+      ret.push(status)
+    }
+    return ret
+
+
+    return status
+
   }
 }

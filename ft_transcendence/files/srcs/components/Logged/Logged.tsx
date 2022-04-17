@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 12:41:27 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/13 21:57:55 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/16 17:03:35 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ const Logged = () => {
     const [pill, setPill] = useState(false)
     const [showCurrentGames, setShowCurrentGames] = useState(false)
     const [currentGamesButtonValue, setCurrentGamesButtonValue] = useState('show')
+    const [friends, setFriends] = useState([])
+    const [friendStatus, setFriendStatus] = useState([])
     const navigate = useNavigate()
 
     const [password, setPassword] = useState('')
@@ -45,6 +47,7 @@ const Logged = () => {
             if(response.data.name){
                 setUser(response.data)
                 setChecked(response.data.isTwoFactorAuthenticationEnabled)
+                setFriends(response.data.friend_list)
             }
             else
                 navigate('/register')
@@ -114,6 +117,7 @@ const Logged = () => {
             localStorage.setItem("sessionID", sessionID);
         });
         socket.on('update-chatlist', (content) => { console.log(content)})
+        socket.on('friend-status-updated', (content) => { setFriendStatus(content)})
         socket.on('password_checked', (content) => {
             if(content.permission)
                 navigate(`/chat?name=${content.username}&room_id=${content.room_id}`)
@@ -228,12 +232,19 @@ const Logged = () => {
         if(activeGames)
             return activeGames.map((game , index) => {
                 if(game.p1 && game.p2)
-                    return ( (<li><p>{game.p1} VS. {game.p2}</p> <input type='button' value='watch' onClick={() => navigate(`/pong?name=${user.name}&room_id=${game.id}`)} /> </li>) )
+                    return ( (<li key={index}><p>{game.p1} VS. {game.p2}</p> <input type='button' value='watch' onClick={() => navigate(`/pong?name=${user.name}&room_id=${game.id}`)} /> </li>) )
             })
     }
 
     const joinChat = async (id, password?) => {
         socket.emit('check-chat-password', {room_id: id, password: password, username: user.name})
+    }
+
+    const displayFriends = () => {
+        socket.emit('get-friend-status', {friends: friends})
+        if(friends && friendStatus)
+            return friends.map((friends, index) => (<li key={index}>{friends} is {friendStatus[index]}</li>))
+
     }
 
     return (
@@ -326,7 +337,10 @@ const Logged = () => {
         {showQRCode && <Popup
             content={<img src={URL.createObjectURL(QRCode)} />}
             handleClose={() => setShowQRCode(!showQRCode)}
-        />}   
+        />}
+        <br></br>
+        Friends:
+        {displayFriends()}   
         </>
     )
 
