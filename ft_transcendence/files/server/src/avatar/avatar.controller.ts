@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:22:43 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/01 19:22:44 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/18 08:22:51 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ import { join } from 'path';
 import AvatarService from './avatar.service';
 import { Readable } from 'stream';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { FileSystemStoredFile, FormDataRequest } from 'nestjs-form-data';
+import { AvatarDto } from './dto/avatar.dto';
 
 
 @Controller('avatar')
@@ -43,8 +45,14 @@ export class DatabaseController {
     return new StreamableFile(file);
   };
 
+  @Put('validate')
+  @FormDataRequest({storage: FileSystemStoredFile})
+  async validate(@Body() file: AvatarDto){
+    return file
+  };
+
   @Put(':id')
-  @UseInterceptors(FileInterceptor('myFile'))
+  @UseInterceptors(FileInterceptor('avatar'))
   async changeAvatar(@Param('id')id: number, @UploadedFile() file){
     this.avatarService.updateAvatar(id, file)
   };

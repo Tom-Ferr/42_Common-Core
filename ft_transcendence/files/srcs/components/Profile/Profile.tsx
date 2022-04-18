@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:28:21 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/05 12:36:01 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/18 08:27:54 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,14 +113,23 @@ const Profile = () => {
         return <></>
     }
 
-    const uploadAvatar = () => {
+    const validateAvatar = () => {
         const formData = new FormData();
-        formData.append("myFile",selectedFile, selectedFile.name);
+        formData.append("avatar",selectedFile, selectedFile.name);
+        axios.put(`http://localhost:3000/avatar/validate`, formData, {withCredentials: true})
+        .then( () => uploadAvatar(formData))
+        .catch(error => alert(error.response.data.message))
+    }
+
+    const uploadAvatar = (formData) => {
+        // const formData = new FormData();
+        // formData.append("avatar",selectedFile, selectedFile.name);
         axios.put(`http://localhost:3000/avatar/${user.id}`, formData, {withCredentials: true})
         .then( () =>{
            setAvatar(selectedFile)
            setIsOpen(!isOpen)
         })
+        .catch(error => alert(error.response.data.message))
     }
 
     const addFriend = async () => {
@@ -190,7 +199,7 @@ const Profile = () => {
             content={<>
                 Please, select a file
                 <input type='file' onChange={(event) => setSelectedFile(event.target.files[0])}/>
-                <input type='button' value={'Upload'} onClick={uploadAvatar}/>
+                <input type='button' value={'Upload'} onClick={validateAvatar}/>
             </>}
             handleClose={() => setIsOpen(!isOpen)}
         />}
