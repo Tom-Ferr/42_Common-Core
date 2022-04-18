@@ -6,7 +6,7 @@
 /*   By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 19:25:36 by tde-cama          #+#    #+#             */
-/*   Updated: 2022/04/17 15:01:56 by tde-cama         ###   ########.fr       */
+/*   Updated: 2022/04/17 18:30:12 by tde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,10 @@ export class UsersService {
     }
     let matches = player.matches
     matches.push(table)
-    this.usersRepository.update(player.id, {matches: matches, stats: stats, gameId: null})
+    let level = player.level
+    if(stats.wins > 0 && !(stats.wins % 10 || stats.wins / level == 10))
+      level++
+    this.usersRepository.update(player.id, {matches: matches, stats: stats, gameId: null, level: level})
     return table
   }
 
