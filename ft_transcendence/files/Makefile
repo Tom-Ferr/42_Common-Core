@@ -6,28 +6,22 @@
 #    By: tde-cama <tde-cama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/24 18:12:12 by tde-cama          #+#    #+#              #
-#    Updated: 2022/02/13 17:45:18 by tde-cama         ###   ########.fr        #
+#    Updated: 2022/04/15 11:04:05 by tde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 
 all:
-	docker-compose -f ./server/src/docker-compose.yml up -d --build
+	docker-compose -f ./docker-compose.yml up -d --build
 
 stop:
-		docker-compose -f ./server/src/docker-compose.yml down
+		docker-compose -f ./docker-compose.yml stop
 
-clean:	stop
+down:
+	docker-compose -f ./docker-compose.yml down
+
+clean:	down
 		docker system prune -a --force
 
-fclean:	clean
-
-re:		fclean all
-
-wp: all
-	docker exec -it wordpress sh
-db: all
-	docker exec -it mariadb sh
-ng: all
-	docker exec -it nginx sh
+re:		clean all

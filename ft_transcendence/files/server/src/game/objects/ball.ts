@@ -88,13 +88,13 @@ export class Ball{
             this.xSpeed *= -1
         else if(this.x < player.x + player.width && this.xSpeed > 0)
             this.xSpeed *= -1
-        if(this.xSpeed <= p5.windowWidth * 5 /100 && this.xSpeed > 0)
+        if(this.xSpeed <= p5.windowWidth * 2 /100 && this.xSpeed > 0)
             this.xSpeed += (Math.floor(Math.random() * 15) + 5) / 100 * this.xSpeed
-        else if(this.xSpeed * -1 <= p5.windowWidth * 5 /100 && this.xSpeed < 0)
+        else if(this.xSpeed * -1 <= p5.windowWidth * 2 /100 && this.xSpeed < 0)
             this.xSpeed += (Math.floor(Math.random() * 15) + 5) / 100 * this.xSpeed
-        if(this.ySpeed <= p5.windowWidth * 5 /100 && this.ySpeed > 0)
+        if(this.ySpeed <= p5.windowWidth * 2 /100 && this.ySpeed > 0)
             this.ySpeed += (Math.floor(Math.random() * 15) + 5) / 100 * this.ySpeed
-        else if(this.ySpeed * -1 <= p5.windowWidth * 5 /100 && this.ySpeed < 0)
+        else if(this.ySpeed * -1 <= p5.windowWidth * 2 /100 && this.ySpeed < 0)
             this.ySpeed += (Math.floor(Math.random() * 10) + 5) / 100 * this.ySpeed
 
     }

@@ -25,9 +25,8 @@ const Header = () => {
     return (
         <>
         <nav className='signin'>
-            <SignIn setInputs={setInputs}/>
+    
             <Button/>
-            <Tester inputs={inputs}/>
         </nav>
         <h1>Transcendence</h1>
         </>
